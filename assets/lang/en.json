@@ -1,0 +1,55 @@
+{
+  "common": {
+    "app_name": "BikeRide",
+    "ok": "OK",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "retry": "Retry",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "done": "Done",
+    "next": "Next",
+    "back": "Back",
+    "skip": "Skip",
+    "continue": "Continue",
+    "submit": "Submit",
+    "confirm": "Confirm"
+  },
+  "buttons": {
+    "get_started": "Get Started",
+    "verify": "Verify",
+    "complete_profile": "Complete Profile",
+    "save_changes": "Save Changes",
+    "update": "Update",
+    "send": "Send"
+  },
+  "validation": {
+    "required_field": "This field is required",
+    "invalid_phone": "Invalid phone number",
+    "invalid_email": "Invalid email address",
+    "min_length": "Minimum {min} characters",
+    "max_length": "Maximum {max} characters",
+    "password_mismatch": "Passwords do not match"
+  },
+  "errors": {
+    "network_error": "Network connection error",
+    "server_error": "Server error",
+    "unknown_error": "An unknown error occurred",
+    "timeout": "Request timed out",
+    "no_internet": "No internet connection"
+  },
+  "messages": {
+    "welcome": "Welcome",
+    "logged_out": "Successfully logged out",
+    "data_saved": "Data saved",
+    "data_deleted": "Data deleted",
+    "confirm_delete": "Are you sure you want to delete?",
+    "no_data": "No data available"
+  }
+}

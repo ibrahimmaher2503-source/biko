@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OTP Verification</title>
+<!-- Google Fonts including Cairo as requested -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                        "neutral-tint": "#fcecee", // Light tint of primary for backgrounds
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col items-center justify-center font-display antialiased selection:bg-primary/20">
+<div class="relative flex h-full min-h-screen w-full max-w-md flex-col overflow-hidden bg-background-light dark:bg-background-dark shadow-xl">
+<!-- Top App Bar -->
+<div class="flex items-center justify-between p-4 pb-2">
+<button aria-label="Go back" class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-col flex-1 px-6 pt-4">
+<!-- Header Text -->
+<div class="mb-8 text-center">
+<h1 class="text-slate-900 dark:text-slate-100 tracking-tight text-[32px] font-bold leading-tight pb-3">Verify Your Number</h1>
+<p class="text-slate-600 dark:text-slate-400 text-base font-normal leading-normal">
+                    Enter the 4-digit code sent to your phone number ending in <span class="font-bold text-slate-900 dark:text-slate-100">**89</span>.
+                </p>
+</div>
+<!-- OTP Input Fields -->
+<div class="flex justify-center py-6 mb-4">
+<fieldset class="relative flex gap-4">
+<!-- Input 1 -->
+<input autofocus="" class="flex h-16 w-14 rounded-xl text-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-primary dark:focus:border-primary focus:ring-2 focus:ring-primary/20 text-2xl font-bold text-slate-900 dark:text-slate-100 transition-all outline-none caret-primary" maxlength="1" type="tel" value="5"/>
+<!-- Input 2 -->
+<input class="flex h-16 w-14 rounded-xl text-center bg-white dark:bg-slate-800 border-2 border-primary dark:border-primary focus:border-primary dark:focus:border-primary focus:ring-2 focus:ring-primary/20 text-2xl font-bold text-slate-900 dark:text-slate-100 transition-all outline-none caret-primary shadow-[0_0_0_4px_rgba(224,6,46,0.1)]" maxlength="1" placeholder="" type="tel"/>
+<!-- Input 3 -->
+<input class="flex h-16 w-14 rounded-xl text-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-primary dark:focus:border-primary focus:ring-2 focus:ring-primary/20 text-2xl font-bold text-slate-900 dark:text-slate-100 transition-all outline-none caret-primary" maxlength="1" placeholder="" type="tel"/>
+<!-- Input 4 -->
+<input class="flex h-16 w-14 rounded-xl text-center bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 focus:border-primary dark:focus:border-primary focus:ring-2 focus:ring-primary/20 text-2xl font-bold text-slate-900 dark:text-slate-100 transition-all outline-none caret-primary" maxlength="1" placeholder="" type="tel"/>
+</fieldset>
+</div>
+<!-- Timer / Resend Code -->
+<div class="flex flex-col items-center gap-4 py-4">
+<div class="flex items-center gap-2 px-4 py-2 bg-neutral-tint dark:bg-primary/10 rounded-full">
+<span class="material-symbols-outlined text-primary text-[20px]">timer</span>
+<p class="text-primary font-bold text-lg">00:30</p>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-sm font-medium">
+                    Didn't receive the code? 
+                    <button class="text-primary font-bold hover:underline ml-1">Resend Code</button>
+</p>
+</div>
+<!-- Spacer to push button to bottom -->
+<div class="flex-1"></div>
+<!-- Verify Button -->
+<div class="w-full pb-8 pt-4">
+<button class="w-full bg-primary hover:bg-primary/90 active:scale-[0.98] text-white font-bold h-14 rounded-xl text-lg shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+<span>Verify</span>
+<span class="material-symbols-outlined text-[20px]">check_circle</span>
+</button>
+</div>
+<!-- Keyboard spacer simulation for mobile view -->
+<div class="h-6"></div>
+</div>
+</div>
+</body></html>

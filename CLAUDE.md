@@ -1,4 +1,4 @@
-# 🏍️ BikeRide — CLAUDE.md
+﻿# 🏍️ BikeRide — CLAUDE.md
 
 > This file gives Claude full context about the BikeRide project.
 > Read this entire file before writing any code, suggesting any solution, or answering any question.
@@ -382,7 +382,7 @@ All values are read from Firestore `app_config` document. Never hardcode prices.
 ## 💳 Payment Logic
 
 ### Commission Calculation
-```
+``` 
 commission = final_price × commission_rate
 driver_earning = final_price - commission
 ```

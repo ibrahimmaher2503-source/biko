@@ -1,0 +1,55 @@
+{
+  "common": {
+    "app_name": "بايكرايد",
+    "ok": "موافق",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "success": "تم بنجاح",
+    "retry": "إعادة المحاولة",
+    "yes": "نعم",
+    "no": "لا",
+    "close": "إغلاق",
+    "done": "تم",
+    "next": "التالي",
+    "back": "رجوع",
+    "skip": "تخطي",
+    "continue": "متابعة",
+    "submit": "إرسال",
+    "confirm": "تأكيد"
+  },
+  "buttons": {
+    "get_started": "ابدأ الآن",
+    "verify": "تحقق",
+    "complete_profile": "إكمال الملف الشخصي",
+    "save_changes": "حفظ التغييرات",
+    "update": "تحديث",
+    "send": "إرسال"
+  },
+  "validation": {
+    "required_field": "هذا الحقل مطلوب",
+    "invalid_phone": "رقم الهاتف غير صالح",
+    "invalid_email": "البريد الإلكتروني غير صالح",
+    "min_length": "الحد الأدنى {min} أحرف",
+    "max_length": "الحد الأقصى {max} حرف",
+    "password_mismatch": "كلمات المرور غير متطابقة"
+  },
+  "errors": {
+    "network_error": "خطأ في الاتصال بالشبكة",
+    "server_error": "خطأ في الخادم",
+    "unknown_error": "حدث خطأ غير معروف",
+    "timeout": "انتهت مهلة الطلب",
+    "no_internet": "لا يوجد اتصال بالإنترنت"
+  },
+  "messages": {
+    "welcome": "مرحباً بك",
+    "logged_out": "تم تسجيل الخروج بنجاح",
+    "data_saved": "تم حفظ البيانات",
+    "data_deleted": "تم حذف البيانات",
+    "confirm_delete": "هل أنت متأكد من الحذف؟",
+    "no_data": "لا توجد بيانات"
+  }
+}

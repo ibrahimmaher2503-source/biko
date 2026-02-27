@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Profile Setup</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "primary-dark": "#b00423",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col items-center justify-center">
+<div class="relative flex h-full min-h-screen w-full max-w-md flex-col overflow-hidden bg-background-light dark:bg-background-dark shadow-xl mx-auto">
+<!-- Top App Bar -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center pr-12">Set Up Profile</h2>
+</div>
+<!-- Main Content Scroll Area -->
+<div class="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-8">
+<!-- Avatar Upload -->
+<div class="flex flex-col gap-4 items-center justify-center mt-4">
+<div class="relative group cursor-pointer">
+<div class="bg-center bg-no-repeat bg-cover rounded-full h-32 w-32 shadow-sm border-4 border-white dark:border-slate-800 bg-slate-200 dark:bg-slate-700 overflow-hidden" data-alt="User avatar placeholder silhouette" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDabSBDBFA0pPeHVCrzASnEXgaIqAkoguC2PQcz7oiX8LOVeNRhdY985Z0cC5sDEWeUP6jvM45tbwy4hiSGspaZimdEiTfZ3X1fiVZ1vD4FfEi3T0d2uu7fu-Xg4t_1_NqNaUibr1QtEA5wISt0jniulgPQaIDaxlEk3YSe_Fh27G4YWUemB7NEU0iblqdyhedDkmXTZ3E4AB1OtTM7LPD_HaFDwJ0GjSGDQfjXLffIN9xxWCxSmLKoCMhBHqvYZRnWwenh_dlvLKbu");'>
+</div>
+<!-- Camera Icon Badge -->
+<div class="absolute bottom-1 right-1 bg-primary text-white rounded-full p-2 border-4 border-background-light dark:border-background-dark flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[20px]">photo_camera</span>
+</div>
+</div>
+<p class="text-slate-900 dark:text-slate-100 text-[22px] font-bold leading-tight tracking-tight text-center">Upload Photo</p>
+<p class="text-slate-500 dark:text-slate-400 text-sm text-center -mt-2">Show us your smile!</p>
+</div>
+<!-- Form Fields -->
+<div class="flex flex-col gap-6 w-full">
+<!-- Full Name Input -->
+<div class="flex flex-col gap-2">
+<label class="text-slate-900 dark:text-slate-100 text-base font-semibold" for="fullName">Full Name</label>
+<div class="relative">
+<input class="form-input w-full rounded-xl border-0 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 shadow-sm ring-1 ring-inset ring-slate-200 dark:ring-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-inset focus:ring-primary h-14 pl-4 pr-10 text-base font-medium transition-all" id="fullName" placeholder="Enter your full name" type="text" value=""/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-slate-400">
+<span class="material-symbols-outlined">person</span>
+</div>
+</div>
+</div>
+<!-- Language Selector -->
+<div class="flex flex-col gap-3">
+<h3 class="text-slate-900 dark:text-slate-100 text-base font-semibold">Select Language</h3>
+<div class="grid grid-cols-2 gap-3 p-1 bg-slate-100 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-800">
+<label class="cursor-pointer group relative flex items-center justify-center h-12">
+<input checked="" class="peer sr-only" name="language" type="radio" value="English"/>
+<span class="absolute inset-0 rounded-xl bg-transparent transition-all duration-200 ease-in-out peer-checked:bg-primary peer-checked:shadow-lg peer-checked:shadow-primary/30"></span>
+<span class="relative z-10 text-sm font-bold text-slate-500 dark:text-slate-400 peer-checked:text-white transition-colors duration-200">English</span>
+</label>
+<label class="cursor-pointer group relative flex items-center justify-center h-12">
+<input class="peer sr-only" name="language" type="radio" value="Arabic"/>
+<span class="absolute inset-0 rounded-xl bg-transparent transition-all duration-200 ease-in-out peer-checked:bg-primary peer-checked:shadow-lg peer-checked:shadow-primary/30"></span>
+<span class="relative z-10 text-sm font-bold text-slate-500 dark:text-slate-400 peer-checked:text-white transition-colors duration-200">العربية</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Action Button -->
+<div class="w-full p-6 bg-background-light dark:bg-background-dark mt-auto pb-8">
+<button class="w-full bg-primary hover:bg-primary-dark text-white font-bold h-14 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+<span>Complete Profile</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>
