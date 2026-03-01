@@ -48,6 +48,18 @@ dependencies:
   # Local Storage
   shared_preferences: ^2.2.0
 
+  # Firebase Auth & Services
+  firebase_auth: ^5.0.0
+  cloud_firestore: ^5.0.0
+  firebase_storage: ^12.0.0
+
+  # Google Sign-In
+  google_sign_in: ^6.2.1
+
+  # Media
+  image_picker: ^1.0.0
+  cached_network_image: ^3.3.1
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -74,9 +86,12 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  # Assets for localization
+  # Assets
   assets:
     - assets/lang/
+    - assets/images/logo/
+    - assets/images/onboarding/
+    - assets/images/backgrounds/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

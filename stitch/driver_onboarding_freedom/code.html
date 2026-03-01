@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Driver Onboarding: Freedom</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-x-hidden">
+<div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark">
+<!-- Top Navigation -->
+<div class="flex items-center p-4 pb-2 justify-between z-10">
+<button class="flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined text-2xl">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold leading-tight tracking-tight flex-1 text-center opacity-0">Onboarding</h2> <!-- Hidden title for layout balance if needed, or visible -->
+<button class="flex h-12 px-2 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<p class="text-primary text-base font-bold leading-normal tracking-wide">Skip</p>
+</button>
+</div>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col items-center justify-center px-6">
+<!-- Illustration Container -->
+<div class="w-full aspect-square relative mb-8 flex items-center justify-center">
+<!-- Decorative blurred background blob -->
+<div class="absolute inset-0 bg-primary/10 rounded-full blur-3xl transform scale-75"></div>
+<!-- Main Image -->
+<div class="relative w-full h-full bg-center bg-contain bg-no-repeat z-10" data-alt="Happy delivery driver with helmet holding smartphone with app" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDc6WrCm9i3gQzZzrHT2MXwYhVyU0IARIL4BLSgJxB1rlXhZPomPjXh0As_07jlsqIy66XlRE9dJ-nEfimWCI4Qhyf1CkajCdq6hiP_e2pii3EU-5D6Ne3Fktnjg3-9pql47-RwEaNi-dhMEgSaP9YKx928k2EwThn7YyYIApBZso5-CeHKzcquT0i9viXasNLH1ubBRZb6zE3NLc9XADy0GCRdf0tf3bTd_BrbHKEqW7DJHee0f9as_mNkz5W32H1_LEPgMiwOLt-K");'>
+</div>
+</div>
+<!-- Text Content -->
+<div class="flex flex-col items-center text-center space-y-4 max-w-xs mx-auto">
+<h1 class="text-3xl font-extrabold leading-tight text-slate-900 dark:text-white tracking-tight">
+                    Be Your Own <span class="text-primary">Boss</span>
+</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-medium leading-relaxed">
+                    Set your own schedule, accept the bids you want, and earn on your terms with total freedom.
+                </p>
+</div>
+</div>
+<!-- Footer / Controls -->
+<div class="w-full p-6 pb-8 space-y-8 bg-background-light dark:bg-background-dark">
+<!-- Pagination Indicators -->
+<div class="flex w-full flex-row items-center justify-center gap-2">
+<div class="h-2 w-8 rounded-full bg-primary transition-all duration-300"></div>
+<div class="h-2 w-2 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+<div class="h-2 w-2 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<!-- Action Button -->
+<button class="w-full h-14 rounded-xl bg-primary hover:bg-red-700 active:scale-[0.98] transition-all flex items-center justify-center shadow-lg shadow-primary/30 group">
+<span class="text-white text-lg font-bold mr-2">Next</span>
+<span class="material-symbols-outlined text-white transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</div>
+</body></html>
