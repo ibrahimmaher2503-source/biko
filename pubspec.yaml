@@ -119,6 +119,7 @@ flutter:
     - assets/images/onboarding/
     - assets/images/backgrounds/
     - assets/images/home/
+    - assets/images/markers/
     - assets/map_styles/
 
   # An image asset can refer to one or more resolution-specific "variants", see

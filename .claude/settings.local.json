@@ -29,7 +29,14 @@
       "Bash(ls:*)",
       "Bash(pwsh -File:*)",
       "Bash(gh pr list:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(test -d \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\features\\\\bidding\")",
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\main_customer.dart\")",
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\routes\\\\customer_pages.dart\")",
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\routes\\\\driver_pages.dart\")",
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\routes\\\\admin_pages.dart\")",
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\services\\\\firestore_service.dart\")",
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\services\\\\map_service.dart\")"
     ]
   }
 }
