@@ -229,6 +229,78 @@ enum PaymentMethod {
   }
 }
 
+enum BidStatus {
+  pending,
+  accepted,
+  rejected,
+  expired;
+
+  String toJson() => name;
+
+  static BidStatus fromJson(String value) {
+    return BidStatus.values.firstWhere(
+      (e) => e.name == value,
+      orElse: () => BidStatus.pending,
+    );
+  }
+}
+
+enum TrackingStatus {
+  driverEnRoute,
+  driverArrived,
+  tripInProgress,
+  arrivingSoon,
+  completed;
+
+  String toJson() {
+    switch (this) {
+      case TrackingStatus.driverEnRoute:
+        return 'driver_en_route';
+      case TrackingStatus.driverArrived:
+        return 'driver_arrived';
+      case TrackingStatus.tripInProgress:
+        return 'in_progress';
+      case TrackingStatus.arrivingSoon:
+        return 'arriving_soon';
+      case TrackingStatus.completed:
+        return 'completed';
+    }
+  }
+
+  static TrackingStatus fromJson(String value) {
+    switch (value) {
+      case 'driver_en_route':
+        return TrackingStatus.driverEnRoute;
+      case 'driver_arrived':
+        return TrackingStatus.driverArrived;
+      case 'in_progress':
+        return TrackingStatus.tripInProgress;
+      case 'arriving_soon':
+        return TrackingStatus.arrivingSoon;
+      case 'completed':
+        return TrackingStatus.completed;
+      default:
+        return TrackingStatus.driverEnRoute;
+    }
+  }
+
+  /// Translation key for display
+  String get translationKey {
+    switch (this) {
+      case TrackingStatus.driverEnRoute:
+        return 'tracking.driver_en_route';
+      case TrackingStatus.driverArrived:
+        return 'tracking.driver_arrived';
+      case TrackingStatus.tripInProgress:
+        return 'tracking.trip_in_progress';
+      case TrackingStatus.arrivingSoon:
+        return 'tracking.arriving_soon';
+      case TrackingStatus.completed:
+        return 'tracking.completed';
+    }
+  }
+}
+
 enum AdminRole {
   admin,
   superAdmin;
