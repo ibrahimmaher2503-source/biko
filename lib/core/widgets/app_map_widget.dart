@@ -91,18 +91,9 @@ class _AppMapWidgetState extends State<AppMapWidget> {
 
   /// Subscribes to the location stream and animates the camera
   Future<void> _initLocationTracking() async {
+    await _locationService.getCurrentPosition();
     final stream = _locationService.getLocationStream();
-    if (stream != null) {
-      _listenToStream(stream);
-    } else {
-      // If we don't have a stream yet, maybe permissions are pending.
-      // Ask for permission and then try the stream again.
-      await _locationService.getCurrentPosition();
-      final retryStream = _locationService.getLocationStream();
-      if (retryStream != null) {
-        _listenToStream(retryStream);
-      }
-    }
+    _listenToStream(stream);
   }
 
   void _listenToStream(Stream<Position> stream) {
