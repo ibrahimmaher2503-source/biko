@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Set Route and Place Bid</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "sans": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-hidden">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top App Bar (Floating) -->
+<div class="absolute top-0 left-0 right-0 z-20 p-4 pt-12 flex items-center justify-between pointer-events-none">
+<button class="pointer-events-auto flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex items-center gap-2 pointer-events-auto">
+<button class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Map Area -->
+<div class="absolute inset-0 z-0 h-full w-full bg-slate-200">
+<!-- Map Placeholder Image -->
+<div class="h-full w-full bg-cover bg-center" data-alt="Map view of Cairo streets" data-location="Cairo, Egypt" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVNNkLoZL2rM8nCnjB9Nbmbn2gZ544KC78cYjan_YvPsHaO2jJrKq8CEjGene0kUBkQYByumXLAt4ghdLD_cbJbPPuuJEqBHAVsX--zI0QHgvrKS15kK8ShhG0q6gvWaOUTm23CP83cmkOI3sQw69pZ_lKQZ8qc6tZRI9IF0GjATE8xpZ_cg2MaocvvjbuLLCDP3VNbRzjEUAIoSpcJZFzVRxI3RDUCbhnwenUeiyCua5NhXi9TRj8AHmTjenFz5y_sNXr9r3FTd4x");'>
+</div>
+<!-- Map Controls -->
+<div class="absolute right-4 bottom-[45%] flex flex-col gap-2 z-10">
+<button class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-lg text-primary">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<div class="flex flex-col rounded-xl bg-white dark:bg-slate-800 shadow-lg overflow-hidden">
+<button class="flex size-10 items-center justify-center border-b border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="flex size-10 items-center justify-center text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Sheet Overlay -->
+<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col justify-end">
+<!-- Semi-transparent backdrop for focus -->
+<!-- Bottom Sheet Content -->
+<div class="relative flex w-full flex-col rounded-t-3xl bg-white dark:bg-slate-900 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] pb-6 pt-2">
+<!-- Handle -->
+<div class="flex w-full justify-center pt-3 pb-2">
+<div class="h-1.5 w-12 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<!-- Locations Preview (Compact) -->
+<div class="px-6 py-2">
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-[20px]">trip_origin</span>
+<div class="border-b border-slate-100 dark:border-slate-800 flex-1 py-1">
+<p class="text-sm font-semibold text-slate-900 dark:text-slate-100">58 El-Thawra St.</p>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400 text-[20px]">location_on</span>
+<div class="flex-1 py-1">
+<p class="text-sm font-semibold text-slate-900 dark:text-slate-100">City Stars Mall, Gate 3</p>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px w-full bg-slate-100 dark:bg-slate-800 my-2"></div>
+<!-- Bidding Section -->
+<div class="flex flex-col px-6 pt-2">
+<div class="flex items-center justify-between mb-2">
+<span class="text-sm font-medium text-slate-500 dark:text-slate-400">Recommended Fare</span>
+<div class="flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
+<span class="material-symbols-outlined text-primary text-[16px]">trending_up</span>
+<span class="text-sm font-bold text-primary">Fair Price: EGP 45</span>
+</div>
+</div>
+<div class="mt-4 flex flex-col items-center">
+<label class="text-xs font-medium text-slate-400 uppercase tracking-wider mb-2">Your Offer</label>
+<div class="flex items-center justify-center w-full gap-4">
+<button class="size-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<div class="relative flex-1 max-w-[180px]">
+<input class="w-full text-center text-5xl font-bold text-slate-900 dark:text-slate-100 bg-transparent border-none focus:ring-0 p-0" placeholder="00" type="number" value="50"/>
+<span class="absolute top-1/2 -translate-y-1/2 right-2 text-xl font-medium text-slate-400 pointer-events-none">EGP</span>
+</div>
+<button class="size-12 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+<p class="mt-2 text-xs text-slate-400 text-center">Drivers are more likely to accept higher bids.</p>
+</div>
+<!-- Options / Payment -->
+<div class="mt-6 flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+<button class="shrink-0 flex items-center gap-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 px-3 py-2">
+<span class="material-symbols-outlined text-green-600 text-[20px]">payments</span>
+<span class="text-sm font-medium">Cash</span>
+</button>
+<button class="shrink-0 flex items-center gap-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 px-3 py-2">
+<span class="material-symbols-outlined text-slate-500 text-[20px]">person</span>
+<span class="text-sm font-medium">1 Passenger</span>
+</button>
+<button class="shrink-0 flex items-center gap-2 rounded-lg bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 px-3 py-2">
+<span class="material-symbols-outlined text-slate-500 text-[20px]">sticky_note_2</span>
+<span class="text-sm font-medium">Add Note</span>
+</button>
+</div>
+<!-- Action Button -->
+<div class="mt-4 pb-4">
+<button class="w-full rounded-xl bg-primary py-4 text-center text-lg font-bold text-white shadow-lg shadow-primary/30 active:scale-[0.98] transition-transform">
+                            Request Ride
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

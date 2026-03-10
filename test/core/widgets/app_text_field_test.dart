@@ -1,7 +1,7 @@
+import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:biko/core/widgets/app_text_field.dart';
-import 'package:biko/core/theme/app_theme.dart';
 
 void main() {
   group('AppTextField Widget Tests', () {
@@ -268,7 +268,7 @@ void main() {
                 label: 'Email',
                 validator: (value) {
                   validatorCalled = value;
-                  return value?.isEmpty == true ? 'Required' : null;
+                  return (value?.isEmpty ?? false) ? 'Required' : null;
                 },
               ),
             ),

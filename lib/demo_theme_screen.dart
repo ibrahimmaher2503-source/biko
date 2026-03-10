@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'core/theme/app_theme.dart';
 
 /// Demo screen to showcase the theme system
@@ -131,7 +132,7 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
         borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -155,7 +156,7 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
               Text(
                 hexCode,
                 style: TextStyle(
-                  color: _getContrastColor(color).withOpacity(0.8),
+                  color: _getContrastColor(color).withValues(alpha: 0.8),
                   fontSize: 12,
                   fontFamily: 'monospace',
                 ),
@@ -207,7 +208,7 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
                 '${style.$2?.fontSize?.toStringAsFixed(0)}sp • '
                 '${_getFontWeightName(style.$2?.fontWeight)}',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ],

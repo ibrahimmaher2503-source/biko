@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:biko/core/app_initializer.dart';
+import 'package:biko/core/routes/admin_pages.dart';
+import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/translations/app_translations.dart';
-import 'package:biko/core/routes/app_routes.dart';
-import 'package:biko/demo_theme_screen.dart';
-import 'package:biko/demo_widgets_screen.dart';
+import 'package:biko/features/admin/controllers/admin_auth_controller.dart';
+import 'package:biko/features/admin/controllers/admin_layout_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// BikeRide Admin Panel Entry Point (Web-optimized)
 ///
@@ -26,6 +27,10 @@ class AdminApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Register permanent controllers
+    Get.put(AdminAuthController(), permanent: true);
+    Get.put(AdminLayoutController(), permanent: true);
+
     return GetMaterialApp(
       // App metadata
       title: 'BikeRide Admin Panel',
@@ -34,7 +39,6 @@ class AdminApp extends StatelessWidget {
       // Theme configuration
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // Follows system preference
 
       // Localization configuration
       translations: AppTranslations(),
@@ -43,7 +47,6 @@ class AdminApp extends StatelessWidget {
 
       // RTL/LTR support
       builder: (context, child) {
-        // Determine text direction based on current locale
         final locale = Get.locale ?? const Locale('en');
         final isRTL = locale.languageCode == 'ar';
 
@@ -53,26 +56,15 @@ class AdminApp extends StatelessWidget {
         );
       },
 
-      // Routing configuration (web-optimized with URL strategy)
-      initialRoute: AppRoutes.demoTheme,
-      getPages: [
-        GetPage(
-          name: AppRoutes.demoTheme,
-          page: () => const DemoThemeScreen(),
+      // Routing configuration
+      initialRoute: AppRoutes.adminLogin,
+      getPages: AdminPages.pages,
+      unknownRoute: GetPage(
+        name: AppRoutes.adminNotFound,
+        page: () => const Scaffold(
+          body: Center(child: Text('Page not found')),
         ),
-        GetPage(
-          name: AppRoutes.demoWidgets,
-          page: () => const DemoWidgetsScreen(),
-        ),
-        // Admin-specific routes will be added here
-        // GetPage(
-        //   name: AppRoutes.adminDashboard,
-        //   page: () => AdminDashboardScreen(),
-        // ),
-      ],
-
-      // Web-specific configuration
-      // useInheritedMediaQuery: true, // Better performance on web
+      ),
     );
   }
 }

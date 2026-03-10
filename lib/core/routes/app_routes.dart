@@ -173,4 +173,19 @@ class AppRoutes {
 
   /// Analytics and reports
   static const String adminAnalytics = '/admin/analytics';
+
+  /// Customer management list
+  static const String adminCustomers = '/admin/customers';
+
+  /// Customer detail
+  static const String adminCustomerDetail = '/admin/customers/detail';
+
+  /// Driver management list
+  static const String adminDrivers = '/admin/drivers';
+
+  /// Driver detail
+  static const String adminDriverDetail = '/admin/drivers/detail';
+
+  /// Admin not found / 404
+  static const String adminNotFound = '/admin/not-found';
 }

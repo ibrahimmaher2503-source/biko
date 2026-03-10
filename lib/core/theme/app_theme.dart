@@ -1,6 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Semantic color extension for surfaces, borders, and status states.
+///
+/// Access via: `Theme.of(context).extension<AppColorsExtension>()!`
+///
+/// Automatically adapts to light/dark mode when registered on both themes.
+class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
+  const AppColorsExtension({
+    required this.surfaceElevated,
+    required this.surfaceContainer,
+    required this.border,
+    required this.borderSubtle,
+    required this.textMuted,
+    required this.info,
+    required this.infoBg,
+    required this.infoBorder,
+    required this.success,
+    required this.successBg,
+    required this.warning,
+    required this.warningBg,
+  });
+
+  /// Card backgrounds, elevated containers
+  final Color surfaceElevated;
+
+  /// Input field backgrounds, secondary containers
+  final Color surfaceContainer;
+
+  /// Default border color for cards, inputs
+  final Color border;
+
+  /// Subtle/light border for dividers
+  final Color borderSubtle;
+
+  /// Secondary/muted text
+  final Color textMuted;
+
+  /// Info icon/text foreground
+  final Color info;
+
+  /// Info tip background
+  final Color infoBg;
+
+  /// Info tip border
+  final Color infoBorder;
+
+  /// Success icon/text foreground
+  final Color success;
+
+  /// Success status background
+  final Color successBg;
+
+  /// Warning icon/text foreground
+  final Color warning;
+
+  /// Warning status background
+  final Color warningBg;
+
+  @override
+  AppColorsExtension copyWith({
+    Color? surfaceElevated,
+    Color? surfaceContainer,
+    Color? border,
+    Color? borderSubtle,
+    Color? textMuted,
+    Color? info,
+    Color? infoBg,
+    Color? infoBorder,
+    Color? success,
+    Color? successBg,
+    Color? warning,
+    Color? warningBg,
+  }) {
+    return AppColorsExtension(
+      surfaceElevated: surfaceElevated ?? this.surfaceElevated,
+      surfaceContainer: surfaceContainer ?? this.surfaceContainer,
+      border: border ?? this.border,
+      borderSubtle: borderSubtle ?? this.borderSubtle,
+      textMuted: textMuted ?? this.textMuted,
+      info: info ?? this.info,
+      infoBg: infoBg ?? this.infoBg,
+      infoBorder: infoBorder ?? this.infoBorder,
+      success: success ?? this.success,
+      successBg: successBg ?? this.successBg,
+      warning: warning ?? this.warning,
+      warningBg: warningBg ?? this.warningBg,
+    );
+  }
+
+  @override
+  AppColorsExtension lerp(AppColorsExtension? other, double t) {
+    if (other is! AppColorsExtension) return this;
+    return AppColorsExtension(
+      surfaceElevated: Color.lerp(surfaceElevated, other.surfaceElevated, t)!,
+      surfaceContainer:
+          Color.lerp(surfaceContainer, other.surfaceContainer, t)!,
+      border: Color.lerp(border, other.border, t)!,
+      borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
+      textMuted: Color.lerp(textMuted, other.textMuted, t)!,
+      info: Color.lerp(info, other.info, t)!,
+      infoBg: Color.lerp(infoBg, other.infoBg, t)!,
+      infoBorder: Color.lerp(infoBorder, other.infoBorder, t)!,
+      success: Color.lerp(success, other.success, t)!,
+      successBg: Color.lerp(successBg, other.successBg, t)!,
+      warning: Color.lerp(warning, other.warning, t)!,
+      warningBg: Color.lerp(warningBg, other.warningBg, t)!,
+    );
+  }
+}
+
 /// Centralized theme system for BikeRide application
 /// Provides consistent colors, typography, spacing, and styling across
 /// Customer App, Driver App, and Admin Panel
@@ -54,6 +163,15 @@ class AppTheme {
   /// Neutral tint - light variant of primary for backgrounds
   static const Color neutralTint = Color(0xFFFCECEE);
 
+  /// Orange accent — used for Package Delivery card icon
+  static const Color orange = Color(0xFFF97316);
+
+  /// Orange background tint (light)
+  static const Color orangeBgLight = Color(0xFFFFF7ED);
+
+  /// Orange background tint (dark)
+  static const Color orangeBgDark = Color(0xFF7C2D12);
+
   // ==================== Border Radius Values ====================
 
   /// Default border radius (8dp)
@@ -77,16 +195,14 @@ class AppTheme {
       brightness: Brightness.light,
 
       // Color scheme
-      colorScheme: ColorScheme.light(
+      colorScheme: const ColorScheme.light(
         primary: primary,
         secondary: primaryDark,
         surface: backgroundLight,
         surfaceTint: neutralTint,
-        error: const Color(0xFFF44336),
-        onPrimary: Colors.white,
+        error: Color(0xFFF44336),
         onSecondary: Colors.white,
-        onSurface: const Color(0xFF1C1B1F),
-        onError: Colors.white,
+        onSurface: Color(0xFF1C1B1F),
       ),
 
       // Scaffold background
@@ -136,7 +252,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: primary,
           minimumSize: const Size(double.infinity, 56),
-          side: const BorderSide(color: primary, width: 1),
+          side: const BorderSide(color: primary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusXl),
           ),
@@ -209,6 +325,22 @@ class AppTheme {
         ),
       ),
 
+      // Filled button theme
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 56),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusXl),
+          ),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
       // Text theme - English (Plus Jakarta Sans)
       textTheme: _buildEnglishTextTheme(),
 
@@ -217,6 +349,24 @@ class AppTheme {
         color: Color(0xFF1C1B1F),
         size: 24,
       ),
+
+      // Theme extensions
+      extensions: const <ThemeExtension<dynamic>>[
+        AppColorsExtension(
+          surfaceElevated: Colors.white,
+          surfaceContainer: Color(0xFFF1F5F9),
+          border: Color(0xFFE2E8F0),
+          borderSubtle: Color(0xFFF1F5F9),
+          textMuted: Color(0xFF64748B),
+          info: Color(0xFF2563EB),
+          infoBg: Color(0xFFEFF6FF),
+          infoBorder: Color(0xFFDBEAFE),
+          success: Color(0xFF16A34A),
+          successBg: Color(0xFFDCFCE7),
+          warning: Color(0xFFD97706),
+          warningBg: Color(0xFFFEF3C7),
+        ),
+      ],
     );
   }
 
@@ -229,16 +379,15 @@ class AppTheme {
       brightness: Brightness.dark,
 
       // Color scheme
-      colorScheme: ColorScheme.dark(
+      colorScheme: const ColorScheme.dark(
         primary: primary,
         secondary: primaryDark,
         surface: backgroundDark,
-        surfaceTint: const Color(0xFF3E1F23),
-        error: const Color(0xFFF44336),
+        surfaceTint: Color(0xFF3E1F23),
+        error: Color(0xFFF44336),
         onPrimary: Colors.white,
         onSecondary: Colors.white,
-        onSurface: const Color(0xFFE6E1E5),
-        onError: Colors.black,
+        onSurface: Color(0xFFE6E1E5),
       ),
 
       // Scaffold background
@@ -288,7 +437,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           foregroundColor: primary,
           minimumSize: const Size(double.infinity, 56),
-          side: const BorderSide(color: primary, width: 1),
+          side: const BorderSide(color: primary),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radiusXl),
           ),
@@ -361,6 +510,22 @@ class AppTheme {
         ),
       ),
 
+      // Filled button theme
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          backgroundColor: primary,
+          foregroundColor: Colors.white,
+          minimumSize: const Size(double.infinity, 56),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusXl),
+          ),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+
       // Text theme - English (Plus Jakarta Sans)
       textTheme: _buildEnglishTextTheme(forDarkMode: true),
 
@@ -369,6 +534,24 @@ class AppTheme {
         color: Color(0xFFE6E1E5),
         size: 24,
       ),
+
+      // Theme extensions
+      extensions: const <ThemeExtension<dynamic>>[
+        AppColorsExtension(
+          surfaceElevated: Color(0xFF2D1316),
+          surfaceContainer: Color(0xFF1E293B),
+          border: Color(0xFF334155),
+          borderSubtle: Color(0xFF1E293B),
+          textMuted: Color(0xFF94A3B8),
+          info: Color(0xFF60A5FA),
+          infoBg: Color(0xFF1E3A5F),
+          infoBorder: Color(0xFF2563EB),
+          success: Color(0xFF4ADE80),
+          successBg: Color(0xFF14532D),
+          warning: Color(0xFFFBBF24),
+          warningBg: Color(0xFF78350F),
+        ),
+      ],
     );
   }
 
@@ -376,7 +559,7 @@ class AppTheme {
 
   /// Build English text theme using Plus Jakarta Sans
   static TextTheme _buildEnglishTextTheme({bool forDarkMode = false}) {
-    final Color textColor = forDarkMode ? const Color(0xFFE6E1E5) : const Color(0xFF1C1B1F);
+    final textColor = forDarkMode ? const Color(0xFFE6E1E5) : const Color(0xFF1C1B1F);
 
     return GoogleFonts.plusJakartaSansTextTheme(
       TextTheme(
@@ -470,7 +653,7 @@ class AppTheme {
 
   /// Build Arabic text theme using Cairo font
   static TextTheme buildArabicTextTheme({bool forDarkMode = false}) {
-    final Color textColor = forDarkMode ? const Color(0xFFE6E1E5) : const Color(0xFF1C1B1F);
+    final textColor = forDarkMode ? const Color(0xFFE6E1E5) : const Color(0xFF1C1B1F);
 
     return GoogleFonts.cairoTextTheme(
       TextTheme(

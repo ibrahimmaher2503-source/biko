@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Driver: Navigate to Customer</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "sans": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-hidden">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<div class="absolute top-0 left-0 right-0 z-30 p-4 pt-12 pointer-events-none">
+<div class="pointer-events-auto bg-slate-900 text-white p-4 rounded-xl shadow-lg flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-4xl">turn_right</span>
+<span class="text-xs font-bold text-slate-300 mt-1">150m</span>
+</div>
+<div>
+<h2 class="text-xl font-bold">Turn right</h2>
+<p class="text-slate-300 text-sm">onto Al-Nozha Street</p>
+</div>
+</div>
+<button class="bg-slate-800 rounded-full p-2 hover:bg-slate-700 transition-colors">
+<span class="material-symbols-outlined text-white">close</span>
+</button>
+</div>
+</div>
+<div class="absolute inset-0 z-0 h-full w-full bg-slate-200">
+<div class="h-full w-full bg-cover bg-center grayscale contrast-125 brightness-110" data-alt="Map view of Cairo streets silver theme" data-location="Cairo, Egypt" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVNNkLoZL2rM8nCnjB9Nbmbn2gZ544KC78cYjan_YvPsHaO2jJrKq8CEjGene0kUBkQYByumXLAt4ghdLD_cbJbPPuuJEqBHAVsX--zI0QHgvrKS15kK8ShhG0q6gvWaOUTm23CP83cmkOI3sQw69pZ_lKQZ8qc6tZRI9IF0GjATE8xpZ_cg2MaocvvjbuLLCDP3VNbRzjEUAIoSpcJZFzVRxI3RDUCbhnwenUeiyCua5NhXi9TRj8AHmTjenFz5y_sNXr9r3FTd4x");'>
+</div>
+<svg class="absolute inset-0 h-full w-full pointer-events-none z-10" style="filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.3));">
+<path d="M 180 800 C 220 700, 150 500, 200 400 S 300 300, 250 150" fill="none" stroke="#e0062e" stroke-dasharray="10 0" stroke-linecap="round" stroke-width="6"></path>
+<circle cx="200" cy="400" fill="#e0062e" r="12" stroke="white" stroke-width="3"></circle>
+</svg>
+<div class="absolute right-4 bottom-[40%] flex flex-col gap-2 z-20">
+<button class="flex size-12 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-lg text-primary">
+<span class="material-symbols-outlined text-[24px]">navigation</span>
+</button>
+<div class="flex flex-col rounded-xl bg-white dark:bg-slate-800 shadow-lg overflow-hidden">
+<button class="flex size-12 items-center justify-center border-b border-slate-100 dark:border-slate-700 text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="flex size-12 items-center justify-center text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+</div>
+</div>
+<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col justify-end">
+<div class="relative flex w-full flex-col rounded-t-3xl bg-white dark:bg-slate-900 shadow-[0_-4px_20px_rgba(0,0,0,0.2)] pb-6 pt-2">
+<div class="flex w-full justify-center pt-3 pb-4">
+<div class="h-1.5 w-12 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<div class="px-6 flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="h-12 w-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">person</span>
+</div>
+<div>
+<h3 class="text-lg font-bold text-slate-900 dark:text-slate-100">Ahmed M.</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400">Customer</p>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="size-10 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 flex items-center justify-center hover:bg-green-200 transition-colors">
+<span class="material-symbols-outlined">call</span>
+</button>
+<button class="size-10 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center hover:bg-blue-200 transition-colors">
+<span class="material-symbols-outlined">chat</span>
+</button>
+</div>
+</div>
+<div class="h-px w-full bg-slate-100 dark:bg-slate-800 my-2"></div>
+<div class="px-6 py-2">
+<div class="flex items-start gap-3 mb-4">
+<div class="mt-1">
+<span class="material-symbols-outlined text-primary">location_on</span>
+</div>
+<div>
+<p class="text-sm font-semibold text-slate-900 dark:text-slate-100">Drop-off Location</p>
+<p class="text-base text-slate-600 dark:text-slate-300">12 Ahmed Orabi St, Mohandessin</p>
+<p class="text-xs text-slate-400 mt-1">Apt 4, Floor 2, Beside Metro Market</p>
+</div>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-4 flex items-center gap-4 border border-slate-100 dark:border-slate-700">
+<div class="h-10 w-10 bg-white dark:bg-slate-700 rounded-lg flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">medication</span>
+</div>
+<div class="flex-1">
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Item Summary</p>
+<p class="text-sm font-bold text-slate-900 dark:text-slate-100">Medicine Package</p>
+</div>
+<span class="text-sm font-semibold text-slate-900 dark:text-slate-100">COD: 120 EGP</span>
+</div>
+</div>
+<div class="px-6 mt-4 pb-4">
+<button class="w-full rounded-xl bg-primary py-4 flex items-center justify-center gap-2 text-lg font-bold text-white shadow-lg shadow-primary/30 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined">check_circle</span>
+                        Tap to Complete Delivery
+                    </button>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

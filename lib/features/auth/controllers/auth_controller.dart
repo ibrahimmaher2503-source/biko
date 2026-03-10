@@ -1,12 +1,14 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import 'package:biko/core/constants/dev_config.dart';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/auth_service.dart';
+import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
+import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 /// Global authentication controller — registered permanently in AppInitializer
 class AuthController extends GetxController {
@@ -25,7 +27,8 @@ class AuthController extends GetxController {
   bool get isLoading =>
       _authState.value == AuthState.sendingOtp ||
       _authState.value == AuthState.verifying ||
-      _authState.value == AuthState.signingInWithGoogle;
+      _authState.value == AuthState.signingInWithGoogle ||
+      _authState.value == AuthState.signingInWithFacebook;
   bool get isAuthenticated => AuthService.currentUser != null;
   bool get isResendEnabled => secondsRemaining.value == 0;
 
@@ -80,7 +83,7 @@ class AuthController extends GetxController {
     );
   }
 
-  void _onAutoVerify(PhoneAuthCredential credential) async {
+  Future<void> _onAutoVerify(PhoneAuthCredential credential) async {
     _authState.value = AuthState.verifying;
     try {
       await AuthService.signInWithCredential(credential);
@@ -171,13 +174,32 @@ class AuthController extends GetxController {
     } catch (e) {
       _authState.value = AuthState.idle;
       errorMessage.value = 'error.google_sign_in_failed'.tr;
-      Get.snackbar(
-        'error.google_sign_in_failed'.tr,
-        '',
-        snackPosition: SnackPosition.BOTTOM,
-        duration: const Duration(seconds: 3),
-        margin: const EdgeInsets.all(16),
-      );
+      AppSnackbar.error('error.google_sign_in_failed'.tr);
+    }
+  }
+
+  // ==================== Facebook Sign-In ====================
+
+  /// Sign in with Facebook account
+  Future<void> signInWithFacebook() async {
+    _authState.value = AuthState.signingInWithFacebook;
+    errorMessage.value = '';
+
+    try {
+      final userCredential = await AuthService.signInWithFacebook();
+
+      // User cancelled the Facebook dialog
+      if (userCredential == null) {
+        _authState.value = AuthState.idle;
+        return;
+      }
+
+      _authState.value = AuthState.authenticated;
+      await _navigateAfterAuth();
+    } catch (e) {
+      _authState.value = AuthState.idle;
+      errorMessage.value = 'error.facebook_sign_in_failed'.tr;
+      AppSnackbar.error('error.facebook_sign_in_failed'.tr);
     }
   }
 
@@ -186,6 +208,9 @@ class AuthController extends GetxController {
   Future<void> _navigateAfterAuth() async {
     final user = AuthService.currentUser;
     if (user == null) return;
+
+    // Initialize FCM: request permission, save token, set up listeners
+    await FcmService.initialize();
 
     final userModel = await FirestoreService.getUser(user.uid);
 
@@ -213,7 +238,8 @@ class AuthController extends GetxController {
   // ==================== Sign Out ====================
 
   Future<void> signOut() async {
-    await AuthService.signOutGoogle();
+    await FcmService.clearToken();
+    await AuthService.signOut();
     _authState.value = AuthState.idle;
     phoneNumber.value = '';
     _verificationId.value = '';

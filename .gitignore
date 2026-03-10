@@ -58,6 +58,9 @@ key.properties
 upload-keystore.jks
 bikeride-release.keystore
 
+# Google Maps API key (iOS)
+ios/Flutter/Maps.xcconfig
+
 # Helper scripts (keep for reference)
 !create_keystore.bat
 !check_keystore.bat

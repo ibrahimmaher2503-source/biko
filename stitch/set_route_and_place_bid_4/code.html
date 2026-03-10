@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Package Details Entry</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                        "sans": ["Cairo", "Plus Jakarta Sans", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-hidden">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<div class="absolute top-0 left-0 right-0 z-20 p-4 pt-12 flex items-center justify-between pointer-events-none">
+<button class="pointer-events-auto flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<div class="flex items-center gap-2 pointer-events-auto">
+<button class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</div>
+<div class="absolute inset-0 z-0 h-[45%] w-full bg-slate-200">
+<div class="h-full w-full bg-cover bg-center grayscale" data-alt="Silver themed map view" data-location="Cairo, Egypt" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVNNkLoZL2rM8nCnjB9Nbmbn2gZ544KC78cYjan_YvPsHaO2jJrKq8CEjGene0kUBkQYByumXLAt4ghdLD_cbJbPPuuJEqBHAVsX--zI0QHgvrKS15kK8ShhG0q6gvWaOUTm23CP83cmkOI3sQw69pZ_lKQZ8qc6tZRI9IF0GjATE8xpZ_cg2MaocvvjbuLLCDP3VNbRzjEUAIoSpcJZFzVRxI3RDUCbhnwenUeiyCua5NhXi9TRj8AHmTjenFz5y_sNXr9r3FTd4x");'></div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative w-2/3 h-1/3 border-t-2 border-primary border-dashed -skew-y-12 opacity-80"></div>
+<div class="absolute top-[35%] left-[20%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
+<div class="bg-white dark:bg-slate-800 p-1.5 rounded-full shadow-lg mb-1">
+<span class="material-symbols-outlined text-primary text-2xl">package_2</span>
+</div>
+<div class="bg-white dark:bg-slate-800 px-2 py-0.5 rounded text-[10px] font-bold shadow text-slate-900">Pickup</div>
+</div>
+<div class="absolute bottom-[35%] right-[20%] translate-x-1/2 translate-y-1/2 flex flex-col items-center">
+<div class="bg-primary p-1.5 rounded-full shadow-lg mb-1">
+<span class="material-symbols-outlined text-white text-2xl">location_on</span>
+</div>
+<div class="bg-primary px-2 py-0.5 rounded text-[10px] font-bold shadow text-white">Dropoff</div>
+</div>
+</div>
+</div>
+<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col justify-end h-[60%]">
+<div class="relative flex w-full flex-col h-full rounded-t-3xl bg-white dark:bg-slate-900 shadow-[0_-4px_20px_rgba(0,0,0,0.15)] pb-6 pt-2 overflow-hidden">
+<div class="flex w-full justify-center pt-3 pb-2 flex-shrink-0">
+<div class="h-1.5 w-12 rounded-full bg-slate-200 dark:bg-slate-700"></div>
+</div>
+<div class="flex-1 overflow-y-auto px-6 pb-20">
+<h2 class="text-xl font-bold mb-4 text-slate-900 dark:text-slate-100">Package Details</h2>
+<div class="mb-6">
+<label class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-3 block">What are you sending?</label>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border-2 border-primary bg-primary/5">
+<span class="material-symbols-outlined text-primary text-3xl">devices</span>
+<span class="text-xs font-bold text-primary">Electronics</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 opacity-70">
+<span class="material-symbols-outlined text-slate-400 text-3xl">lunch_dining</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Food</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 opacity-70">
+<span class="material-symbols-outlined text-slate-400 text-3xl">description</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Docs</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 opacity-70">
+<span class="material-symbols-outlined text-slate-400 text-3xl">apparel</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Clothes</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 opacity-70">
+<span class="material-symbols-outlined text-slate-400 text-3xl">medication</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Meds</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 opacity-70">
+<span class="material-symbols-outlined text-slate-400 text-3xl">inventory_2</span>
+<span class="text-xs font-medium text-slate-500 dark:text-slate-400">Other</span>
+</button>
+</div>
+</div>
+<div class="mb-6">
+<label class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-3 block">Package Weight</label>
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+<button class="flex-1 py-2 text-sm font-semibold rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm transition-all">Small</button>
+<button class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all">Medium</button>
+<button class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all">Large</button>
+</div>
+<p class="text-xs text-slate-400 mt-2 ml-1">Max 5kg • Fits in a backpack</p>
+</div>
+<div class="mb-4">
+<label class="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-3 block">Instructions for Driver</label>
+<textarea class="w-full rounded-xl bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-sm focus:border-primary focus:ring-primary min-h-[100px] resize-none" placeholder="e.g. Leave at reception, call upon arrival..."></textarea>
+</div>
+</div>
+<div class="absolute bottom-0 inset-x-0 p-6 bg-gradient-to-t from-white via-white to-transparent dark:from-slate-900 dark:via-slate-900 pt-10">
+<button class="w-full rounded-xl bg-primary py-4 text-center text-lg font-bold text-white shadow-lg shadow-primary/30 active:scale-[0.98] transition-transform flex items-center justify-center gap-2">
+<span>Next</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>

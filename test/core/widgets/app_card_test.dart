@@ -1,7 +1,7 @@
+import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:biko/core/widgets/app_card.dart';
-import 'package:biko/core/theme/app_theme.dart';
 
 void main() {
   group('AppCard Widget Tests', () {
@@ -9,9 +9,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
-              child: const Text('Card Content'),
+              child: Text('Card Content'),
             ),
           ),
         ),
@@ -50,9 +50,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
-              child: const Text('Default Padding'),
+              child: Text('Default Padding'),
             ),
           ),
         ),
@@ -67,10 +67,10 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
               padding: 24.0,
-              child: const Text('Custom Padding'),
+              child: Text('Custom Padding'),
             ),
           ),
         ),
@@ -85,9 +85,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
-              child: const Text('Default Elevation'),
+              child: Text('Default Elevation'),
             ),
           ),
         ),
@@ -101,10 +101,10 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
               elevation: 4.0,
-              child: const Text('Custom Elevation'),
+              child: Text('Custom Elevation'),
             ),
           ),
         ),
@@ -118,10 +118,10 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
               backgroundColor: Colors.amber,
-              child: const Text('Custom Color'),
+              child: Text('Custom Color'),
             ),
           ),
         ),
@@ -135,9 +135,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
-              child: const Text('Default Radius'),
+              child: Text('Default Radius'),
             ),
           ),
         ),
@@ -154,10 +154,10 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
               borderRadius: 20.0,
-              child: const Text('Custom Radius'),
+              child: Text('Custom Radius'),
             ),
           ),
         ),
@@ -174,9 +174,9 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppCard(
-              child: const Text('Theme Color'),
+              child: Text('Theme Color'),
             ),
           ),
         ),

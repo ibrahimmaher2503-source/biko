@@ -1,12 +1,12 @@
+import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:biko/core/widgets/app_button.dart';
-import 'package:biko/core/theme/app_theme.dart';
 
 void main() {
   group('AppButton Widget Tests', () {
     testWidgets('Primary variant renders ElevatedButton', (tester) async {
-      bool pressed = false;
+      var pressed = false;
 
       await tester.pumpWidget(
         MaterialApp(
@@ -15,7 +15,6 @@ void main() {
             body: AppButton(
               text: 'Primary Button',
               onPressed: () => pressed = true,
-              variant: ButtonVariant.primary,
             ),
           ),
         ),
@@ -85,12 +84,10 @@ void main() {
     });
 
     testWidgets('Disabled state prevents interaction', (tester) async {
-      bool pressed = false;
-
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: Scaffold(
+          home: const Scaffold(
             body: AppButton(
               text: 'Disabled Button',
               onPressed: null, // Disabled

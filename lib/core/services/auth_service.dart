@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 /// Wraps Firebase Phone Authentication
@@ -62,14 +63,24 @@ class AuthService {
     return _auth.signInWithCredential(credential);
   }
 
-  /// Sign out the current user
-  static Future<void> signOut() async {
-    await _auth.signOut();
+  /// Sign in with Facebook — returns null if user cancelled
+  static Future<UserCredential?> signInWithFacebook() async {
+    final result = await FacebookAuth.instance.login(
+      permissions: ['public_profile'],
+    );
+    if (result.status != LoginStatus.success) return null;
+
+    final accessToken = result.accessToken;
+    if (accessToken == null) return null;
+
+    final credential = FacebookAuthProvider.credential(accessToken.tokenString);
+    return _auth.signInWithCredential(credential);
   }
 
-  /// Sign out from both Google and Firebase
-  static Future<void> signOutGoogle() async {
-    await GoogleSignIn().signOut();
+  /// Sign out from all providers and Firebase
+  static Future<void> signOut() async {
+    try { await GoogleSignIn().signOut(); } catch (_) {}
+    try { await FacebookAuth.instance.logOut(); } catch (_) {}
     await _auth.signOut();
   }
 }

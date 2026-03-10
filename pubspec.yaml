@@ -52,9 +52,30 @@ dependencies:
   firebase_auth: ^5.0.0
   cloud_firestore: ^5.0.0
   firebase_storage: ^12.0.0
+  firebase_messaging: ^15.1.0
+
+  # Local Notifications (foreground display + channels)
+  flutter_local_notifications: ^18.0.0
 
   # Google Sign-In
   google_sign_in: ^6.2.1
+
+  # Facebook Sign-In
+  flutter_facebook_auth: ^7.1.1
+
+  # Location & Maps
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
+  google_maps_flutter: ^2.10.0
+
+  # Polyline decoding for Google Maps Directions API
+  flutter_polyline_points: ^2.1.0
+
+  # HTTP
+  http: ^1.2.0
+
+  # URL Launcher
+  url_launcher: ^6.2.0
 
   # Media
   image_picker: ^1.0.0
@@ -64,6 +85,11 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
 
+  cloud_functions: any
+  firebase_database: any
+  fl_chart: any
+  timeago: any
+  web: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -92,6 +118,8 @@ flutter:
     - assets/images/logo/
     - assets/images/onboarding/
     - assets/images/backgrounds/
+    - assets/images/home/
+    - assets/map_styles/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

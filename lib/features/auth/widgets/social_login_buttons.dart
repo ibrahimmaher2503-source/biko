@@ -35,64 +35,61 @@ class SocialLoginButtons extends StatelessWidget {
         ),
         const SizedBox(height: 16),
         // Social buttons row
-        Row(
-          children: [
-            Expanded(
-              child: Obx(() {
-                final authController = Get.find<AuthController>();
-                final isSigningIn = authController.authState ==
-                    AuthState.signingInWithGoogle;
-                return _SocialButton(
+        Obx(() {
+          final authController = Get.find<AuthController>();
+          final isSocialLoading =
+              authController.authState == AuthState.signingInWithGoogle ||
+              authController.authState == AuthState.signingInWithFacebook;
+          return Row(
+            children: [
+              Expanded(
+                child: _SocialButton(
                   label: 'phone.google'.tr,
                   icon: 'G',
                   iconColor: const Color(0xFFDB4437),
-                  isLoading: isSigningIn,
-                  onTap: isSigningIn
+                  isLoading: authController.authState ==
+                      AuthState.signingInWithGoogle,
+                  onTap: isSocialLoading
                       ? null
-                      : () => authController.signInWithGoogle(),
-                );
-              }),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _SocialButton(
-                label: 'phone.facebook'.tr,
-                icon: 'f',
-                iconColor: const Color(0xFF1877F2),
-                onTap: () => _showComingSoon(),
+                      : authController.signInWithGoogle,
+                ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _SocialButton(
+                  label: 'phone.facebook'.tr,
+                  icon: 'f',
+                  iconColor: const Color(0xFF1877F2),
+                  isLoading: authController.authState ==
+                      AuthState.signingInWithFacebook,
+                  onTap: isSocialLoading
+                      ? null
+                      : authController.signInWithFacebook,
+                ),
+              ),
+            ],
+          );
+        }),
       ],
     );
   }
 
-  void _showComingSoon() {
-    Get.snackbar(
-      'phone.coming_soon'.tr,
-      '',
-      snackPosition: SnackPosition.BOTTOM,
-      duration: const Duration(seconds: 2),
-      margin: const EdgeInsets.all(16),
-    );
-  }
 }
 
 class _SocialButton extends StatelessWidget {
+  const _SocialButton({
+    required this.label,
+    required this.icon,
+    required this.iconColor,
+    required this.onTap,
+    this.isLoading = false,
+  });
+
   final String label;
   final String icon;
   final Color iconColor;
   final bool isLoading;
   final VoidCallback? onTap;
-
-  const _SocialButton({
-    required this.label,
-    required this.icon,
-    required this.iconColor,
-    this.isLoading = false,
-    required this.onTap,
-  });
 
   @override
   Widget build(BuildContext context) {

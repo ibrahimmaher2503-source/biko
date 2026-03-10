@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// BikeRide branded text field widget with support for:
 /// - Material 3 styling following AppTheme
@@ -39,8 +38,8 @@ import 'package:flutter/services.dart';
 /// ```
 class AppTextField extends StatefulWidget {
   const AppTextField({
-    super.key,
     required this.controller,
+    super.key,
     this.label,
     this.hint,
     this.errorText,
@@ -120,7 +119,6 @@ class AppTextField extends StatefulWidget {
 
 class _AppTextFieldState extends State<AppTextField> {
   late FocusNode _focusNode;
-  bool _isFocused = false;
 
   @override
   void initState() {
@@ -139,9 +137,7 @@ class _AppTextFieldState extends State<AppTextField> {
   }
 
   void _onFocusChange() {
-    setState(() {
-      _isFocused = _focusNode.hasFocus;
-    });
+    setState(() {});
   }
 
   @override

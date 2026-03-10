@@ -1,7 +1,7 @@
+import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:biko/core/widgets/app_loading.dart';
-import 'package:biko/core/theme/app_theme.dart';
 
 void main() {
   group('AppLoading Widget Tests', () {
@@ -185,7 +185,7 @@ void main() {
         (container) => container.color != null,
       );
 
-      expect(overlayContainer.color, Colors.black.withOpacity(0.5));
+      expect(overlayContainer.color, Colors.black.withValues(alpha: 0.5));
     });
 
     testWidgets('Message text is white in overlay mode', (tester) async {

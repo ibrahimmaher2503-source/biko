@@ -1,3 +1,4 @@
+import 'package:biko/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
@@ -25,10 +26,7 @@ class FirebaseService {
   static Future<bool> initialize() async {
     try {
       await Firebase.initializeApp(
-        // Firebase options will be auto-detected from:
-        // - android/app/google-services.json (Android)
-        // - ios/Runner/GoogleService-Info.plist (iOS)
-        // - web/index.html (Web)
+        options: DefaultFirebaseOptions.currentPlatform,
       );
 
       if (kDebugMode) {

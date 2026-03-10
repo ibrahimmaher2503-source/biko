@@ -1,11 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:biko/core/app_initializer.dart';
+import 'package:biko/core/routes/app_routes.dart';
+import 'package:biko/core/routes/driver_pages.dart';
+import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/translations/app_translations.dart';
-import 'package:biko/core/routes/app_routes.dart';
-import 'package:biko/demo_theme_screen.dart';
-import 'package:biko/demo_widgets_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// BikeRide Driver App Entry Point
 ///
@@ -14,6 +15,9 @@ import 'package:biko/demo_widgets_screen.dart';
 /// flutter run -t lib/main_driver.dart
 /// ```
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
   await AppInitializer.init(
     appName: 'Driver',
     appBuilder: () => const DriverApp(),
@@ -34,7 +38,7 @@ class DriverApp extends StatelessWidget {
       // Theme configuration
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // Follows system preference
+      themeMode: AppInitializer.restoredThemeMode,
 
       // Localization configuration
       translations: AppTranslations(),
@@ -54,22 +58,8 @@ class DriverApp extends StatelessWidget {
       },
 
       // Routing configuration
-      initialRoute: AppRoutes.demoTheme,
-      getPages: [
-        GetPage(
-          name: AppRoutes.demoTheme,
-          page: () => const DemoThemeScreen(),
-        ),
-        GetPage(
-          name: AppRoutes.demoWidgets,
-          page: () => const DemoWidgetsScreen(),
-        ),
-        // Driver-specific routes will be added here
-        // GetPage(
-        //   name: AppRoutes.driverHome,
-        //   page: () => DriverHomeScreen(),
-        // ),
-      ],
+      initialRoute: AppRoutes.splash,
+      getPages: DriverPages.pages,
     );
   }
 }

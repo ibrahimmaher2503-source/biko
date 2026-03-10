@@ -13,12 +13,6 @@ class AppConstants {
   static const double spacing2xl = 32.0;
   static const double spacing3xl = 48.0;
 
-  /// Border radius values
-  static const double radiusDefault = 8.0;
-  static const double radiusLarge = 12.0;
-  static const double radiusXl = 16.0;
-  static const double radiusFull = 9999.0;
-
   /// Touch target sizes (Material Design guidelines)
   static const double minTouchTarget = 48.0;
 

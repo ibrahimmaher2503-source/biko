@@ -1,37 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:biko/core/models/enums.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
-  final String uid;
-  final String name;
-  final String phone;
-  final String? email;
-  final List<String> authProviders;
-  final UserType type;
-  final UserStatus status;
-  final double walletBalance;
-  final String referralCode;
-  final String? referredBy;
-  final String lang;
-  final String? avatarUrl;
-  final String? fcmToken;
-  final DateTime createdAt;
-
   const UserModel({
     required this.uid,
     required this.name,
     required this.phone,
+    required this.type,
+    required this.createdAt,
     this.email,
     this.authProviders = const [],
-    required this.type,
     this.status = UserStatus.active,
     this.walletBalance = 0.0,
     this.referralCode = '',
     this.referredBy,
     this.lang = 'ar',
+    this.theme = 'light',
     this.avatarUrl,
     this.fcmToken,
-    required this.createdAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -50,6 +36,7 @@ class UserModel {
       referralCode: json['referral_code'] as String? ?? '',
       referredBy: json['referred_by'] as String?,
       lang: json['lang'] as String? ?? 'ar',
+      theme: json['theme'] as String? ?? 'light',
       avatarUrl: json['avatar_url'] as String?,
       fcmToken: json['fcm_token'] as String?,
       createdAt: json['created_at'] is Timestamp
@@ -57,6 +44,22 @@ class UserModel {
           : DateTime.now(),
     );
   }
+
+  final String uid;
+  final String name;
+  final String phone;
+  final String? email;
+  final List<String> authProviders;
+  final UserType type;
+  final UserStatus status;
+  final double walletBalance;
+  final String referralCode;
+  final String? referredBy;
+  final String lang;
+  final String theme;
+  final String? avatarUrl;
+  final String? fcmToken;
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -71,6 +74,7 @@ class UserModel {
       'referral_code': referralCode,
       'referred_by': referredBy,
       'lang': lang,
+      'theme': theme,
       'avatar_url': avatarUrl,
       'fcm_token': fcmToken,
       'created_at': FieldValue.serverTimestamp(),
@@ -89,6 +93,7 @@ class UserModel {
     String? referralCode,
     String? referredBy,
     String? lang,
+    String? theme,
     String? avatarUrl,
     String? fcmToken,
     DateTime? createdAt,
@@ -105,6 +110,7 @@ class UserModel {
       referralCode: referralCode ?? this.referralCode,
       referredBy: referredBy ?? this.referredBy,
       lang: lang ?? this.lang,
+      theme: theme ?? this.theme,
       avatarUrl: avatarUrl ?? this.avatarUrl,
       fcmToken: fcmToken ?? this.fcmToken,
       createdAt: createdAt ?? this.createdAt,

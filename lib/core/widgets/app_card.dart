@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:biko/core/theme/app_theme.dart';
+import 'package:flutter/material.dart';
 
 /// BikeRide branded card widget with Material 3 styling
 ///
@@ -28,8 +28,8 @@ import 'package:biko/core/theme/app_theme.dart';
 /// ```
 class AppCard extends StatelessWidget {
   const AppCard({
-    super.key,
     required this.child,
+    super.key,
     this.onTap,
     this.padding = 16.0,
     this.elevation = 2.0,

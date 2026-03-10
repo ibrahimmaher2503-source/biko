@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -55,6 +56,13 @@ class AppSnackbar {
     VoidCallback? onTap,
   }) {
     final config = _getConfig(type);
+
+    if (kDebugMode) {
+      final log = message.isEmpty
+          ? '[Snackbar] ${config.title}'
+          : '[Snackbar] ${config.title}: $message';
+      debugPrint(log);
+    }
 
     Get.snackbar(
       config.title,
@@ -137,30 +145,30 @@ class AppSnackbar {
   static _SnackbarConfig _getConfig(SnackbarType type) {
     switch (type) {
       case SnackbarType.success:
-        return _SnackbarConfig(
+        return const _SnackbarConfig(
           title: 'Success',
-          backgroundColor: const Color(0xFF4CAF50), // Green
+          backgroundColor: Color(0xFF4CAF50), // Green
           icon: Icons.check_circle,
         );
 
       case SnackbarType.error:
-        return _SnackbarConfig(
+        return const _SnackbarConfig(
           title: 'Error',
-          backgroundColor: const Color(0xFFF44336), // Red
+          backgroundColor: Color(0xFFF44336), // Red
           icon: Icons.error,
         );
 
       case SnackbarType.info:
-        return _SnackbarConfig(
+        return const _SnackbarConfig(
           title: 'Info',
-          backgroundColor: const Color(0xFF2196F3), // Blue
+          backgroundColor: Color(0xFF2196F3), // Blue
           icon: Icons.info,
         );
 
       case SnackbarType.warning:
-        return _SnackbarConfig(
+        return const _SnackbarConfig(
           title: 'Warning',
-          backgroundColor: const Color(0xFFFF9800), // Orange
+          backgroundColor: Color(0xFFFF9800), // Orange
           icon: Icons.warning,
         );
     }
@@ -169,13 +177,13 @@ class AppSnackbar {
 
 /// Internal configuration class for snackbar styling
 class _SnackbarConfig {
-  final String title;
-  final Color backgroundColor;
-  final IconData icon;
-
-  _SnackbarConfig({
+  const _SnackbarConfig({
     required this.title,
     required this.backgroundColor,
     required this.icon,
   });
+
+  final String title;
+  final Color backgroundColor;
+  final IconData icon;
 }

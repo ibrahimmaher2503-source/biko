@@ -46,14 +46,14 @@ enum ButtonVariant {
 /// ```
 class AppButton extends StatelessWidget {
   const AppButton({
-    super.key,
     required this.text,
     required this.onPressed,
+    super.key,
     this.variant = ButtonVariant.primary,
     this.isLoading = false,
     this.leadingIcon,
     this.trailingIcon,
-    this.width,
+    this.width = double.infinity,
     this.height = 56.0,
   });
 
@@ -75,7 +75,7 @@ class AppButton extends StatelessWidget {
   /// Icon displayed after text (flipped in RTL)
   final IconData? trailingIcon;
 
-  /// Custom width (defaults to double.infinity)
+  /// Custom width (defaults to double.infinity for full-width, pass null for intrinsic width)
   final double? width;
 
   /// Button height (default 56dp per design spec)
@@ -83,7 +83,6 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final isRTL = Directionality.of(context) == TextDirection.rtl;
     final isDisabled = onPressed == null;
 
@@ -99,7 +98,7 @@ class AppButton extends StatelessWidget {
     final button = _buildButton(context, content);
 
     return SizedBox(
-      width: width ?? double.infinity,
+      width: width,
       height: height,
       child: button,
     );
@@ -118,7 +117,7 @@ class AppButton extends StatelessWidget {
       );
     }
 
-    final children = <Widget>[];
+    final List<Widget> children = <Widget>[];
 
     // Handle icon positioning based on RTL
     final actualLeadingIcon = isRTL ? trailingIcon : leadingIcon;
@@ -150,7 +149,7 @@ class AppButton extends StatelessWidget {
 
     switch (variant) {
       case ButtonVariant.primary:
-        return ElevatedButton(
+        return FilledButton(
           onPressed: effectiveOnPressed,
           child: content,
         );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:biko/core/theme/app_theme.dart';
 
 /// BikeRide loading indicator widget with two modes:
 /// - **Inline mode**: Simple centered spinner for use within widgets
@@ -80,8 +79,8 @@ class AppLoading extends StatelessWidget {
         children: [
           // Semi-transparent overlay
           Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
+            child: ColoredBox(
+              color: Colors.black.withValues(alpha: 0.5),
             ),
           ),
           // Centered spinner with message

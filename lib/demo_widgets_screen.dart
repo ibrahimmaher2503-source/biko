@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_button.dart';
-import 'package:biko/core/widgets/app_text_field.dart';
 import 'package:biko/core/widgets/app_card.dart';
 import 'package:biko/core/widgets/app_loading.dart';
-import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/core/widgets/app_map_widget.dart';
+import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:biko/core/widgets/app_text_field.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// Demo screen showcasing all BikeRide shared widgets
 /// Demonstrates theme adaptation, RTL/LTR support, and widget functionality
@@ -93,7 +92,6 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                 AppButton(
                   text: _isArabic ? 'زر رئيسي' : 'Primary Button',
                   onPressed: () => AppSnackbar.success('Primary button tapped'),
-                  variant: ButtonVariant.primary,
                 ),
                 const SizedBox(height: 12),
                 AppButton(
@@ -118,20 +116,17 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                   text: _isArabic ? 'مع أيقونة' : 'With Icon',
                   onPressed: () {},
                   leadingIcon: Icons.star,
-                  variant: ButtonVariant.primary,
                 ),
                 const SizedBox(height: 12),
                 AppButton(
                   text: _isArabic ? 'جاري التحميل...' : 'Loading...',
                   onPressed: () {},
                   isLoading: true,
-                  variant: ButtonVariant.primary,
                 ),
                 const SizedBox(height: 12),
                 AppButton(
                   text: _isArabic ? 'زر معطل' : 'Disabled Button',
                   onPressed: null,
-                  variant: ButtonVariant.primary,
                 ),
                 const SizedBox(height: 32),
 
@@ -141,7 +136,9 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                 AppTextField(
                   controller: _textController,
                   label: _isArabic ? 'البريد الإلكتروني' : 'Email',
-                  hint: _isArabic ? 'أدخل بريدك الإلكتروني' : 'Enter your email',
+                  hint: _isArabic
+                      ? 'أدخل بريدك الإلكتروني'
+                      : 'Enter your email',
                   prefixIcon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -149,7 +146,9 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                 AppTextField(
                   controller: _validatedController,
                   label: _isArabic ? 'حقل مع التحقق' : 'Field with validation',
-                  hint: _isArabic ? 'أدخل 3 أحرف على الأقل' : 'Enter at least 3 characters',
+                  hint: _isArabic
+                      ? 'أدخل 3 أحرف على الأقل'
+                      : 'Enter at least 3 characters',
                   errorText: _validationError,
                   prefixIcon: Icons.text_fields,
                 ),
@@ -191,7 +190,10 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.touch_app, color: theme.colorScheme.primary),
+                          Icon(
+                            Icons.touch_app,
+                            color: theme.colorScheme.primary,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             _isArabic ? 'بطاقة قابلة للنقر' : 'Tappable Card',
@@ -201,7 +203,9 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        _isArabic ? 'انقر على هذه البطاقة' : 'Tap this card to see ripple effect',
+                        _isArabic
+                            ? 'انقر على هذه البطاقة'
+                            : 'Tap this card to see ripple effect',
                         style: theme.textTheme.bodyMedium,
                       ),
                     ],
@@ -220,10 +224,7 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                         style: theme.textTheme.titleMedium,
                       ),
                       const SizedBox(height: 16),
-                      const SizedBox(
-                        height: 100,
-                        child: AppLoading(),
-                      ),
+                      const SizedBox(height: 100, child: AppLoading()),
                     ],
                   ),
                 ),
@@ -239,7 +240,9 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                       SizedBox(
                         height: 120,
                         child: AppLoading(
-                          message: _isArabic ? 'جاري التحميل...' : 'Loading data...',
+                          message: _isArabic
+                              ? 'جاري التحميل...'
+                              : 'Loading data...',
                         ),
                       ),
                     ],
@@ -247,7 +250,9 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                 ),
                 const SizedBox(height: 12),
                 AppButton(
-                  text: _isArabic ? 'عرض تراكب التحميل' : 'Show Overlay Loading',
+                  text: _isArabic
+                      ? 'عرض تراكب التحميل'
+                      : 'Show Overlay Loading',
                   onPressed: () {
                     setState(() => _showOverlayLoading = true);
                     Future.delayed(const Duration(seconds: 2), () {
@@ -273,7 +278,6 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                       onPressed: () => AppSnackbar.success(
                         _isArabic ? 'عملية ناجحة!' : 'Operation successful!',
                       ),
-                      variant: ButtonVariant.primary,
                       width: 150,
                     ),
                     AppButton(
@@ -281,7 +285,6 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                       onPressed: () => AppSnackbar.error(
                         _isArabic ? 'حدث خطأ!' : 'An error occurred!',
                       ),
-                      variant: ButtonVariant.primary,
                       width: 150,
                     ),
                     AppButton(
@@ -289,15 +292,15 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                       onPressed: () => AppSnackbar.info(
                         _isArabic ? 'معلومات مفيدة' : 'Useful information',
                       ),
-                      variant: ButtonVariant.primary,
                       width: 150,
                     ),
                     AppButton(
                       text: _isArabic ? 'تحذير' : 'Warning',
                       onPressed: () => AppSnackbar.warning(
-                        _isArabic ? 'تحذير: تحقق من الإدخال' : 'Warning: Check your input',
+                        _isArabic
+                            ? 'تحذير: تحقق من الإدخال'
+                            : 'Warning: Check your input',
                       ),
-                      variant: ButtonVariant.primary,
                       width: 150,
                     ),
                   ],
@@ -305,23 +308,9 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
                 const SizedBox(height: 32),
 
                 // AppMapWidget Section
-                _buildSectionHeader('AppMapWidget Placeholder', theme),
+                _buildSectionHeader('AppMapWidget', theme),
                 const SizedBox(height: 16),
-                const AppMapWidget(
-                  height: 250,
-                  zoom: 14.0,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  _isArabic
-                      ? 'سيتم تنفيذ الخريطة باستخدام google_maps_flutter في التحديث المستقبلي'
-                      : 'Map will be implemented with google_maps_flutter in a future update',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: theme.colorScheme.onSurface.withOpacity(0.6),
-                    fontStyle: FontStyle.italic,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
+                const AppMapWidget(height: 250, zoom: 14.0),
                 const SizedBox(height: 32),
 
                 // Theme Info
@@ -342,10 +331,7 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
   }
 
   Widget _buildSectionHeader(String title, ThemeData theme) {
-    return Text(
-      title,
-      style: theme.textTheme.headlineSmall,
-    );
+    return Text(title, style: theme.textTheme.headlineSmall);
   }
 
   Widget _buildThemeInfo() {
@@ -359,9 +345,15 @@ class _DemoWidgetsScreenState extends State<DemoWidgetsScreen> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 8),
-          Text('${_isArabic ? "الوضع" : "Theme Mode"}: ${_isDarkMode ? (_isArabic ? "داكن" : "Dark") : (_isArabic ? "فاتح" : "Light")}'),
-          Text('${_isArabic ? "اللغة" : "Language"}: ${_isArabic ? "العربية (RTL)" : "English (LTR)"}'),
-          Text('${_isArabic ? "عائلة الخط" : "Font Family"}: ${_isArabic ? "Cairo" : "Plus Jakarta Sans"}'),
+          Text(
+            '${_isArabic ? "الوضع" : "Theme Mode"}: ${_isDarkMode ? (_isArabic ? "داكن" : "Dark") : (_isArabic ? "فاتح" : "Light")}',
+          ),
+          Text(
+            '${_isArabic ? "اللغة" : "Language"}: ${_isArabic ? "العربية (RTL)" : "English (LTR)"}',
+          ),
+          Text(
+            '${_isArabic ? "عائلة الخط" : "Font Family"}: ${_isArabic ? "Cairo" : "Plus Jakarta Sans"}',
+          ),
         ],
       ),
     );

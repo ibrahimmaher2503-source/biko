@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Driver: New Delivery Request</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#e0062e",
+                        "secondary": "#64748b",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#230f13",
+                    },
+                    fontFamily: {
+                        "display": ["Cairo", "sans-serif"],
+                        "sans": ["Cairo", "sans-serif"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "3xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+        .map-grayscale {
+            filter: grayscale(100%) contrast(1.1) brightness(1.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 overflow-hidden">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<div class="absolute top-0 left-0 right-0 z-20 p-4 pt-12 flex items-center justify-between pointer-events-none">
+<button class="pointer-events-auto flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex items-center gap-3 pointer-events-auto bg-white dark:bg-slate-800 px-4 py-2 rounded-full shadow-md">
+<span class="flex size-2 bg-green-500 rounded-full animate-pulse"></span>
+<span class="text-sm font-bold text-slate-800 dark:text-slate-100">Online</span>
+</div>
+<button class="pointer-events-auto flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-md text-slate-900 dark:text-slate-100">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+<div class="absolute inset-0 z-0 h-full w-full bg-slate-200">
+<div class="h-full w-full bg-cover bg-center map-grayscale" data-alt="Map view of Cairo streets" data-location="Cairo, Egypt" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCVNNkLoZL2rM8nCnjB9Nbmbn2gZ544KC78cYjan_YvPsHaO2jJrKq8CEjGene0kUBkQYByumXLAt4ghdLD_cbJbPPuuJEqBHAVsX--zI0QHgvrKS15kK8ShhG0q6gvWaOUTm23CP83cmkOI3sQw69pZ_lKQZ8qc6tZRI9IF0GjATE8xpZ_cg2MaocvvjbuLLCDP3VNbRzjEUAIoSpcJZFzVRxI3RDUCbhnwenUeiyCua5NhXi9TRj8AHmTjenFz5y_sNXr9r3FTd4x");'>
+</div>
+<div class="absolute right-4 bottom-[380px] flex flex-col gap-2 z-10">
+<button class="flex size-10 items-center justify-center rounded-full bg-white dark:bg-slate-800 shadow-lg text-primary">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+</div>
+</div>
+<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col justify-end p-4 pb-8">
+<div class="relative flex w-full flex-col rounded-3xl bg-white dark:bg-slate-900 shadow-[0_10px_40px_-10px_rgba(0,0,0,0.2)] overflow-hidden ring-1 ring-slate-100 dark:ring-slate-800">
+<div class="flex items-center justify-between p-5 pb-4 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/50">
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Customer Offer</span>
+<div class="flex items-baseline gap-1">
+<span class="text-3xl font-extrabold text-slate-900 dark:text-white">EGP 40</span>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-700 px-2 py-1 rounded-md mb-1">
+<span class="material-symbols-outlined text-slate-500 text-[16px]">distance</span>
+<span class="text-sm font-bold text-slate-700 dark:text-slate-300">5.2 km</span>
+</div>
+<span class="text-xs text-slate-400">~15 mins</span>
+</div>
+</div>
+<div class="px-5 py-4 flex flex-col gap-4">
+<div class="flex gap-3 relative">
+<div class="absolute left-[11px] top-7 bottom-[-16px] w-0.5 bg-slate-200 dark:bg-slate-700 -z-10"></div>
+<div class="mt-1 flex-shrink-0">
+<div class="flex size-6 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300">
+<span class="material-symbols-outlined text-[16px]">storefront</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Pickup • Store</p>
+<h3 class="font-bold text-slate-900 dark:text-white truncate">El-Abd Patisserie</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 truncate">25 Talaat Harb St, Downtown</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="mt-1 flex-shrink-0">
+<div class="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary">
+<span class="material-symbols-outlined text-[16px]">person_pin_circle</span>
+</div>
+</div>
+<div class="flex-1">
+<p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Drop-off • Customer</p>
+<h3 class="font-bold text-slate-900 dark:text-white truncate">Zamalek Residence</h3>
+<p class="text-sm text-slate-500 dark:text-slate-400 truncate">Hassan Sabry St, Zamalek</p>
+</div>
+</div>
+</div>
+<div class="px-5 pb-4">
+<div class="flex items-center justify-between rounded-xl bg-orange-50 dark:bg-orange-900/20 p-3 border border-orange-100 dark:border-orange-800/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-orange-600 dark:text-orange-400">paid</span>
+<span class="text-sm font-bold text-orange-800 dark:text-orange-200">Cash to Collect</span>
+</div>
+<span class="text-lg font-bold text-orange-700 dark:text-orange-300">EGP 250</span>
+</div>
+</div>
+<div class="p-4 pt-0 grid grid-cols-[1fr_2fr] gap-3">
+<button class="flex flex-col items-center justify-center gap-1 rounded-xl bg-slate-100 dark:bg-slate-800 py-3.5 text-slate-700 dark:text-slate-200 active:scale-[0.98] transition-transform">
+<span class="text-base font-bold">Counter</span>
+<span class="text-[10px] font-semibold opacity-60">OFFER</span>
+</button>
+<button class="relative overflow-hidden flex items-center justify-center rounded-xl bg-primary py-3.5 text-white shadow-lg shadow-primary/30 active:scale-[0.98] transition-transform">
+<span class="relative z-10 text-lg font-bold">Accept Order</span>
+<div class="absolute bottom-0 left-0 h-1 bg-white/30 w-full animate-[width_10s_linear]"></div>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+</body></html>
