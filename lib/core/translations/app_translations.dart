@@ -252,6 +252,37 @@ class AppTranslations extends Translations {
               'قد لا يتم تحديث موقعك عند تصغير التطبيق',
           'notification.tracking_active': 'بيكو يتتبع موقعك',
 
+          // Bids
+          'bids.incoming_bids': 'العروض الواردة',
+          'bids.no_bids_yet': 'في انتظار عروض السائقين...',
+          'bids.accept_bid': 'قبول',
+          'bids.reject_bid': 'رفض',
+          'bids.raise_offer': 'لم يتم العثور على سائق. جرب رفع عرضك.',
+          'bids.bid_expired': 'انتهت صلاحية هذا العرض',
+          'bids.cancel_search': 'إلغاء البحث',
+          'bids.cancel_search_confirm': 'هل تريد إلغاء البحث عن سائق؟',
+          'bids.eta_minutes': '@minutes دقائق',
+          'bids.egp': 'جنيه',
+          'bids.your_offer': 'عرضك',
+          'bids.accept_error': 'فشل قبول العرض. حاول مرة أخرى.',
+
+          // Tracking
+          'tracking.driver_en_route': 'السائق في الطريق إليك',
+          'tracking.driver_arrived': 'السائق وصل',
+          'tracking.trip_in_progress': 'الرحلة جارية',
+          'tracking.arriving_soon': 'وصلنا قريباً',
+          'tracking.completed': 'اكتملت الرحلة',
+          'tracking.eta_label': 'الوصول خلال',
+          'tracking.call_driver': 'اتصل بالسائق',
+          'tracking.chat_driver': 'محادثة',
+          'tracking.cancel_trip': 'إلغاء الرحلة',
+          'tracking.cannot_cancel_in_progress':
+              'لا يمكن الإلغاء أثناء الرحلة',
+          'tracking.cancel_trip_confirm': 'هل تريد إلغاء الرحلة؟',
+          'tracking.cancel_reason': 'سبب الإلغاء',
+          'tracking.cancel_error': 'فشل إلغاء الرحلة. حاول مرة أخرى.',
+          'tracking.eta_minutes': '@minutes دقائق',
+
           // ==================== Admin Panel ====================
           // Admin Login
           'admin.login.title': 'لوحة تحكم بايكرايد',
@@ -781,6 +812,38 @@ class AppTranslations extends Translations {
               'Your location may not update when the app is minimized',
           'notification.tracking_active':
               'BikeRide is tracking your location',
+
+          // Bids
+          'bids.incoming_bids': 'Incoming Bids',
+          'bids.no_bids_yet': 'Waiting for driver bids...',
+          'bids.accept_bid': 'Accept',
+          'bids.reject_bid': 'Reject',
+          'bids.raise_offer':
+              'No drivers found yet. Try raising your offer.',
+          'bids.bid_expired': 'This bid has expired',
+          'bids.cancel_search': 'Cancel Search',
+          'bids.cancel_search_confirm': 'Cancel driver search?',
+          'bids.eta_minutes': '@minutes min away',
+          'bids.egp': 'EGP',
+          'bids.your_offer': 'Your offer',
+          'bids.accept_error': 'Failed to accept bid. Try again.',
+
+          // Tracking
+          'tracking.driver_en_route': 'Driver is on the way',
+          'tracking.driver_arrived': 'Driver has arrived',
+          'tracking.trip_in_progress': 'Trip in progress',
+          'tracking.arriving_soon': 'Arriving soon',
+          'tracking.completed': 'Trip completed',
+          'tracking.eta_label': 'ETA',
+          'tracking.call_driver': 'Call Driver',
+          'tracking.chat_driver': 'Chat',
+          'tracking.cancel_trip': 'Cancel Trip',
+          'tracking.cannot_cancel_in_progress':
+              'Cannot cancel during trip',
+          'tracking.cancel_trip_confirm': 'Cancel this trip?',
+          'tracking.cancel_reason': 'Cancellation reason',
+          'tracking.cancel_error': 'Failed to cancel trip. Try again.',
+          'tracking.eta_minutes': '@minutes min',
 
           // ==================== Admin Panel ====================
           // Admin Login
