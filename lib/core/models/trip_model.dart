@@ -20,19 +20,22 @@ class TripModel {
     this.durationMinutes,
     this.cancelledBy,
     this.cancellationReason,
+    this.note,
+    this.passengerCount = 1,
     this.acceptedAt,
     this.completedAt,
     this.cancelledAt,
   });
+
+  /// Alias for [fromMap] — used by admin controllers.
+  factory TripModel.fromJson(Map<String, dynamic> json) = TripModel.fromMap;
 
   factory TripModel.fromMap(Map<String, dynamic> map) {
     return TripModel(
       id: map['id'] as String? ?? '',
       customerUid: map['customer_uid'] as String? ?? '',
       driverUid: map['driver_uid'] as String?,
-      pickup: PlaceModel.fromMap(
-        map['pickup'] as Map<String, dynamic>? ?? {},
-      ),
+      pickup: PlaceModel.fromMap(map['pickup'] as Map<String, dynamic>? ?? {}),
       dropoff: PlaceModel.fromMap(
         map['dropoff'] as Map<String, dynamic>? ?? {},
       ),
@@ -47,6 +50,8 @@ class TripModel {
       durationMinutes: (map['duration_minutes'] as num?)?.toInt(),
       cancelledBy: map['cancelled_by'] as String?,
       cancellationReason: map['cancellation_reason'] as String?,
+      note: map['note'] as String?,
+      passengerCount: (map['passenger_count'] as num?)?.toInt() ?? 1,
       createdAt: map['created_at'] is Timestamp
           ? (map['created_at'] as Timestamp).toDate()
           : DateTime.now(),
@@ -76,15 +81,22 @@ class TripModel {
   final int? durationMinutes;
   final String? cancelledBy;
   final String? cancellationReason;
+  final String? note;
+  final int passengerCount;
   final DateTime createdAt;
   final DateTime? acceptedAt;
   final DateTime? completedAt;
   final DateTime? cancelledAt;
 
+  /// The trip ID (alias for [id])
+  String get tripId => id;
+
+  /// Final price — accepted price if available, otherwise customer's price
+  double get finalPrice => acceptedPrice ?? customerPrice;
+
   /// Formatted total fare string
   String get formattedPrice {
-    final price = acceptedPrice ?? customerPrice;
-    return '${price.toStringAsFixed(0)} EGP';
+    return '${finalPrice.toStringAsFixed(0)} EGP';
   }
 
   /// Whether the trip is currently active (not completed/cancelled)
@@ -107,6 +119,8 @@ class TripModel {
       'duration_minutes': durationMinutes,
       'cancelled_by': cancelledBy,
       'cancellation_reason': cancellationReason,
+      'note': note,
+      'passenger_count': passengerCount,
       'created_at': FieldValue.serverTimestamp(),
       'accepted_at': acceptedAt != null
           ? Timestamp.fromDate(acceptedAt!)
@@ -135,6 +149,8 @@ class TripModel {
     int? durationMinutes,
     String? cancelledBy,
     String? cancellationReason,
+    String? note,
+    int? passengerCount,
     DateTime? createdAt,
     DateTime? acceptedAt,
     DateTime? completedAt,
@@ -155,6 +171,8 @@ class TripModel {
       durationMinutes: durationMinutes ?? this.durationMinutes,
       cancelledBy: cancelledBy ?? this.cancelledBy,
       cancellationReason: cancellationReason ?? this.cancellationReason,
+      note: note ?? this.note,
+      passengerCount: passengerCount ?? this.passengerCount,
       createdAt: createdAt ?? this.createdAt,
       acceptedAt: acceptedAt ?? this.acceptedAt,
       completedAt: completedAt ?? this.completedAt,

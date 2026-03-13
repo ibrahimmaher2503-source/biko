@@ -9,11 +9,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppCard(
-              child: Text('Card Content'),
-            ),
-          ),
+          home: const Scaffold(body: AppCard(child: Text('Card Content'))),
         ),
       );
 
@@ -50,11 +46,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppCard(
-              child: Text('Default Padding'),
-            ),
-          ),
+          home: const Scaffold(body: AppCard(child: Text('Default Padding'))),
         ),
       );
 
@@ -68,10 +60,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.lightTheme,
           home: const Scaffold(
-            body: AppCard(
-              padding: 24.0,
-              child: Text('Custom Padding'),
-            ),
+            body: AppCard(padding: 24.0, child: Text('Custom Padding')),
           ),
         ),
       );
@@ -85,11 +74,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppCard(
-              child: Text('Default Elevation'),
-            ),
-          ),
+          home: const Scaffold(body: AppCard(child: Text('Default Elevation'))),
         ),
       );
 
@@ -102,10 +87,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.lightTheme,
           home: const Scaffold(
-            body: AppCard(
-              elevation: 4.0,
-              child: Text('Custom Elevation'),
-            ),
+            body: AppCard(elevation: 4.0, child: Text('Custom Elevation')),
           ),
         ),
       );
@@ -135,11 +117,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppCard(
-              child: Text('Default Radius'),
-            ),
-          ),
+          home: const Scaffold(body: AppCard(child: Text('Default Radius'))),
         ),
       );
 
@@ -155,10 +133,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.lightTheme,
           home: const Scaffold(
-            body: AppCard(
-              borderRadius: 20.0,
-              child: Text('Custom Radius'),
-            ),
+            body: AppCard(borderRadius: 20.0, child: Text('Custom Radius')),
           ),
         ),
       );
@@ -170,15 +145,13 @@ void main() {
       expect(borderRadius.topLeft.x, 20.0);
     });
 
-    testWidgets('Card respects theme card color when backgroundColor is null', (tester) async {
+    testWidgets('Card respects theme card color when backgroundColor is null', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppCard(
-              child: Text('Theme Color'),
-            ),
-          ),
+          home: const Scaffold(body: AppCard(child: Text('Theme Color'))),
         ),
       );
 
@@ -188,7 +161,9 @@ void main() {
       expect(card.color, theme.cardTheme.color);
     });
 
-    testWidgets('InkWell border radius matches card border radius', (tester) async {
+    testWidgets('InkWell border radius matches card border radius', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
@@ -206,6 +181,86 @@ void main() {
       final borderRadius = inkWell.borderRadius as BorderRadius;
 
       expect(borderRadius.topLeft.x, 16.0);
+    });
+
+    testWidgets('T034: Flat card with zero elevation (outlined-style)', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const Scaffold(
+            body: AppCard(
+              elevation: 0.0,
+              child: Text('Flat Card'),
+            ),
+          ),
+        ),
+      );
+
+      // Verify card renders with zero elevation (outline/flat style)
+      expect(find.text('Flat Card'), findsOneWidget);
+      final card = tester.widget<Card>(find.byType(Card));
+      expect(card.elevation, 0.0);
+    });
+
+    testWidgets('T035: Adapts to dark theme correctly', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.dark,
+          home: const Scaffold(
+            body: AppCard(
+              child: Text('Dark Theme Card'),
+            ),
+          ),
+        ),
+      );
+
+      // Verify card renders in dark theme
+      expect(find.text('Dark Theme Card'), findsOneWidget);
+      expect(find.byType(Card), findsOneWidget);
+
+      // Verify dark theme is applied
+      final BuildContext context = tester.element(find.byType(AppCard));
+      expect(Theme.of(context).brightness, equals(Brightness.dark));
+
+      // Verify card color matches dark theme
+      final card = tester.widget<Card>(find.byType(Card));
+      final darkTheme = AppTheme.darkTheme;
+      expect(card.color, darkTheme.cardTheme.color);
+    });
+
+    testWidgets('T036: Renders correctly in RTL layout', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const Directionality(
+            textDirection: TextDirection.rtl,
+            child: Scaffold(
+              body: AppCard(
+                child: Row(
+                  children: [
+                    Icon(Icons.star),
+                    SizedBox(width: 8),
+                    Text('RTL Card Content'),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // Verify card renders in RTL
+      expect(find.text('RTL Card Content'), findsOneWidget);
+      expect(find.byIcon(Icons.star), findsOneWidget);
+      expect(find.byType(Card), findsOneWidget);
+
+      // Verify directionality is RTL
+      final BuildContext context = tester.element(find.byType(AppCard));
+      expect(Directionality.of(context), equals(TextDirection.rtl));
     });
   });
 

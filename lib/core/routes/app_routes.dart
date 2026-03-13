@@ -188,4 +188,47 @@ class AppRoutes {
 
   /// Admin not found / 404
   static const String adminNotFound = '/admin/not-found';
+
+  // ==================== Admin Approval Queue ====================
+  /// Driver approval queue
+  static const String adminApprovalQueue = '/admin/approvals';
+
+  /// Driver review (individual driver approval)
+  static const String adminDriverReview = '/admin/approvals/review';
+
+  // ==================== Admin Promo Detail ====================
+  /// Promo code detail view
+  static const String adminPromoDetail = '/admin/promos/detail';
+
+  // ==================== Admin Finance Routes ====================
+  /// Financial dashboard
+  static const String adminFinancialDashboard = '/admin/finance/dashboard';
+
+  /// Revenue analytics
+  static const String adminRevenue = '/admin/finance/revenue';
+
+  /// Commission management
+  static const String adminCommissions = '/admin/finance/commissions';
+
+  /// Driver earnings
+  static const String adminDriverEarnings = '/admin/finance/driver-earnings';
+
+  /// Driver earnings detail
+  static const String adminDriverEarningsDetail =
+      '/admin/finance/driver-earnings/detail';
+
+  /// Wallet monitoring
+  static const String adminWalletMonitoring = '/admin/finance/wallets';
+
+  /// Payment analytics
+  static const String adminPaymentAnalytics = '/admin/finance/payments';
+
+  /// Transaction monitor
+  static const String adminTransactionMonitor = '/admin/finance/transactions';
+
+  /// Financial reports
+  static const String adminReports = '/admin/finance/reports';
+
+  /// Settlement
+  static const String adminSettlement = '/admin/finance/settlement';
 }

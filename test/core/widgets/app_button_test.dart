@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('AppButton Widget Tests', () {
-    testWidgets('Primary variant renders ElevatedButton', (tester) async {
+    testWidgets('Primary variant renders FilledButton', (tester) async {
       var pressed = false;
 
       await tester.pumpWidget(
@@ -21,7 +21,7 @@ void main() {
       );
 
       expect(find.text('Primary Button'), findsOneWidget);
-      expect(find.byType(ElevatedButton), findsOneWidget);
+      expect(find.byType(FilledButton), findsOneWidget);
 
       await tester.tap(find.byType(AppButton));
       await tester.pump();
@@ -98,8 +98,8 @@ void main() {
 
       expect(find.text('Disabled Button'), findsOneWidget);
 
-      // Find the ElevatedButton and check if it's disabled
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      // Find the FilledButton and check if it's disabled
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
       expect(button.onPressed, isNull);
 
       // Verify opacity is applied for disabled state
@@ -108,7 +108,9 @@ void main() {
       expect(opacity.opacity, 0.5);
     });
 
-    testWidgets('Loading state shows CircularProgressIndicator', (tester) async {
+    testWidgets('Loading state shows CircularProgressIndicator', (
+      tester,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
@@ -126,7 +128,7 @@ void main() {
       expect(find.text('Loading Button'), findsNothing);
 
       // Loading state should disable interaction
-      final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
       expect(button.onPressed, isNull);
     });
 
@@ -209,10 +211,12 @@ void main() {
         ),
       );
 
-      final sizedBox = tester.widget<SizedBox>(find.ancestor(
-        of: find.byType(ElevatedButton),
-        matching: find.byType(SizedBox),
-      ));
+      final sizedBox = tester.widget<SizedBox>(
+        find.ancestor(
+          of: find.byType(FilledButton),
+          matching: find.byType(SizedBox),
+        ),
+      );
 
       expect(sizedBox.width, 200);
       expect(sizedBox.height, 48);
@@ -223,20 +227,121 @@ void main() {
         MaterialApp(
           theme: AppTheme.lightTheme,
           home: Scaffold(
+            body: AppButton(text: 'Default Height', onPressed: () {}),
+          ),
+        ),
+      );
+
+      final sizedBox = tester.widget<SizedBox>(
+        find.ancestor(
+          of: find.byType(FilledButton),
+          matching: find.byType(SizedBox),
+        ),
+      );
+
+      expect(sizedBox.height, 56.0);
+    });
+
+    testWidgets('T020: Adapts to dark theme correctly', (tester) async {
+      // Test that button renders correctly in dark mode
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.dark,
+          home: Scaffold(
             body: AppButton(
-              text: 'Default Height',
+              text: 'Dark Theme Button',
               onPressed: () {},
             ),
           ),
         ),
       );
 
-      final sizedBox = tester.widget<SizedBox>(find.ancestor(
-        of: find.byType(ElevatedButton),
-        matching: find.byType(SizedBox),
-      ));
+      // Verify button renders with dark theme
+      expect(find.text('Dark Theme Button'), findsOneWidget);
+      expect(find.byType(FilledButton), findsOneWidget);
 
-      expect(sizedBox.height, 56.0);
+      // Verify dark theme is applied
+      final BuildContext context = tester.element(find.byType(AppButton));
+      expect(Theme.of(context).brightness, equals(Brightness.dark));
+
+      // Verify button is functional in dark theme
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNotNull);
+    });
+  });
+
+  group('AppButton Accessibility Tests', () {
+    testWidgets('T023: Has proper semantic structure for screen readers', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: AppButton(
+              text: 'Accessible Button',
+              onPressed: () {},
+            ),
+          ),
+        ),
+      );
+
+      // Verify button text is present for screen readers
+      expect(find.text('Accessible Button'), findsOneWidget);
+
+      // Verify button is interactive (has onPressed)
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNotNull);
+
+      // Verify button is rendered (visible to screen readers)
+      expect(find.byType(FilledButton), findsOneWidget);
+    });
+
+    testWidgets('Disabled button is accessible with proper state', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const Scaffold(
+            body: AppButton(
+              text: 'Disabled Accessible',
+              onPressed: null,
+            ),
+          ),
+        ),
+      );
+
+      // Verify disabled state is communicated
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNull);
+
+      // Verify text is still accessible
+      expect(find.text('Disabled Accessible'), findsOneWidget);
+    });
+
+    testWidgets('Loading button is accessible', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: Scaffold(
+            body: AppButton(
+              text: 'Loading',
+              onPressed: () {},
+              isLoading: true,
+            ),
+          ),
+        ),
+      );
+
+      // Verify loading indicator is present and accessible
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Verify button is disabled during loading
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNull);
     });
   });
 

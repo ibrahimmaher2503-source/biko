@@ -26,7 +26,8 @@ class UserModel {
       name: json['name'] as String? ?? '',
       phone: json['phone'] as String? ?? '',
       email: json['email'] as String?,
-      authProviders: (json['auth_providers'] as List<dynamic>?)
+      authProviders:
+          (json['auth_providers'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],

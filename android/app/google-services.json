@@ -37,6 +37,13 @@
             {
               "client_id": "283152900428-fj92gd46bs5q7u4shl8vhelg0ba5l1ap.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "283152900428-rkdt7fe7atl1r41s8mvifto6686pjahh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.biko"
+              }
             }
           ]
         }

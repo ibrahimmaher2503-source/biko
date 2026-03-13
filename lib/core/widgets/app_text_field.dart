@@ -173,7 +173,9 @@ class _AppTextFieldState extends State<AppTextField> {
         // but we can override specific properties here if needed
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         // Counter text for character limit
-        counterText: widget.maxLength != null ? '' : null, // Hide default counter
+        counterText: widget.maxLength != null
+            ? ''
+            : null, // Hide default counter
       ),
       style: theme.textTheme.bodyLarge,
     );

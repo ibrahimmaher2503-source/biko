@@ -1,23 +1,6 @@
 import 'package:biko/core/models/enums.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Bid status for individual driver bids on a trip
-enum BidStatus {
-  pending,
-  accepted,
-  rejected,
-  expired;
-
-  String toJson() => name;
-
-  static BidStatus fromJson(String value) {
-    return BidStatus.values.firstWhere(
-      (e) => e.name == value,
-      orElse: () => BidStatus.pending,
-    );
-  }
-}
-
 /// Model for a driver's bid on a customer trip request
 class BidModel {
   const BidModel({

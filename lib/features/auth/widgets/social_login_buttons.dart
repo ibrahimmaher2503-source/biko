@@ -22,12 +22,11 @@ class SocialLoginButtons extends StatelessWidget {
               child: Text(
                 'phone.or_continue'.tr,
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.5),
-                      fontWeight: FontWeight.w500,
-                    ),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withValues(alpha: 0.5),
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
             const Expanded(child: Divider()),
@@ -47,8 +46,8 @@ class SocialLoginButtons extends StatelessWidget {
                   label: 'phone.google'.tr,
                   icon: 'G',
                   iconColor: const Color(0xFFDB4437),
-                  isLoading: authController.authState ==
-                      AuthState.signingInWithGoogle,
+                  isLoading:
+                      authController.authState == AuthState.signingInWithGoogle,
                   onTap: isSocialLoading
                       ? null
                       : authController.signInWithGoogle,
@@ -60,7 +59,8 @@ class SocialLoginButtons extends StatelessWidget {
                   label: 'phone.facebook'.tr,
                   icon: 'f',
                   iconColor: const Color(0xFF1877F2),
-                  isLoading: authController.authState ==
+                  isLoading:
+                      authController.authState ==
                       AuthState.signingInWithFacebook,
                   onTap: isSocialLoading
                       ? null
@@ -73,7 +73,6 @@ class SocialLoginButtons extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class _SocialButton extends StatelessWidget {
@@ -99,9 +98,7 @@ class _SocialButton extends StatelessWidget {
       onPressed: onTap,
       style: OutlinedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 14),
-        side: BorderSide(
-          color: ext.border,
-        ),
+        side: BorderSide(color: ext.border),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
         ),
@@ -126,9 +123,9 @@ class _SocialButton extends StatelessWidget {
                 const SizedBox(width: 8),
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
                 ),
               ],
             ),

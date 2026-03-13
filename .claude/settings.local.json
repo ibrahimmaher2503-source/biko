@@ -36,7 +36,18 @@
       "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\routes\\\\driver_pages.dart\")",
       "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\routes\\\\admin_pages.dart\")",
       "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\services\\\\firestore_service.dart\")",
-      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\services\\\\map_service.dart\")"
+      "Bash(test -f \"C:\\\\Users\\\\berog\\\\StudioProjects\\\\biko\\\\.claude\\\\worktrees\\\\stoic-kare\\\\lib\\\\core\\\\services\\\\map_service.dart\")",
+      "Bash(flutter test test/l10n/localization_test.dart)",
+      "Bash(flutter test test/widgets/snackbar_test.dart)",
+      "Bash(flutter test test/integration/app_entry_test.dart)",
+      "Bash(flutter test)",
+      "Bash(dart format --output none --set-exit-if-changed lib/ test/)",
+      "Bash(dart format lib/ test/)",
+      "Bash(xargs -I {} bash -c 'echo \"\"=== {} ===\"\" && ls -1 \"\"{}\"\" 2>/dev/null')",
+      "Bash(xargs find -type f -name \"*.dart\")",
+      "Bash(dart format lib/core/services/background_location_service.dart lib/core/services/firestore_service.dart lib/core/app_initializer.dart lib/features/driver_home/ lib/core/routes/driver_pages.dart lib/core/translations/app_translations.dart lib/features/driver_registration/screens/pending_approval_screen.dart)",
+      "Bash(dart format lib/features/driver_trips/ lib/core/translations/app_translations.dart lib/core/routes/driver_pages.dart)",
+      "Bash(flutter test test/)"
     ]
   }
 }

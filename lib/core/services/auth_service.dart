@@ -79,8 +79,12 @@ class AuthService {
 
   /// Sign out from all providers and Firebase
   static Future<void> signOut() async {
-    try { await GoogleSignIn().signOut(); } catch (_) {}
-    try { await FacebookAuth.instance.logOut(); } catch (_) {}
+    try {
+      await GoogleSignIn().signOut();
+    } catch (_) {}
+    try {
+      await FacebookAuth.instance.logOut();
+    } catch (_) {}
     await _auth.signOut();
   }
 }

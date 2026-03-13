@@ -104,8 +104,9 @@ class LocationService extends GetxService {
           position.latitude,
           position.longitude,
         );
-        final timeDiff =
-            position.timestamp.difference(prev.timestamp).inSeconds;
+        final timeDiff = position.timestamp
+            .difference(prev.timestamp)
+            .inSeconds;
         if (distance > 100 && timeDiff < 2) return false;
       }
 

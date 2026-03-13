@@ -9,9 +9,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(),
-          ),
+          home: const Scaffold(body: AppLoading()),
         ),
       );
 
@@ -27,16 +25,15 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(
-              showOverlay: true,
-            ),
-          ),
+          home: const Scaffold(body: AppLoading(showOverlay: true)),
         ),
       );
 
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
-      expect(find.byType(Container), findsWidgets); // Container for overlay background
+      expect(
+        find.byType(ColoredBox),
+        findsWidgets,
+      ); // ColoredBox for overlay background
 
       // Verify overlay mode by checking AppLoading widget property
       final appLoading = tester.widget<AppLoading>(find.byType(AppLoading));
@@ -47,11 +44,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(
-              message: 'Loading data...',
-            ),
-          ),
+          home: const Scaffold(body: AppLoading(message: 'Loading data...')),
         ),
       );
 
@@ -64,10 +57,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.lightTheme,
           home: const Scaffold(
-            body: AppLoading(
-              showOverlay: true,
-              message: 'Please wait...',
-            ),
+            body: AppLoading(showOverlay: true, message: 'Please wait...'),
           ),
         ),
       );
@@ -84,9 +74,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(),
-          ),
+          home: const Scaffold(body: AppLoading()),
         ),
       );
 
@@ -98,18 +86,18 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(
-              size: 60.0,
-            ),
-          ),
+          home: const Scaffold(body: AppLoading(size: 60.0)),
         ),
       );
 
-      final sizedBox = tester.widget<SizedBox>(find.ancestor(
-        of: find.byType(CircularProgressIndicator),
-        matching: find.byType(SizedBox),
-      ).first);
+      final sizedBox = tester.widget<SizedBox>(
+        find
+            .ancestor(
+              of: find.byType(CircularProgressIndicator),
+              matching: find.byType(SizedBox),
+            )
+            .first,
+      );
 
       expect(sizedBox.width, 60.0);
       expect(sizedBox.height, 60.0);
@@ -119,9 +107,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(),
-          ),
+          home: const Scaffold(body: AppLoading()),
         ),
       );
 
@@ -133,18 +119,15 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(
-              color: Colors.amber,
-            ),
-          ),
+          home: const Scaffold(body: AppLoading(color: Colors.amber)),
         ),
       );
 
       final progressIndicator = tester.widget<CircularProgressIndicator>(
         find.byType(CircularProgressIndicator),
       );
-      final valueColor = progressIndicator.valueColor as AlwaysStoppedAnimation<Color>;
+      final valueColor =
+          progressIndicator.valueColor as AlwaysStoppedAnimation<Color>;
 
       expect(valueColor.value, Colors.amber);
     });
@@ -153,16 +136,15 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(),
-          ),
+          home: const Scaffold(body: AppLoading()),
         ),
       );
 
       final progressIndicator = tester.widget<CircularProgressIndicator>(
         find.byType(CircularProgressIndicator),
       );
-      final valueColor = progressIndicator.valueColor as AlwaysStoppedAnimation<Color>;
+      final valueColor =
+          progressIndicator.valueColor as AlwaysStoppedAnimation<Color>;
 
       expect(valueColor.value, AppTheme.primary);
     });
@@ -171,21 +153,18 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(
-              showOverlay: true,
-            ),
-          ),
+          home: const Scaffold(body: AppLoading(showOverlay: true)),
         ),
       );
 
-      // Find the Container used for the overlay background
-      final containers = tester.widgetList<Container>(find.byType(Container));
-      final overlayContainer = containers.firstWhere(
-        (container) => container.color != null,
+      // Find the ColoredBox used for the overlay background
+      final coloredBoxes =
+          tester.widgetList<ColoredBox>(find.byType(ColoredBox));
+      final overlayBox = coloredBoxes.firstWhere(
+        (box) => box.color == Colors.black.withValues(alpha: 0.5),
       );
 
-      expect(overlayContainer.color, Colors.black.withValues(alpha: 0.5));
+      expect(overlayBox.color, Colors.black.withValues(alpha: 0.5));
     });
 
     testWidgets('Message text is white in overlay mode', (tester) async {
@@ -193,10 +172,7 @@ void main() {
         MaterialApp(
           theme: AppTheme.lightTheme,
           home: const Scaffold(
-            body: AppLoading(
-              showOverlay: true,
-              message: 'Loading...',
-            ),
+            body: AppLoading(showOverlay: true, message: 'Loading...'),
           ),
         ),
       );
@@ -209,11 +185,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.lightTheme,
-          home: const Scaffold(
-            body: AppLoading(
-              message: 'Loading...',
-            ),
-          ),
+          home: const Scaffold(body: AppLoading(message: 'Loading...')),
         ),
       );
 
@@ -221,6 +193,102 @@ void main() {
       final theme = AppTheme.lightTheme;
 
       expect(text.style?.color, theme.colorScheme.onSurface);
+    });
+
+    testWidgets('T040: Adapts to dark theme correctly', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          darkTheme: AppTheme.darkTheme,
+          themeMode: ThemeMode.dark,
+          home: const Scaffold(
+            body: AppLoading(message: 'Loading in dark mode...'),
+          ),
+        ),
+      );
+
+      // Verify loading indicator renders in dark theme
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Loading in dark mode...'), findsOneWidget);
+
+      // Verify dark theme is applied
+      final BuildContext context = tester.element(find.byType(AppLoading));
+      expect(Theme.of(context).brightness, equals(Brightness.dark));
+
+      // Verify message text uses dark theme color
+      final text = tester.widget<Text>(find.text('Loading in dark mode...'));
+      final darkTheme = AppTheme.darkTheme;
+      expect(text.style?.color, darkTheme.colorScheme.onSurface);
+    });
+  });
+
+  group('AppLoading Accessibility Tests', () {
+    testWidgets('T041: Has proper semantic labels for screen readers', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const Scaffold(
+            body: AppLoading(message: 'Loading your data, please wait...'),
+          ),
+        ),
+      );
+
+      // Verify loading indicator is present for screen readers
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Verify message text is accessible
+      expect(find.text('Loading your data, please wait...'), findsOneWidget);
+
+      // Verify text is centered for accessibility
+      final text = tester.widget<Text>(
+        find.text('Loading your data, please wait...'),
+      );
+      expect(text.textAlign, equals(TextAlign.center));
+    });
+
+    testWidgets('Loading indicator without message is accessible', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const Scaffold(body: AppLoading()),
+        ),
+      );
+
+      // Verify loading indicator is present
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+      // Verify no text message (loading state is conveyed by spinner alone)
+      expect(find.byType(Text), findsNothing);
+    });
+
+    testWidgets('Overlay mode is accessible', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.lightTheme,
+          home: const Scaffold(
+            body: AppLoading(
+              showOverlay: true,
+              message: 'Processing your request...',
+            ),
+          ),
+        ),
+      );
+
+      // Verify overlay loading is visible
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+      expect(find.text('Processing your request...'), findsOneWidget);
+
+      // Verify overlay background exists (blocks interaction)
+      final coloredBoxes =
+          tester.widgetList<ColoredBox>(find.byType(ColoredBox));
+      final overlayBox = coloredBoxes.firstWhere(
+        (box) => box.color == Colors.black.withValues(alpha: 0.5),
+      );
+      expect(overlayBox, isNotNull);
     });
   });
 

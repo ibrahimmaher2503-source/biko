@@ -30,10 +30,7 @@ class AppBottomSheet {
     double? maxHeight,
   }) {
     return Get.bottomSheet<T>(
-      _BottomSheetContent(
-        maxHeight: maxHeight,
-        child: child,
-      ),
+      _BottomSheetContent(maxHeight: maxHeight, child: child),
       isDismissible: isDismissible,
       enableDrag: enableDrag,
       isScrollControlled: isScrollControlled,
@@ -43,10 +40,7 @@ class AppBottomSheet {
 }
 
 class _BottomSheetContent extends StatelessWidget {
-  const _BottomSheetContent({
-    required this.child,
-    this.maxHeight,
-  });
+  const _BottomSheetContent({required this.child, this.maxHeight});
 
   final Widget child;
   final double? maxHeight;
@@ -55,12 +49,10 @@ class _BottomSheetContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    Widget content = Container(
+    Widget content = DecoratedBox(
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
