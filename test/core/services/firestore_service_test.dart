@@ -259,8 +259,8 @@ void main() {
       expect(() => FirestoreService.getTrip, returnsNormally);
     });
 
-    test('getTripHistory returns Future<List<TripModel>>', () {
-      expect(() => FirestoreService.getTripHistory, returnsNormally);
+    test('getTripHistoryPaginated returns Future<PaginatedResult<TripModel>>', () {
+      expect(() => FirestoreService.getTripHistoryPaginated, returnsNormally);
     });
   });
 
@@ -348,15 +348,15 @@ void main() {
   });
 
   group('FirestoreService - Query Patterns', () {
-    test('getTripHistory uses proper Firestore queries', () {
+    test('getTripHistoryPaginated uses proper Firestore queries', () {
       // Queries trips by customer_uid and status
-      // Returns Future<List<TripModel>>
-      expect('Future<List<TripModel>>', isA<String>());
+      // Returns PaginatedResult<TripModel> with opaque cursor
+      expect('PaginatedResult<TripModel>', isA<String>());
     });
 
-    test('pagination uses DocumentSnapshot for lastDoc', () {
-      // Firestore pagination pattern
-      expect('DocumentSnapshot?', isA<String>());
+    test('pagination uses opaque cursor (not DocumentSnapshot)', () {
+      // Opaque cursor pattern hides Firestore from controllers
+      expect('Object?', isA<String>());
     });
 
     test('queries require proper indexes', () {

@@ -1,6 +1,5 @@
 import 'package:biko/core/models/trip_model.dart';
 import 'package:biko/core/services/firestore_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +14,11 @@ class TripHistoryController extends GetxController {
   final RxString errorMessage = ''.obs;
 
   String _uid = '';
-  DocumentSnapshot? _lastDoc;
+
+  /// Opaque pagination cursor — never inspect, just pass back to service.
+  Object? _cursor;
+
+  static const _pageSize = 20;
 
   // ==================== Lifecycle ====================
 
@@ -37,12 +40,12 @@ class TripHistoryController extends GetxController {
     try {
       isLoading.value = true;
       errorMessage.value = '';
-      _lastDoc = null;
+      _cursor = null;
 
-      final results = await FirestoreService.getTripHistory(_uid);
-      trips.assignAll(results);
-      _lastDoc = await FirestoreService.getTripHistoryLastDoc(_uid);
-      hasMore.value = results.length >= 20;
+      final result = await FirestoreService.getTripHistoryPaginated(_uid);
+      trips.assignAll(result.items);
+      _cursor = result.cursor;
+      hasMore.value = result.hasMore(_pageSize);
     } catch (e) {
       debugPrint('❌ TripHistoryController._loadTrips: $e');
       errorMessage.value = 'history.load_error';
@@ -53,19 +56,20 @@ class TripHistoryController extends GetxController {
 
   /// Load more trips for pagination
   Future<void> loadMore() async {
-    if (isLoadingMore.value || !hasMore.value || _lastDoc == null) return;
+    if (isLoadingMore.value || !hasMore.value || _cursor == null) return;
     try {
       isLoadingMore.value = true;
-      final results = await FirestoreService.getTripHistory(
+      final result = await FirestoreService.getTripHistoryPaginated(
         _uid,
-        lastDoc: _lastDoc,
+        cursor: _cursor,
       );
-      trips.addAll(results);
-      _lastDoc = await FirestoreService.getTripHistoryLastDoc(
-        _uid,
-        lastDoc: _lastDoc,
-      );
-      hasMore.value = results.length >= 20;
+      if (result.items.isEmpty) {
+        hasMore.value = false;
+      } else {
+        trips.addAll(result.items);
+        _cursor = result.cursor;
+        hasMore.value = result.hasMore(_pageSize);
+      }
     } catch (e) {
       debugPrint('❌ TripHistoryController.loadMore: $e');
     } finally {

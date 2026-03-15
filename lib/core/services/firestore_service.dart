@@ -7,6 +7,7 @@ import 'package:biko/core/models/driver_location_model.dart';
 import 'package:biko/core/models/driver_profile_model.dart';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/notification_model.dart';
+import 'package:biko/core/models/paginated_result.dart';
 import 'package:biko/core/models/promo_code_model.dart';
 import 'package:biko/core/models/rating_model.dart';
 import 'package:biko/core/models/referral_model.dart';
@@ -234,14 +235,14 @@ class FirestoreService {
 
   // ==================== Trip History ====================
 
-  /// Get paginated trip history for a customer.
+  /// Get paginated trip history for a customer in a single Firestore read.
   ///
   /// Returns completed and cancelled trips ordered by creation date (newest first).
-  /// Use [lastDoc] for pagination.
-  static Future<List<TripModel>> getTripHistory(
+  /// Use [cursor] (opaque) for pagination — pass the cursor from a previous result.
+  static Future<PaginatedResult<TripModel>> getTripHistoryPaginated(
     String uid, {
     int limit = 20,
-    DocumentSnapshot? lastDoc,
+    Object? cursor,
   }) async {
     try {
       var query = _firestore
@@ -251,46 +252,23 @@ class FirestoreService {
           .orderBy('created_at', descending: true)
           .limit(limit);
 
-      if (lastDoc != null) {
-        query = query.startAfterDocument(lastDoc);
+      if (cursor != null && cursor is DocumentSnapshot) {
+        query = query.startAfterDocument(cursor);
       }
 
       final snapshot = await query.get();
-      return snapshot.docs.map((doc) {
+      final items = snapshot.docs.map((doc) {
         final data = doc.data();
         data['id'] = doc.id;
         return TripModel.fromMap(data);
       }).toList();
+      final lastDoc =
+          snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
+
+      return PaginatedResult(items: items, cursor: lastDoc);
     } catch (e) {
-      debugPrint('❌ FirestoreService.getTripHistory failed: $e');
+      debugPrint('❌ FirestoreService.getTripHistoryPaginated failed: $e');
       rethrow;
-    }
-  }
-
-  /// Get the last document snapshot for pagination
-  static Future<DocumentSnapshot?> getTripHistoryLastDoc(
-    String uid, {
-    int limit = 20,
-    DocumentSnapshot? lastDoc,
-  }) async {
-    try {
-      var query = _firestore
-          .collection('trips')
-          .where('customer_uid', isEqualTo: uid)
-          .where('status', whereIn: ['completed', 'cancelled'])
-          .orderBy('created_at', descending: true)
-          .limit(limit);
-
-      if (lastDoc != null) {
-        query = query.startAfterDocument(lastDoc);
-      }
-
-      final snapshot = await query.get();
-      if (snapshot.docs.isEmpty) return null;
-      return snapshot.docs.last;
-    } catch (e) {
-      debugPrint('❌ FirestoreService.getTripHistoryLastDoc failed: $e');
-      return null;
     }
   }
 
@@ -428,16 +406,15 @@ class FirestoreService {
     });
   }
 
-  /// Get paginated transaction history with cursor for next page.
+  /// Get paginated transaction history with opaque cursor for next page.
   ///
-  /// Returns both the transaction list and the last document snapshot
-  /// for cursor-based pagination in a single Firestore read.
-  static Future<
-      ({List<TransactionModel> items, DocumentSnapshot? cursor})>
+  /// Returns a [PaginatedResult] with the transaction list and an opaque
+  /// cursor for the next page — controllers never see [DocumentSnapshot].
+  static Future<PaginatedResult<TransactionModel>>
       getTransactionsPaginated(
     String uid, {
     int limit = 20,
-    DocumentSnapshot? lastDoc,
+    Object? cursor,
   }) async {
     try {
       var query = _firestore
@@ -446,8 +423,8 @@ class FirestoreService {
           .orderBy('created_at', descending: true)
           .limit(limit);
 
-      if (lastDoc != null) {
-        query = query.startAfterDocument(lastDoc);
+      if (cursor != null && cursor is DocumentSnapshot) {
+        query = query.startAfterDocument(cursor);
       }
 
       final snapshot = await query.get();
@@ -457,12 +434,13 @@ class FirestoreService {
                 TransactionModel.fromMap({...doc.data(), 'txn_id': doc.id}),
           )
           .toList();
-      final cursor =
+      final lastDoc =
           snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
-      return (items: items, cursor: cursor);
+
+      return PaginatedResult(items: items, cursor: lastDoc);
     } catch (e) {
       debugPrint('❌ FirestoreService.getTransactionsPaginated failed: $e');
-      return (items: <TransactionModel>[], cursor: null);
+      return const PaginatedResult(items: <TransactionModel>[]);
     }
   }
 
@@ -836,10 +814,10 @@ class FirestoreService {
   // ==================== Driver Ratings ====================
 
   /// Get paginated ratings for a driver.
-  static Future<List<RatingModel>> getDriverRatings(
+  static Future<PaginatedResult<RatingModel>> getDriverRatingsPaginated(
     String driverUid, {
     int limit = 20,
-    DocumentSnapshot? lastDoc,
+    Object? cursor,
   }) async {
     try {
       var query = _firestore
@@ -848,17 +826,21 @@ class FirestoreService {
           .orderBy('created_at', descending: true)
           .limit(limit);
 
-      if (lastDoc != null) {
-        query = query.startAfterDocument(lastDoc);
+      if (cursor != null && cursor is DocumentSnapshot) {
+        query = query.startAfterDocument(cursor);
       }
 
       final snapshot = await query.get();
-      return snapshot.docs.map((doc) {
+      final items = snapshot.docs.map((doc) {
         return RatingModel.fromMap({...doc.data(), 'rating_id': doc.id});
       }).toList();
+      final lastDoc =
+          snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
+
+      return PaginatedResult(items: items, cursor: lastDoc);
     } catch (e) {
-      debugPrint('❌ FirestoreService.getDriverRatings failed: $e');
-      return [];
+      debugPrint('❌ FirestoreService.getDriverRatingsPaginated failed: $e');
+      return const PaginatedResult(items: <RatingModel>[]);
     }
   }
 
@@ -1059,19 +1041,23 @@ class FirestoreService {
   // ==================== App Config (Pricing) ====================
 
   /// Get commission rate from app_config/pricing.
-  static Future<double> getCommissionRate() async {
+  ///
+  /// Returns null if the config is missing — callers must handle this
+  /// rather than falling back to a hardcoded value (per project rules).
+  static Future<double?> getCommissionRate() async {
     try {
       final doc = await _firestore
           .collection('app_config')
           .doc('pricing')
           .get();
       if (doc.exists && doc.data() != null) {
-        return (doc.data()!['commission_rate'] as num?)?.toDouble() ?? 0.15;
+        return (doc.data()!['commission_rate'] as num?)?.toDouble();
       }
-      return 0.15;
+      debugPrint('⚠️ FirestoreService.getCommissionRate: config missing');
+      return null;
     } catch (e) {
       debugPrint('❌ FirestoreService.getCommissionRate failed: $e');
-      return 0.15;
+      return null;
     }
   }
 

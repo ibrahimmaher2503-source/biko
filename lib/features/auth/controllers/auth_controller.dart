@@ -7,7 +7,6 @@ import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 /// Global authentication controller — registered permanently in AppInitializer
@@ -83,21 +82,21 @@ class AuthController extends GetxController {
     );
   }
 
-  Future<void> _onAutoVerify(PhoneAuthCredential credential) async {
+  Future<void> _onAutoVerify(PhoneCredential credential) async {
     _authState.value = AuthState.verifying;
     try {
-      await AuthService.signInWithCredential(credential);
+      await AuthService.signInWithPhoneCredential(credential);
       _authState.value = AuthState.authenticated;
       await _navigateAfterAuth();
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       _authState.value = AuthState.error;
-      errorMessage.value = e.message ?? 'error.otp_failed'.tr;
+      errorMessage.value = e.toString();
     }
   }
 
-  void _onVerificationFailed(FirebaseAuthException e) {
+  void _onVerificationFailed(String error) {
     _authState.value = AuthState.error;
-    errorMessage.value = e.message ?? 'error.otp_failed'.tr;
+    errorMessage.value = error;
   }
 
   void _onCodeSent(String verificationId, int? resendToken) {
@@ -127,9 +126,9 @@ class AuthController extends GetxController {
       _authState.value = AuthState.authenticated;
       _timer?.cancel();
       await _navigateAfterAuth();
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       _authState.value = AuthState.error;
-      errorMessage.value = e.message ?? 'error.otp_failed'.tr;
+      errorMessage.value = e.toString();
     }
   }
 

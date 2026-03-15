@@ -5,7 +5,6 @@ import 'package:biko/core/models/wallet_model.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -21,13 +20,17 @@ class WalletController extends GetxController {
   final RxString errorMessage = ''.obs;
 
   // Top-up state
-  final Rx<double?> selectedTopUpAmount = Rx<double?>(null);
+  final Rxn<double> selectedTopUpAmount = Rxn<double>();
   final RxString selectedPaymentMethod = 'card'.obs;
   final RxBool isProcessingTopUp = false.obs;
 
   StreamSubscription<WalletModel?>? _walletSub;
   String _uid = '';
-  DocumentSnapshot? _lastDoc;
+
+  /// Opaque pagination cursor — never inspect, just pass back to service.
+  Object? _cursor;
+
+  static const _pageSize = 20;
 
   // ==================== Lifecycle ====================
 
@@ -66,12 +69,11 @@ class WalletController extends GetxController {
   Future<void> _loadTransactions() async {
     if (_uid.isEmpty) return;
     try {
-      _lastDoc = null;
-      final result =
-          await FirestoreService.getTransactionsPaginated(_uid);
+      _cursor = null;
+      final result = await FirestoreService.getTransactionsPaginated(_uid);
       transactions.assignAll(result.items);
-      _lastDoc = result.cursor;
-      hasMore.value = result.items.length >= 20;
+      _cursor = result.cursor;
+      hasMore.value = result.hasMore(_pageSize);
     } catch (e) {
       debugPrint('❌ WalletController._loadTransactions: $e');
     }
@@ -79,19 +81,19 @@ class WalletController extends GetxController {
 
   /// Load more transactions (pagination)
   Future<void> loadMore() async {
-    if (isPaginating.value || !hasMore.value || _lastDoc == null) return;
+    if (isPaginating.value || !hasMore.value || _cursor == null) return;
     try {
       isPaginating.value = true;
       final result = await FirestoreService.getTransactionsPaginated(
         _uid,
-        lastDoc: _lastDoc,
+        cursor: _cursor,
       );
       if (result.items.isEmpty) {
         hasMore.value = false;
       } else {
         transactions.addAll(result.items);
-        _lastDoc = result.cursor;
-        hasMore.value = result.items.length >= 20;
+        _cursor = result.cursor;
+        hasMore.value = result.hasMore(_pageSize);
       }
     } catch (e) {
       debugPrint('❌ WalletController.loadMore: $e');

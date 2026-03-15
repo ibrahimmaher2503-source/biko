@@ -151,7 +151,9 @@ class HomeHeader extends GetView<HomeController> {
                   final balance = controller.walletBalance.value;
                   return Text(
                     loaded
-                        ? 'EGP ${balance.toStringAsFixed(0)}'
+                        ? 'home.balance_amount'.trParams({
+                            'amount': balance.toStringAsFixed(0),
+                          })
                         : 'home.balance_error'.tr,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,

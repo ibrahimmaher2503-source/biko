@@ -80,7 +80,11 @@ class ProfileSetupController extends GetxController {
 
     isUploading.value = true;
     try {
-      final uid = AuthService.currentUser!.uid;
+      final uid = AuthService.currentUser?.uid;
+      if (uid == null) {
+        AppSnackbar.error('error.session_expired'.tr);
+        return;
+      }
       final url = await StorageService.uploadAvatar(uid, File(file.path));
       avatarUrl.value = url;
     } catch (e) {
@@ -114,7 +118,11 @@ class ProfileSetupController extends GetxController {
 
     isSaving.value = true;
     try {
-      final uid = AuthService.currentUser!.uid;
+      final uid = AuthService.currentUser?.uid;
+      if (uid == null) {
+        AppSnackbar.error('error.session_expired'.tr);
+        return;
+      }
       await FirestoreService.updateUser(uid, {
         'name': name,
         'lang': selectedLang.value,

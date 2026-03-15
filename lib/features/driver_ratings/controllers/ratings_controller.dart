@@ -33,8 +33,8 @@ class RatingsController extends GetxController {
       driverProfile.value = profile;
 
       // Load ratings
-      final results = await FirestoreService.getDriverRatings(uid);
-      ratings.assignAll(results);
+      final result = await FirestoreService.getDriverRatingsPaginated(uid);
+      ratings.assignAll(result.items);
     } catch (e) {
       debugPrint('RatingsController._loadData error: $e');
     } finally {

@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class OtpVerificationScreen extends StatelessWidget {
-  const OtpVerificationScreen({super.key});
+  OtpVerificationScreen({super.key});
+
+  /// Reactive OTP code — kept outside build() to avoid recreation on rebuild.
+  final RxString otpCode = ''.obs;
 
   @override
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
-    final otpCode = ''.obs;
 
     return Scaffold(
       body: SafeArea(

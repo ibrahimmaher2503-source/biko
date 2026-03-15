@@ -81,7 +81,7 @@ class CustomerPages {
     ),
     GetPage(
       name: AppRoutes.otpVerification,
-      page: () => const OtpVerificationScreen(),
+      page: OtpVerificationScreen.new,
       binding: OtpVerificationBinding(),
       transition: Transition.rightToLeft,
     ),

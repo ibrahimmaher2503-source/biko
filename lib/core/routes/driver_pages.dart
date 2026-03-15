@@ -72,7 +72,7 @@ class DriverPages {
     ),
     GetPage(
       name: AppRoutes.otpVerification,
-      page: () => const OtpVerificationScreen(),
+      page: OtpVerificationScreen.new,
       transition: Transition.rightToLeft,
     ),
     GetPage(

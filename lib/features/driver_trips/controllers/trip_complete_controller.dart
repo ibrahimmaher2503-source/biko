@@ -62,7 +62,9 @@ class TripCompleteController extends GetxController {
   Future<void> _loadFareBreakdown(TripModel loadedTrip) async {
     try {
       final rate = await FirestoreService.getCommissionRate();
-      commissionRate.value = rate;
+      if (rate != null) {
+        commissionRate.value = rate;
+      }
     } catch (e) {
       debugPrint('TripCompleteController._loadFareBreakdown error: $e');
     }

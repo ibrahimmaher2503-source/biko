@@ -45,9 +45,9 @@ void main() {
       expect(() => AuthService.verifyOtp, returnsNormally);
     });
 
-    test('signInWithCredential accepts PhoneAuthCredential', () {
-      // Compile-time test: verify signInWithCredential method exists
-      expect(() => AuthService.signInWithCredential, returnsNormally);
+    test('signInWithPhoneCredential accepts PhoneCredential', () {
+      // Compile-time test: verify signInWithPhoneCredential method exists
+      expect(() => AuthService.signInWithPhoneCredential, returnsNormally);
     });
   });
 

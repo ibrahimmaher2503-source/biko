@@ -1,6 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+/// Opaque wrapper for phone auth credentials.
+///
+/// Hides [PhoneAuthCredential] from controllers so they never
+/// import `firebase_auth` directly (RULE-06 compliance).
+class PhoneCredential {
+  PhoneCredential._(this._credential);
+  final PhoneAuthCredential _credential;
+}
 
 /// Wraps Firebase Phone Authentication
 class AuthService {
@@ -12,18 +22,26 @@ class AuthService {
   static User? get currentUser => _auth.currentUser;
 
   /// Send OTP to the given phone number (E.164 format: +20XXXXXXXXXX)
+  ///
+  /// Callbacks use project types instead of Firebase types:
+  /// - [onAutoVerify] receives a [PhoneCredential] (opaque)
+  /// - [onFailed] receives an error message [String]
   static Future<void> sendOtp({
     required String phoneNumber,
-    required void Function(PhoneAuthCredential) onAutoVerify,
-    required void Function(FirebaseAuthException) onFailed,
+    required void Function(PhoneCredential) onAutoVerify,
+    required void Function(String errorMessage) onFailed,
     required void Function(String verificationId, int? resendToken) onCodeSent,
     required void Function(String verificationId) onTimeout,
     int? resendToken,
   }) async {
     await _auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
-      verificationCompleted: onAutoVerify,
-      verificationFailed: onFailed,
+      verificationCompleted: (credential) {
+        onAutoVerify(PhoneCredential._(credential));
+      },
+      verificationFailed: (exception) {
+        onFailed(exception.message ?? 'error.otp_failed');
+      },
       codeSent: onCodeSent,
       codeAutoRetrievalTimeout: onTimeout,
       forceResendingToken: resendToken,
@@ -43,11 +61,11 @@ class AuthService {
     return _auth.signInWithCredential(credential);
   }
 
-  /// Sign in with a PhoneAuthCredential (auto-verify flow)
-  static Future<UserCredential> signInWithCredential(
-    PhoneAuthCredential credential,
+  /// Sign in with an opaque [PhoneCredential] (auto-verify flow)
+  static Future<UserCredential> signInWithPhoneCredential(
+    PhoneCredential credential,
   ) async {
-    return _auth.signInWithCredential(credential);
+    return _auth.signInWithCredential(credential._credential);
   }
 
   /// Sign in with Google — returns null if user cancelled the picker
@@ -81,10 +99,14 @@ class AuthService {
   static Future<void> signOut() async {
     try {
       await GoogleSignIn().signOut();
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('GoogleSignIn.signOut failed: $e');
+    }
     try {
       await FacebookAuth.instance.logOut();
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('FacebookAuth.logOut failed: $e');
+    }
     await _auth.signOut();
   }
 }

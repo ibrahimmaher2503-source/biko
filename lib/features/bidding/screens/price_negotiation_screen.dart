@@ -1,5 +1,7 @@
 import 'package:biko/core/models/directions_result.dart';
 import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_button.dart';
+import 'package:biko/core/widgets/app_loading.dart';
 import 'package:biko/features/bidding/controllers/bidding_controller.dart';
 import 'package:biko/features/bidding/widgets/fare_badge.dart';
 import 'package:biko/features/bidding/widgets/offer_adjuster.dart';
@@ -156,7 +158,7 @@ class PriceNegotiationScreen extends GetView<BiddingController> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const CircularProgressIndicator(),
+          const AppLoading(),
           const SizedBox(height: 16),
           Text(
             'trip.loading_route'.tr,
@@ -244,20 +246,12 @@ class PriceNegotiationScreen extends GetView<BiddingController> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Obx(
-            () => ElevatedButton(
+            () => AppButton(
+              text: 'trip.request_ride'.tr,
               onPressed: controller.isSubmitting.value
                   ? null
                   : controller.submitTrip,
-              child: controller.isSubmitting.value
-                  ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : Text('trip.request_ride'.tr),
+              isLoading: controller.isSubmitting.value,
             ),
           ),
         ),
