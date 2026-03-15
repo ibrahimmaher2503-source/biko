@@ -428,8 +428,13 @@ class FirestoreService {
     });
   }
 
-  /// Get paginated transaction history
-  static Future<List<TransactionModel>> getTransactions(
+  /// Get paginated transaction history with cursor for next page.
+  ///
+  /// Returns both the transaction list and the last document snapshot
+  /// for cursor-based pagination in a single Firestore read.
+  static Future<
+      ({List<TransactionModel> items, DocumentSnapshot? cursor})>
+      getTransactionsPaginated(
     String uid, {
     int limit = 20,
     DocumentSnapshot? lastDoc,
@@ -446,41 +451,18 @@ class FirestoreService {
       }
 
       final snapshot = await query.get();
-      return snapshot.docs
+      final items = snapshot.docs
           .map(
             (doc) =>
                 TransactionModel.fromMap({...doc.data(), 'txn_id': doc.id}),
           )
           .toList();
+      final cursor =
+          snapshot.docs.isNotEmpty ? snapshot.docs.last : null;
+      return (items: items, cursor: cursor);
     } catch (e) {
-      debugPrint('❌ FirestoreService.getTransactions failed: $e');
-      return [];
-    }
-  }
-
-  /// Get the last document snapshot for transaction pagination cursor.
-  static Future<DocumentSnapshot?> getTransactionsLastDoc(
-    String uid, {
-    int limit = 20,
-    DocumentSnapshot? lastDoc,
-  }) async {
-    try {
-      var query = _firestore
-          .collection('transactions')
-          .where('uid', isEqualTo: uid)
-          .orderBy('created_at', descending: true)
-          .limit(limit);
-
-      if (lastDoc != null) {
-        query = query.startAfterDocument(lastDoc);
-      }
-
-      final snapshot = await query.get();
-      if (snapshot.docs.isEmpty) return null;
-      return snapshot.docs.last;
-    } catch (e) {
-      debugPrint('❌ FirestoreService.getTransactionsLastDoc failed: $e');
-      return null;
+      debugPrint('❌ FirestoreService.getTransactionsPaginated failed: $e');
+      return (items: <TransactionModel>[], cursor: null);
     }
   }
 

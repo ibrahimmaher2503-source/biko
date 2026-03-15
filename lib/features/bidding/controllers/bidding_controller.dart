@@ -98,7 +98,9 @@ class BiddingController extends GetxController {
         _baseFare = (config['base_fare'] as num?)?.toDouble() ?? 0;
         _pricePerKm = (config['price_per_km'] as num?)?.toDouble() ?? 0;
         _pricePerMin = (config['price_per_min'] as num?)?.toDouble() ?? 0;
-        _pricingLoaded = true;
+        // Only mark loaded if at least one pricing value is non-zero
+        _pricingLoaded =
+            _baseFare > 0 || _pricePerKm > 0 || _pricePerMin > 0;
       }
 
       // Apply directions

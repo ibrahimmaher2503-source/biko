@@ -67,7 +67,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(6, (index) {
         return Padding(
-          padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
+          padding: EdgeInsetsDirectional.only(start: index > 0 ? 8 : 0),
           child: KeyboardListener(
             focusNode: FocusNode(),
             onKeyEvent: (event) => _onKeyEvent(index, event),

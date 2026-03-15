@@ -51,8 +51,8 @@ class WalletController extends GetxController {
     }
 
     try {
-      final results = await FirestoreService.getTransactions(uid);
-      transactions.assignAll(results);
+      final result = await FirestoreService.getTransactionsPaginated(uid);
+      transactions.assignAll(result.items);
     } catch (e) {
       debugPrint('WalletController._loadTransactions error: $e');
     } finally {

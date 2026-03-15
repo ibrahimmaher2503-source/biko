@@ -67,10 +67,11 @@ class WalletController extends GetxController {
     if (_uid.isEmpty) return;
     try {
       _lastDoc = null;
-      final results = await FirestoreService.getTransactions(_uid);
-      transactions.assignAll(results);
-      _lastDoc = await FirestoreService.getTransactionsLastDoc(_uid);
-      hasMore.value = results.length >= 20;
+      final result =
+          await FirestoreService.getTransactionsPaginated(_uid);
+      transactions.assignAll(result.items);
+      _lastDoc = result.cursor;
+      hasMore.value = result.items.length >= 20;
     } catch (e) {
       debugPrint('❌ WalletController._loadTransactions: $e');
     }
@@ -81,19 +82,16 @@ class WalletController extends GetxController {
     if (isPaginating.value || !hasMore.value || _lastDoc == null) return;
     try {
       isPaginating.value = true;
-      final results = await FirestoreService.getTransactions(
+      final result = await FirestoreService.getTransactionsPaginated(
         _uid,
         lastDoc: _lastDoc,
       );
-      if (results.isEmpty) {
+      if (result.items.isEmpty) {
         hasMore.value = false;
       } else {
-        transactions.addAll(results);
-        _lastDoc = await FirestoreService.getTransactionsLastDoc(
-          _uid,
-          lastDoc: _lastDoc,
-        );
-        hasMore.value = results.length >= 20;
+        transactions.addAll(result.items);
+        _lastDoc = result.cursor;
+        hasMore.value = result.items.length >= 20;
       }
     } catch (e) {
       debugPrint('❌ WalletController.loadMore: $e');
