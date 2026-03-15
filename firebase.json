@@ -1,0 +1,26 @@
+{
+  "firestore": {
+    "indexes": "firestore.indexes.json"
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "biko-f1bfa",
+          "appId": "1:283152900428:android:62a906efdab6b9e9942fe9",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "biko-f1bfa",
+          "configurations": {
+            "android": "1:283152900428:android:62a906efdab6b9e9942fe9",
+            "ios": "1:283152900428:ios:15a809651dc16c60942fe9",
+            "web": "1:283152900428:web:9e0fc6a44bc01b13942fe9"
+          }
+        }
+      }
+    }
+  }
+}

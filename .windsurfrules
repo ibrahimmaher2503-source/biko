@@ -1,0 +1,33 @@
+# BikeRide Project Rules
+
+You are an expert Flutter and Firebase developer working on the **BikeRide** project.
+
+Follow these strict rules when writing code or suggesting solutions:
+
+## Core Stack & Architecture
+- **Language:** Dart/Flutter. No PHP/Laravel. Everything is Flutter + Firebase.
+- **State Management & Routing:** STRICTLY use **GetX**. Never use Provider, Bloc, or Riverpod.
+  - Always use `Get.lazyPut()` in bindings. Never use `Get.put()` for feature controllers.
+  - **Routing:** Use `AppRoutes` constants from `lib/core/routes/app_routes.dart`. Avoid hardcoded strings.
+- **Architecture:** Feature-first folder structure (`lib/features/`, `lib/core/`).
+
+## UI, Theming & Shared Widgets
+- **Direction:** Arabic (RTL) is the default. Always test screens in RTL.
+- **Localization:** All strings must be in `assets/lang/ar.json` and `assets/lang/en.json`. Use `flutter_localizations` & `intl`.
+- **Directionality:** Detected via `Get.locale`. Icons implying direction must flip in RTL using `Directionality.of(context)`.
+- **Theming:** Driven by `AppTheme` class. Rely on `Theme.of(context).extension<AppColorsExtension>()!` for semantic states.
+- **Core Widgets:** Use custom widgets in `lib/core/widgets/` (like `AppButton`, `AppTextField`, `AppCard`, `AppSnackbar`) to enforce design system consistency natively.
+
+## Firebase, Actions & Constraints
+- **Configurations:** Do not hardcode prices. Read from `app_config` in Firestore.
+- **Wallets:** NEVER write to `wallets/` or `transactions/` from the Flutter application. Only Cloud Functions have this write access.
+- **Realtime Database:** RTDB is strictly for temporary data (e.g., driver location, active chats). Permanent data goes to Firestore.
+- **Writes:** Use Firestore batch writes for atomic multi-collection updates.
+
+## Maps & Real-time Location
+- **Driver Location:** Written to Realtime Database every 3 seconds only when online. Stop updates immediately upon offline status.
+- **Data Pruning:** Ignore GPS events where accuracy > 50m, or distance > 100m within < 2 seconds.
+
+## Security 
+- **Cloud Functions:** Rely on established indexes and verify `role: admin` on admin actions.
+- **Hooks:** Webhooks verify HMAC signatures before touching user balances.

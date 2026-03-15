@@ -1,0 +1,147 @@
+import 'dart:async';
+
+import 'package:biko/core/models/bid_model.dart';
+import 'package:biko/core/models/enums.dart';
+import 'package:biko/core/routes/app_routes.dart';
+import 'package:biko/core/services/firestore_service.dart';
+import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:get/get.dart';
+
+/// Controller for the incoming bids screen.
+///
+/// Listens to live bids from Realtime DB, handles accept/reject,
+/// search timeout, and cancellation.
+class BidsController extends GetxController {
+  // ==================== Observables ====================
+
+  /// Live list of incoming bids
+  final bids = <BidModel>[].obs;
+
+  /// Loading state for initial data
+  final isLoading = true.obs;
+
+  /// Whether a bid acceptance is in progress
+  final isAcceptingBid = false.obs;
+
+  /// Trip ID from route arguments
+  final tripId = ''.obs;
+
+  /// Whether the search has timed out (60s with no bids)
+  final hasTimedOut = false.obs;
+
+  /// Customer's offered price (for display)
+  final offeredPrice = 0.0.obs;
+
+  /// Pickup address (for display)
+  final pickupAddress = ''.obs;
+
+  /// Dropoff address (for display)
+  final dropoffAddress = ''.obs;
+
+  // ==================== Internal ====================
+
+  StreamSubscription<List<BidModel>>? _bidsSub;
+  Timer? _timeoutTimer;
+
+  // ==================== Lifecycle ====================
+
+  @override
+  void onInit() {
+    super.onInit();
+    _extractArguments();
+    _listenToBids();
+    _startTimeoutTimer();
+  }
+
+  @override
+  void onClose() {
+    _bidsSub?.cancel();
+    _timeoutTimer?.cancel();
+    super.onClose();
+  }
+
+  // ==================== Initialization ====================
+
+  void _extractArguments() {
+    final args = Get.arguments;
+    if (args is Map<String, dynamic>) {
+      tripId.value = (args['trip_id'] as String?) ?? '';
+      offeredPrice.value = (args['offered_price'] as num?)?.toDouble() ?? 0;
+      pickupAddress.value = (args['pickup_address'] as String?) ?? '';
+      dropoffAddress.value = (args['dropoff_address'] as String?) ?? '';
+    }
+  }
+
+  void _listenToBids() {
+    if (tripId.value.isEmpty) {
+      isLoading.value = false;
+      return;
+    }
+
+    _bidsSub = FirestoreService.listenToLiveBids(tripId.value).listen(
+      (bidList) {
+        bids.assignAll(
+          bidList.where((b) => b.status == BidStatus.pending).toList(),
+        );
+        isLoading.value = false;
+
+        // Reset timeout when bids arrive
+        if (bidList.isNotEmpty) {
+          hasTimedOut.value = false;
+          _timeoutTimer?.cancel();
+        }
+      },
+      onError: (_) {
+        isLoading.value = false;
+      },
+    );
+  }
+
+  void _startTimeoutTimer() {
+    _timeoutTimer = Timer(const Duration(seconds: 60), () {
+      if (bids.isEmpty) {
+        hasTimedOut.value = true;
+      }
+    });
+  }
+
+  // ==================== Actions ====================
+
+  /// Accept a bid and navigate to trip tracking.
+  Future<void> acceptBid(BidModel bid) async {
+    isAcceptingBid.value = true;
+    try {
+      await FirestoreService.acceptBid(
+        tripId: tripId.value,
+        bidId: bid.bidId,
+        finalPrice: bid.amount,
+        driverUid: bid.driverUid,
+      );
+
+      Get.offNamed(AppRoutes.trackTrip, arguments: {'trip_id': tripId.value});
+    } catch (_) {
+      AppSnackbar.error('bids.accept_error'.tr);
+    } finally {
+      isAcceptingBid.value = false;
+    }
+  }
+
+  /// Reject a specific bid.
+  Future<void> rejectBid(BidModel bid) async {
+    try {
+      await FirestoreService.rejectBid(tripId.value, bid.bidId);
+    } catch (_) {
+      AppSnackbar.error('common.error'.tr);
+    }
+  }
+
+  /// Cancel the driver search and go home.
+  Future<void> cancelSearch() async {
+    try {
+      await FirestoreService.cancelTripSearch(tripId.value);
+      Get.offAllNamed(AppRoutes.customerHome);
+    } catch (_) {
+      AppSnackbar.error('common.error'.tr);
+    }
+  }
+}

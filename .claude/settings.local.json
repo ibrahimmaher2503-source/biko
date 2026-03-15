@@ -47,7 +47,13 @@
       "Bash(xargs find -type f -name \"*.dart\")",
       "Bash(dart format lib/core/services/background_location_service.dart lib/core/services/firestore_service.dart lib/core/app_initializer.dart lib/features/driver_home/ lib/core/routes/driver_pages.dart lib/core/translations/app_translations.dart lib/features/driver_registration/screens/pending_approval_screen.dart)",
       "Bash(dart format lib/features/driver_trips/ lib/core/translations/app_translations.dart lib/core/routes/driver_pages.dart)",
-      "Bash(flutter test test/)"
+      "Bash(flutter test test/)",
+      "Bash(coderabbit --version)",
+      "Bash(grep -iE '\\\\.env|credentials|secret|\\\\.key$|\\\\.pem$')",
+      "Bash(git reset:*)"
     ]
+  },
+  "remote": {
+    "defaultEnvironmentId": "env_01YE2DHQEJEPMRsum6dD73Qj"
   }
 }

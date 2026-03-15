@@ -1,0 +1,294 @@
+name: Flutter Tests
+
+on:
+  push:
+    branches: [main, develop, 'feature/**', 'fix/**']
+  pull_request:
+    branches: [main, develop]
+
+# Cancel in-progress runs for the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FLUTTER_VERSION: '3.29.0'
+
+jobs:
+  # =====================================================
+  # T167: Run all tests with coverage
+  # =====================================================
+  test:
+    name: Flutter Test (Coverage)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Cache pub dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.pub-cache
+            .dart_tool
+          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify Flutter installation
+        run: |
+          flutter --version
+          flutter doctor -v
+
+      - name: Run flutter analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run all tests with coverage
+        run: |
+          flutter test --coverage --reporter=expanded 2>&1 | tee test_output.txt
+          echo "Test exit code: ${PIPESTATUS[0]}"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-output
+          path: test_output.txt
+          retention-days: 7
+
+  # =====================================================
+  # T168: Coverage enforcement (fail if < 70%)
+  # =====================================================
+  coverage:
+    name: Coverage Check (>= 70%)
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Check coverage threshold
+        run: |
+          if [ ! -f coverage/lcov.info ]; then
+            echo "ERROR: coverage/lcov.info not found"
+            exit 1
+          fi
+
+          # Install lcov for coverage analysis
+          sudo apt-get install -y lcov
+
+          # Generate coverage summary
+          lcov --summary coverage/lcov.info 2>&1 | tee coverage_summary.txt
+
+          # Extract line coverage percentage
+          LINE_COVERAGE=$(lcov --summary coverage/lcov.info 2>&1 | grep "lines" | grep -oP '\d+\.\d+(?=%)' | head -1)
+
+          if [ -z "$LINE_COVERAGE" ]; then
+            echo "WARNING: Could not parse coverage percentage, continuing..."
+            exit 0
+          fi
+
+          echo "Line coverage: ${LINE_COVERAGE}%"
+
+          # Check if coverage meets threshold using Python (more reliable than bc)
+          python3 -c "
+          coverage = float('$LINE_COVERAGE')
+          threshold = 70.0
+          print(f'Coverage: {coverage:.1f}% (threshold: {threshold}%)')
+          if coverage < threshold:
+              print(f'FAIL: Coverage {coverage:.1f}% is below {threshold}% threshold')
+              exit(1)
+          else:
+              print(f'PASS: Coverage {coverage:.1f}% meets threshold')
+          "
+
+      - name: Generate HTML coverage report
+        if: always()
+        run: |
+          sudo apt-get install -y lcov
+          genhtml coverage/lcov.info -o coverage/html --no-branch-coverage || true
+
+      - name: Upload coverage artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage/lcov.info
+            coverage/html/
+          retention-days: 30
+
+  # =====================================================
+  # T169: Golden test verification
+  # =====================================================
+  golden-tests:
+    name: Golden Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run golden tests
+        run: |
+          # Run tests with existing goldens (will fail if goldens changed)
+          flutter test test/core/widgets/ --reporter=compact 2>&1 | tee golden_output.txt
+          echo "Golden test exit: ${PIPESTATUS[0]}"
+
+      - name: Check for golden failures
+        run: |
+          if grep -q "FAILED" golden_output.txt; then
+            echo "Golden test failures detected!"
+            echo "If intentional, regenerate goldens: flutter test --update-goldens test/core/widgets/"
+            cat golden_output.txt
+            exit 1
+          fi
+
+      - name: Upload golden diff artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-failures
+          path: |
+            test/core/widgets/goldens/
+            test/core/widgets/**/failures/
+          retention-days: 7
+
+  # =====================================================
+  # T170: Codecov integration
+  # =====================================================
+  codecov:
+    name: Upload to Codecov
+    runs-on: ubuntu-latest
+    needs: test
+    timeout-minutes: 10
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          file: coverage/lcov.info
+          flags: unittests
+          name: bikeride-coverage
+          fail_ci_if_error: false  # Don't fail CI if Codecov upload fails
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  # =====================================================
+  # T171: Matrix testing (stable + beta channels)
+  # =====================================================
+  matrix-test:
+    name: Matrix Test (${{ matrix.flutter-channel }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        flutter-channel: [stable, beta]
+        include:
+          # Run on macOS for stable only (faster CI)
+          - os: macos-latest
+            flutter-channel: stable
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter (${{ matrix.flutter-channel }})
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.flutter-channel }}
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests
+        run: flutter test --reporter=compact
+
+      - name: Run flutter analyze
+        run: flutter analyze --no-fatal-infos
+        continue-on-error: ${{ matrix.flutter-channel == 'beta' }}
+
+  # =====================================================
+  # Format check (enforces dart format)
+  # =====================================================
+  format:
+    name: Dart Format Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Check formatting
+        run: dart format --output=none --set-exit-if-changed lib/ test/
