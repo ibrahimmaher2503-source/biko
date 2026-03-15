@@ -90,7 +90,7 @@ class AuthController extends GetxController {
       await _navigateAfterAuth();
     } catch (e) {
       _authState.value = AuthState.error;
-      errorMessage.value = e.toString();
+      errorMessage.value = 'error.otp_failed'.tr;
     }
   }
 
@@ -128,7 +128,7 @@ class AuthController extends GetxController {
       await _navigateAfterAuth();
     } catch (e) {
       _authState.value = AuthState.error;
-      errorMessage.value = e.toString();
+      errorMessage.value = 'error.otp_failed'.tr;
     }
   }
 

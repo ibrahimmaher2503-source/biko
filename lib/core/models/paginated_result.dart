@@ -1,4 +1,4 @@
-/// Generic paginated result that hides Firestore [DocumentSnapshot] from controllers.
+/// Generic paginated result that hides Firestore internals from controllers.
 ///
 /// Controllers use this class for cursor-based pagination without importing
 /// `cloud_firestore` directly (RULE-06 compliance).

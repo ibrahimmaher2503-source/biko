@@ -18,8 +18,8 @@ class TripCompleteController extends GetxController {
   final isSubmitting = false.obs;
   final hasRated = false.obs;
 
-  // Fare breakdown (read from app_config)
-  final commissionRate = 0.15.obs;
+  // Fare breakdown (read from app_config — never hardcoded)
+  final commissionRate = 0.0.obs;
   final totalFare = 0.0.obs;
   final commission = 0.0.obs;
   final netEarning = 0.0.obs;

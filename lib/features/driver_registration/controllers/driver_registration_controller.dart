@@ -43,7 +43,11 @@ class DriverRegistrationController extends GetxController {
     if (file == null) return;
 
     try {
-      final uid = AuthService.currentUser!.uid;
+      final uid = AuthService.currentUser?.uid;
+      if (uid == null) {
+        AppSnackbar.error('error.session_expired'.tr);
+        return;
+      }
       final url = await StorageService.uploadDocument(
         uid,
         type,
@@ -84,7 +88,11 @@ class DriverRegistrationController extends GetxController {
 
     isSubmitting.value = true;
     try {
-      final uid = AuthService.currentUser!.uid;
+      final uid = AuthService.currentUser?.uid;
+      if (uid == null) {
+        AppSnackbar.error('error.session_expired'.tr);
+        return;
+      }
 
       // Create driver profile
       await FirestoreService.createDriverProfile(
