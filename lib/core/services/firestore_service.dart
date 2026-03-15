@@ -323,17 +323,31 @@ class FirestoreService {
         }
       }
 
-      // Build summary from trip data
+      // Build summary from trip data using app_config pricing
       final totalFare = trip.acceptedPrice ?? trip.customerPrice;
+      final config = await getAppConfig();
+      final baseFare =
+          (config?['base_fare'] as num?)?.toDouble() ?? 0;
+      final pricePerKm =
+          (config?['price_per_km'] as num?)?.toDouble() ?? 0;
+      final pricePerMin =
+          (config?['price_per_min'] as num?)?.toDouble() ?? 0;
+      final distanceKm = trip.distanceKm ?? 0.0;
+      final durationMin = trip.durationMinutes ?? 0;
+
+      // Calculate real fare components from config
+      final calculatedDistanceFare = pricePerKm * distanceKm;
+      final calculatedTimeFare = pricePerMin * durationMin;
+
       return TripSummaryModel(
         tripId: trip.id,
         pickupAddress: trip.pickup.address,
         dropoffAddress: trip.dropoff.address,
-        distanceKm: trip.distanceKm ?? 0.0,
-        durationMinutes: trip.durationMinutes ?? 0,
-        baseFare: totalFare * 0.4,
-        distanceFare: totalFare * 0.35,
-        timeFare: totalFare * 0.25,
+        distanceKm: distanceKm,
+        durationMinutes: durationMin,
+        baseFare: baseFare,
+        distanceFare: calculatedDistanceFare,
+        timeFare: calculatedTimeFare,
         totalFare: totalFare,
         paymentMethod: trip.paymentMethod.toJson(),
         driver:
@@ -441,6 +455,32 @@ class FirestoreService {
     } catch (e) {
       debugPrint('❌ FirestoreService.getTransactions failed: $e');
       return [];
+    }
+  }
+
+  /// Get the last document snapshot for transaction pagination cursor.
+  static Future<DocumentSnapshot?> getTransactionsLastDoc(
+    String uid, {
+    int limit = 20,
+    DocumentSnapshot? lastDoc,
+  }) async {
+    try {
+      var query = _firestore
+          .collection('transactions')
+          .where('uid', isEqualTo: uid)
+          .orderBy('created_at', descending: true)
+          .limit(limit);
+
+      if (lastDoc != null) {
+        query = query.startAfterDocument(lastDoc);
+      }
+
+      final snapshot = await query.get();
+      if (snapshot.docs.isEmpty) return null;
+      return snapshot.docs.last;
+    } catch (e) {
+      debugPrint('❌ FirestoreService.getTransactionsLastDoc failed: $e');
+      return null;
     }
   }
 

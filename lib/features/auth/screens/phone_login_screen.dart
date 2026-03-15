@@ -6,13 +6,25 @@ import 'package:biko/features/auth/widgets/social_login_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PhoneLoginScreen extends StatelessWidget {
+class PhoneLoginScreen extends StatefulWidget {
   const PhoneLoginScreen({super.key});
+
+  @override
+  State<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
+}
+
+class _PhoneLoginScreenState extends State<PhoneLoginScreen> {
+  final _phoneController = TextEditingController();
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
-    final phoneController = TextEditingController();
 
     return Scaffold(
       body: Column(
@@ -29,7 +41,7 @@ class PhoneLoginScreen extends StatelessWidget {
                   // Phone input field
                   Obx(
                     () => PhoneInputField(
-                      controller: phoneController,
+                      controller: _phoneController,
                       errorText: authController.errorMessage.value.isNotEmpty
                           ? authController.errorMessage.value
                           : null,
@@ -46,7 +58,7 @@ class PhoneLoginScreen extends StatelessWidget {
                     () => AppButton(
                       text: 'phone.continue'.tr,
                       onPressed: () =>
-                          authController.sendOtp(phoneController.text),
+                          authController.sendOtp(_phoneController.text),
                       trailingIcon: Icons.arrow_forward,
                       isLoading: authController.isLoading,
                     ),

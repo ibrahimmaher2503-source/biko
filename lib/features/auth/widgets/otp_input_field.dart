@@ -2,7 +2,7 @@ import 'package:biko/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// 4-digit OTP input — 4 individual TextFields with auto-advance focus
+/// 6-digit OTP input — 6 individual TextFields with auto-advance focus
 class OtpInputField extends StatefulWidget {
   const OtpInputField({required this.onCompleted, super.key});
 
@@ -19,8 +19,8 @@ class _OtpInputFieldState extends State<OtpInputField> {
   @override
   void initState() {
     super.initState();
-    _controllers = List.generate(4, (_) => TextEditingController());
-    _focusNodes = List.generate(4, (_) => FocusNode());
+    _controllers = List.generate(6, (_) => TextEditingController());
+    _focusNodes = List.generate(6, (_) => FocusNode());
   }
 
   @override
@@ -37,13 +37,13 @@ class _OtpInputFieldState extends State<OtpInputField> {
   String get _otp => _controllers.map((c) => c.text).join();
 
   void _onChanged(int index, String value) {
-    if (value.length == 1 && index < 3) {
+    if (value.length == 1 && index < 5) {
       // Advance to next field
       _focusNodes[index + 1].requestFocus();
     }
 
-    // Auto-submit when all 4 filled
-    if (_otp.length == 4) {
+    // Auto-submit when all 6 filled
+    if (_otp.length == 6) {
       widget.onCompleted(_otp);
     }
   }
@@ -65,15 +65,15 @@ class _OtpInputFieldState extends State<OtpInputField> {
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(4, (index) {
+      children: List.generate(6, (index) {
         return Padding(
-          padding: EdgeInsets.only(left: index > 0 ? 16 : 0),
+          padding: EdgeInsets.only(left: index > 0 ? 8 : 0),
           child: KeyboardListener(
             focusNode: FocusNode(),
             onKeyEvent: (event) => _onKeyEvent(index, event),
             child: SizedBox(
-              width: 56,
-              height: 64,
+              width: 48,
+              height: 56,
               child: TextField(
                 controller: _controllers[index],
                 focusNode: _focusNodes[index],

@@ -3,10 +3,10 @@ import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/place_model.dart';
 import 'package:biko/core/models/trip_model.dart';
 import 'package:biko/core/routes/app_routes.dart';
+import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/services/map_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 /// Controller for the Price Negotiation (bidding) screen.
@@ -49,11 +49,12 @@ class BiddingController extends GetxController {
   /// Whether trip creation is in progress
   final isSubmitting = false.obs;
 
-  // ==================== Pricing config ====================
+  // ==================== Pricing config (loaded from app_config) ====================
 
-  double _baseFare = 10.0;
-  double _pricePerKm = 3.0;
-  double _pricePerMin = 0.5;
+  double _baseFare = 0;
+  double _pricePerKm = 0;
+  double _pricePerMin = 0;
+  bool _pricingLoaded = false;
 
   // ==================== Lifecycle ====================
 
@@ -91,14 +92,13 @@ class BiddingController extends GetxController {
         MapService.getDirections(pickup.value!.latLng, dropoff.value!.latLng),
       ]);
 
-      // Apply pricing config
+      // Apply pricing config (must come from app_config — never hardcoded)
       final config = results[0] as Map<String, dynamic>?;
       if (config != null) {
-        _baseFare = (config['base_fare'] as num?)?.toDouble() ?? _baseFare;
-        _pricePerKm =
-            (config['price_per_km'] as num?)?.toDouble() ?? _pricePerKm;
-        _pricePerMin =
-            (config['price_per_min'] as num?)?.toDouble() ?? _pricePerMin;
+        _baseFare = (config['base_fare'] as num?)?.toDouble() ?? 0;
+        _pricePerKm = (config['price_per_km'] as num?)?.toDouble() ?? 0;
+        _pricePerMin = (config['price_per_min'] as num?)?.toDouble() ?? 0;
+        _pricingLoaded = true;
       }
 
       // Apply directions
@@ -142,7 +142,7 @@ class BiddingController extends GetxController {
 
   /// Increase offer by 5 EGP (max 999).
   void incrementOffer() {
-    if (offerAmount.value < 999) {
+    if (offerAmount.value + 5 <= 999) {
       offerAmount.value += 5;
     }
   }
@@ -179,13 +179,19 @@ class BiddingController extends GetxController {
   Future<void> submitTrip() async {
     if (pickup.value == null || dropoff.value == null) return;
 
+    // Pricing config guard
+    if (!_pricingLoaded) {
+      AppSnackbar.error('trip.pricing_unavailable'.tr);
+      return;
+    }
+
     // Same-location guard
     if (_isSameLocation(pickup.value!, dropoff.value!)) {
       AppSnackbar.error('trip.same_location_error'.tr);
       return;
     }
 
-    final uid = FirebaseAuth.instance.currentUser?.uid;
+    final uid = AuthService.currentUser?.uid;
     if (uid == null) return;
 
     isSubmitting.value = true;

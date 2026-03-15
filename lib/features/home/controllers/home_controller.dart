@@ -4,11 +4,11 @@ import 'dart:ui';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
+import 'package:biko/core/services/location_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/home/models/recent_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,35 +90,25 @@ class HomeController extends GetxController {
         locationLoaded.value = true;
       }
 
-      // Check location service
-      final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-      if (!serviceEnabled) {
+      // Use global LocationService for permission and position
+      final locationService = Get.find<LocationService>();
+      final hasPermission =
+          await locationService.checkAndRequestPermission();
+      if (!hasPermission) {
         if (!locationLoaded.value) {
           locationLoaded.value = false;
         }
         return;
       }
 
-      // Check permission
-      var permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied ||
-            permission == LocationPermission.deniedForever) {
-          if (!locationLoaded.value) {
-            locationLoaded.value = false;
-          }
-          return;
+      // Get position via LocationService
+      final position = await locationService.getCurrentPosition();
+      if (position == null) {
+        if (!locationLoaded.value) {
+          locationLoaded.value = false;
         }
+        return;
       }
-
-      // Get position
-      final position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.low,
-          timeLimit: Duration(seconds: 10),
-        ),
-      );
 
       // Subscribe to nearby drivers around current position
       _subscribeToNearbyDrivers(LatLng(position.latitude, position.longitude));

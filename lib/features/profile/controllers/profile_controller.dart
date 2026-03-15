@@ -3,10 +3,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:biko/core/models/user_model.dart';
-import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/services/storage_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:biko/features/auth/controllers/auth_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -125,8 +125,8 @@ class ProfileController extends GetxController {
     // TODO: persist preference and update FCM token registration
   }
 
-  /// Logout
-  void logout() {
-    Get.offAllNamed(AppRoutes.splash);
+  /// Logout — delegates to AuthController for proper Firebase sign-out
+  Future<void> logout() async {
+    await Get.find<AuthController>().signOut();
   }
 }

@@ -5,6 +5,7 @@ import 'package:biko/core/models/wallet_model.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -26,6 +27,7 @@ class WalletController extends GetxController {
 
   StreamSubscription<WalletModel?>? _walletSub;
   String _uid = '';
+  DocumentSnapshot? _lastDoc;
 
   // ==================== Lifecycle ====================
 
@@ -64,8 +66,10 @@ class WalletController extends GetxController {
   Future<void> _loadTransactions() async {
     if (_uid.isEmpty) return;
     try {
+      _lastDoc = null;
       final results = await FirestoreService.getTransactions(_uid);
       transactions.assignAll(results);
+      _lastDoc = await FirestoreService.getTransactionsLastDoc(_uid);
       hasMore.value = results.length >= 20;
     } catch (e) {
       debugPrint('❌ WalletController._loadTransactions: $e');
@@ -74,14 +78,22 @@ class WalletController extends GetxController {
 
   /// Load more transactions (pagination)
   Future<void> loadMore() async {
-    if (isPaginating.value || !hasMore.value) return;
+    if (isPaginating.value || !hasMore.value || _lastDoc == null) return;
     try {
       isPaginating.value = true;
-      final results = await FirestoreService.getTransactions(_uid);
+      final results = await FirestoreService.getTransactions(
+        _uid,
+        lastDoc: _lastDoc,
+      );
       if (results.isEmpty) {
         hasMore.value = false;
       } else {
         transactions.addAll(results);
+        _lastDoc = await FirestoreService.getTransactionsLastDoc(
+          _uid,
+          lastDoc: _lastDoc,
+        );
+        hasMore.value = results.length >= 20;
       }
     } catch (e) {
       debugPrint('❌ WalletController.loadMore: $e');

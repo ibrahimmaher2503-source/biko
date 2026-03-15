@@ -750,6 +750,8 @@ class AppTranslations extends Translations {
       'trip.same_location_error':
           'نقطة الانطلاق والوصول لا يمكن أن تكونا نفس المكان',
       'trip.create_failed': 'فشل إنشاء الطلب. حاول مرة أخرى',
+      'trip.pricing_unavailable':
+          'لم يتم تحميل الأسعار. حاول مرة أخرى',
       'trip.loading_route': 'جاري تحميل المسار...',
       'trip.payment_method': 'طريقة الدفع',
       'trip.passenger_count': 'عدد الركاب',
@@ -2019,6 +2021,8 @@ class AppTranslations extends Translations {
       'trip.same_location_error':
           'Pickup and dropoff cannot be the same location',
       'trip.create_failed': 'Failed to create request. Try again',
+      'trip.pricing_unavailable':
+          'Pricing not loaded. Please try again',
       'trip.loading_route': 'Loading route...',
       'trip.payment_method': 'Payment Method',
       'trip.passenger_count': 'Passenger Count',

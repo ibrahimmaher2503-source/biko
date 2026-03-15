@@ -37,7 +37,7 @@ class SplashScreen extends GetView<SplashController> {
         const SizedBox(height: 24),
         // App name
         Text(
-          'BikeRide',
+          'common.app_name'.tr,
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: AppTheme.primary,
             fontWeight: FontWeight.bold,

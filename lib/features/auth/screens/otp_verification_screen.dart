@@ -154,7 +154,7 @@ class OtpVerificationScreen extends StatelessWidget {
                       () => AppButton(
                         text: 'otp.verify'.tr,
                         onPressed:
-                            otpCode.value.length == 4 &&
+                            otpCode.value.length == 6 &&
                                 !authController.isLoading
                             ? () => authController.verifyOtp(otpCode.value)
                             : null,

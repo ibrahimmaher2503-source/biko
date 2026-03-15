@@ -114,7 +114,7 @@ class AuthController extends GetxController {
 
   /// Verify the user-entered OTP code
   Future<void> verifyOtp(String smsCode) async {
-    if (smsCode.length != 4) return;
+    if (smsCode.length != 6) return;
 
     _authState.value = AuthState.verifying;
     errorMessage.value = '';

@@ -210,13 +210,10 @@ void main() {
       expect(controller.offerAmount.value, equals(999)); // capped
     });
 
-    test('incrementOffer from 997 stops at 999 (next step would be 1002)', () {
+    test('incrementOffer from 997 stays at 997 (next step would exceed 999)', () {
       controller.offerAmount.value = 997;
       controller.incrementOffer();
-      expect(controller.offerAmount.value, equals(1002)); // actually would be 1002
-      // But the constraint is < 999, so 997 < 999 → increment to 1002
-      // Wait: the code says "if (offerAmount.value < 999)" → 997 < 999 → true → add 5 → 1002
-      // Actually this is a design quirk — let's verify the actual behavior
+      expect(controller.offerAmount.value, equals(997)); // 997+5=1002 > 999, so no increment
     });
 
     test('decrementOffer decreases offerAmount by 5', () {
