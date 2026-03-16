@@ -105,9 +105,7 @@ class PlaceModel {
   }
 
   @override
-  int get hashCode => placeId.isNotEmpty
-      ? placeId.hashCode
-      : Object.hash(lat, lng, name);
+  int get hashCode => Object.hash(lat, lng, name);
 }
 
 /// Autocomplete result from Google Places API
