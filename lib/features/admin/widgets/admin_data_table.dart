@@ -29,6 +29,7 @@ class AdminDataTable<T> extends StatelessWidget {
     this.onRowTap,
     this.isLoading = false,
     this.emptyMessage,
+    this.emptyWidget,
     this.hasNextPage = false,
     this.hasPreviousPage = false,
     this.onNextPage,
@@ -46,6 +47,7 @@ class AdminDataTable<T> extends StatelessWidget {
   final ValueChanged<T>? onRowTap;
   final bool isLoading;
   final String? emptyMessage;
+  final Widget? emptyWidget;
   final bool hasNextPage;
   final bool hasPreviousPage;
   final VoidCallback? onNextPage;
@@ -95,12 +97,13 @@ class AdminDataTable<T> extends StatelessWidget {
               ? const Center(child: AppLoading())
               : rows.isEmpty
               ? Center(
-                  child: Text(
-                    emptyMessage ?? 'admin.common.no_data'.tr,
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: colors.textMuted,
-                    ),
-                  ),
+                  child: emptyWidget ??
+                      Text(
+                        emptyMessage ?? 'admin.common.no_data'.tr,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: colors.textMuted,
+                        ),
+                      ),
                 )
               : SingleChildScrollView(
                   child: Column(

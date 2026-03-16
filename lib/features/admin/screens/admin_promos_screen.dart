@@ -71,7 +71,24 @@ class AdminPromosScreen extends GetView<AdminPromosController> {
             child: Obx(
               () => AdminDataTable<Map<String, dynamic>>(
                 isLoading: controller.isLoading.value,
-                emptyMessage: 'admin.promos.no_promos'.tr,
+                emptyWidget: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'admin.promos.no_promos'.tr,
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(
+                          context,
+                        ).extension<AppColorsExtension>()!.textMuted,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    AppButton(
+                      text: 'admin.promos.create_new'.tr,
+                      onPressed: () => _showCreatePromoDialog(context),
+                    ),
+                  ],
+                ),
                 columns: [
                   AdminColumn(label: 'admin.promos.columns.code'.tr),
                   AdminColumn(label: 'admin.promos.columns.type'.tr),

@@ -21,7 +21,6 @@ class AdminCustomersScreen extends GetView<AdminUsersController> {
     final colors = theme.extension<AppColorsExtension>()!;
 
     return Scaffold(
-      appBar: AppBar(title: Text('admin.users.customers_title'.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Obx(

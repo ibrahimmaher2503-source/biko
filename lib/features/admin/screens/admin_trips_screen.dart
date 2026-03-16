@@ -27,37 +27,28 @@ class AdminTripsScreen extends GetView<AdminTripsController> {
     final colors = theme.extension<AppColorsExtension>()!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('admin.trips.title'.tr),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: controller.loadTrips,
-            tooltip: 'admin.common.refresh'.tr,
-          ),
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Page title and filter reset
+            // Filter reset and refresh
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'admin.trips.list_title'.tr,
-                  style: theme.textTheme.headlineSmall,
-                ),
                 TextButton.icon(
                   icon: const Icon(Icons.clear_all, size: 18),
                   label: Text('admin.common.reset_filters'.tr),
                   onPressed: controller.resetFilters,
                 ),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: controller.loadTrips,
+                  tooltip: 'admin.common.refresh'.tr,
+                ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
             // Data table with filters
             Expanded(
