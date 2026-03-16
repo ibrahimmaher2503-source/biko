@@ -1877,6 +1877,82 @@ class AppTranslations extends Translations {
       'admin.finance.no_commission_data': 'لا توجد بيانات عمولة',
       'admin.finance.no_earnings_data': 'لا توجد بيانات أرباح',
       'admin.finance.no_payment_data': 'لا توجد بيانات دفع',
+
+      // Dashboard camelCase aliases
+      'admin.dashboard.tripsToday': 'رحلات اليوم',
+      'admin.dashboard.revenueToday': 'إيرادات اليوم',
+      'admin.dashboard.driversOnline': 'سائقون متصلون',
+      'admin.dashboard.pendingReviews': 'مراجعات معلقة',
+
+      // currency.egp alias
+      'currency.egp': 'ج.م',
+
+      // admin.finance.pending
+      'admin.finance.pending': 'معلق',
+
+      // admin.financial dynamic values
+      'admin.financial.bonus': 'مكافأة',
+      'admin.financial.processing': 'قيد المعالجة',
+      'admin.financial.paid': 'مدفوع',
+      'admin.financial.refunded': 'مسترد',
+      'admin.financial.cancelled': 'ملغى',
+      'admin.financial.trip_payment': 'دفع رحلة',
+      'admin.financial.wallet_topup': 'شحن محفظة',
+      'admin.financial.commission': 'عمولة',
+
+      // admin.trips dynamic type/status values
+      'admin.trips.type_ride': 'رحلة',
+      'admin.trips.type_c2c_delivery': 'توصيل C2C',
+      'admin.trips.type_b2b_delivery': 'توصيل B2B',
+      'admin.trips.status_searching': 'جاري البحث',
+      'admin.trips.status_bidding': 'جاري المزايدة',
+      'admin.trips.status_accepted': 'مقبول',
+      'admin.trips.status_on_the_way': 'في الطريق',
+      'admin.trips.status_arrived': 'وصل',
+      'admin.trips.status_in_progress': 'جاري التنفيذ',
+      'admin.trips.status_completed': 'مكتمل',
+      'admin.trips.status_cancelled': 'ملغى',
+
+      // admin.documents dynamic type values
+      'admin.documents.type_national_id': 'بطاقة الهوية',
+      'admin.documents.type_license': 'الرخصة',
+      'admin.documents.type_vehicle_registration': 'تسجيل المركبة',
+      'admin.documents.type_criminal_record': 'صحيفة الحالة الجنائية',
+
+      // admin.drivers dynamic vehicle type values
+      'admin.drivers.vehicle_motorcycle': 'دراجة نارية',
+      'admin.drivers.vehicle_scooter': 'سكوتر',
+      'admin.drivers.vehicle_ebike': 'دراجة كهربائية',
+
+      // admin.finance dynamic status/type/method/freq values
+      'admin.finance.status_active': 'نشط',
+      'admin.finance.status_inactive': 'غير نشط',
+      'admin.finance.status_paused': 'متوقف مؤقتاً',
+      'admin.finance.method_cash': 'نقدي',
+      'admin.finance.method_wallet': 'محفظة',
+      'admin.finance.method_card': 'بطاقة',
+      'admin.finance.method_vodafone_cash': 'فودافون كاش',
+      'admin.finance.method_fawry': 'فوري',
+      'admin.finance.method_bank_transfer': 'تحويل بنكي',
+      'admin.finance.freq_daily': 'يومي',
+      'admin.finance.freq_weekly': 'أسبوعي',
+      'admin.finance.freq_monthly': 'شهري',
+      'admin.finance.report_revenue': 'تقرير الإيرادات',
+      'admin.finance.report_commission': 'تقرير العمولة',
+      'admin.finance.report_driver': 'تقرير السائق',
+      'admin.finance.report_trip': 'تقرير الرحلة',
+      'admin.finance.report_wallet': 'تقرير المحفظة',
+      'admin.finance.type_ride': 'رحلة',
+      'admin.finance.type_c2c_delivery': 'توصيل C2C',
+      'admin.finance.type_b2b_delivery': 'توصيل B2B',
+      'admin.finance.type_cash': 'نقدي',
+      'admin.finance.type_wallet': 'محفظة',
+      'admin.finance.type_card': 'بطاقة',
+      'admin.finance.pending_payouts': 'مدفوعات معلقة',
+
+      // admin.notifications dynamic segment values
+      'admin.notifications.segments.all_drivers': 'جميع السائقين',
+      'admin.notifications.segments.all_customers': 'جميع العملاء',
     },
 
     // English translations
@@ -3762,6 +3838,82 @@ class AppTranslations extends Translations {
       'admin.finance.no_commission_data': 'No commission data',
       'admin.finance.no_earnings_data': 'No earnings data',
       'admin.finance.no_payment_data': 'No payment data',
+
+      // Dashboard camelCase aliases (screens use camelCase)
+      'admin.dashboard.tripsToday': 'Trips Today',
+      'admin.dashboard.revenueToday': 'Revenue Today',
+      'admin.dashboard.driversOnline': 'Drivers Online',
+      'admin.dashboard.pendingReviews': 'Pending Reviews',
+
+      // currency.egp alias
+      'currency.egp': 'EGP',
+
+      // admin.finance.pending
+      'admin.finance.pending': 'Pending',
+
+      // admin.financial dynamic values (type/status/method)
+      'admin.financial.bonus': 'Bonus',
+      'admin.financial.processing': 'Processing',
+      'admin.financial.paid': 'Paid',
+      'admin.financial.refunded': 'Refunded',
+      'admin.financial.cancelled': 'Cancelled',
+      'admin.financial.trip_payment': 'Trip Payment',
+      'admin.financial.wallet_topup': 'Wallet Top-up',
+      'admin.financial.commission': 'Commission',
+
+      // admin.trips dynamic type/status values
+      'admin.trips.type_ride': 'Ride',
+      'admin.trips.type_c2c_delivery': 'C2C Delivery',
+      'admin.trips.type_b2b_delivery': 'B2B Delivery',
+      'admin.trips.status_searching': 'Searching',
+      'admin.trips.status_bidding': 'Bidding',
+      'admin.trips.status_accepted': 'Accepted',
+      'admin.trips.status_on_the_way': 'On the Way',
+      'admin.trips.status_arrived': 'Arrived',
+      'admin.trips.status_in_progress': 'In Progress',
+      'admin.trips.status_completed': 'Completed',
+      'admin.trips.status_cancelled': 'Cancelled',
+
+      // admin.documents dynamic type values
+      'admin.documents.type_national_id': 'National ID',
+      'admin.documents.type_license': 'License',
+      'admin.documents.type_vehicle_registration': 'Vehicle Registration',
+      'admin.documents.type_criminal_record': 'Criminal Record',
+
+      // admin.drivers dynamic vehicle type values
+      'admin.drivers.vehicle_motorcycle': 'Motorcycle',
+      'admin.drivers.vehicle_scooter': 'Scooter',
+      'admin.drivers.vehicle_ebike': 'E-Bike',
+
+      // admin.finance dynamic status/type/method/freq values
+      'admin.finance.status_active': 'Active',
+      'admin.finance.status_inactive': 'Inactive',
+      'admin.finance.status_paused': 'Paused',
+      'admin.finance.method_cash': 'Cash',
+      'admin.finance.method_wallet': 'Wallet',
+      'admin.finance.method_card': 'Card',
+      'admin.finance.method_vodafone_cash': 'Vodafone Cash',
+      'admin.finance.method_fawry': 'Fawry',
+      'admin.finance.method_bank_transfer': 'Bank Transfer',
+      'admin.finance.freq_daily': 'Daily',
+      'admin.finance.freq_weekly': 'Weekly',
+      'admin.finance.freq_monthly': 'Monthly',
+      'admin.finance.report_revenue': 'Revenue Report',
+      'admin.finance.report_commission': 'Commission Report',
+      'admin.finance.report_driver': 'Driver Report',
+      'admin.finance.report_trip': 'Trip Report',
+      'admin.finance.report_wallet': 'Wallet Report',
+      'admin.finance.type_ride': 'Ride',
+      'admin.finance.type_c2c_delivery': 'C2C Delivery',
+      'admin.finance.type_b2b_delivery': 'B2B Delivery',
+      'admin.finance.type_cash': 'Cash',
+      'admin.finance.type_wallet': 'Wallet',
+      'admin.finance.type_card': 'Card',
+      'admin.finance.pending_payouts': 'Pending Payouts',
+
+      // admin.notifications dynamic segment values
+      'admin.notifications.segments.all_drivers': 'All Drivers',
+      'admin.notifications.segments.all_customers': 'All Customers',
     },
   };
 }
