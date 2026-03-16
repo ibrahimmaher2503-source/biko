@@ -4,6 +4,7 @@ import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -72,6 +73,7 @@ class TrackingController extends GetxController {
 
   StreamSubscription<Map<String, dynamic>>? _tripSub;
   StreamSubscription<Map<String, dynamic>>? _driverLocationSub;
+  Timer? _loadingTimeoutTimer;
 
   // ==================== Lifecycle ====================
 
@@ -81,19 +83,25 @@ class TrackingController extends GetxController {
     _extractArguments();
     _listenToTrip();
     _listenToDriverLocation();
-    Future.delayed(const Duration(seconds: 10), () {
-      if (isLoading.value) {
-        isLoading.value = false;
-        errorMessage.value = 'tracking.load_error';
-      }
-    });
+    _startLoadingTimeout();
   }
 
   @override
   void onClose() {
     _tripSub?.cancel();
     _driverLocationSub?.cancel();
+    _loadingTimeoutTimer?.cancel();
     super.onClose();
+  }
+
+  void _startLoadingTimeout() {
+    _loadingTimeoutTimer = Timer(const Duration(seconds: 15), () {
+      if (isLoading.value) {
+        isLoading.value = false;
+        errorMessage.value = 'tracking.timeout_error'.tr;
+        debugPrint('Tracking: loading timeout after 15s');
+      }
+    });
   }
 
   // ==================== Initialization ====================
@@ -115,10 +123,14 @@ class TrackingController extends GetxController {
       (data) {
         if (data.isEmpty) return;
         _handleTripUpdate(data);
-        isLoading.value = false;
+        if (isLoading.value) {
+          isLoading.value = false;
+          _loadingTimeoutTimer?.cancel();
+        }
       },
       onError: (_) {
         isLoading.value = false;
+        _loadingTimeoutTimer?.cancel();
         errorMessage.value = 'tracking.load_error';
       },
     );

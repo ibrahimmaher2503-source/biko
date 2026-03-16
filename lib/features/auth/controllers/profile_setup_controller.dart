@@ -133,7 +133,11 @@ class ProfileSetupController extends GetxController {
         if (avatarUrl.value != null) 'avatar_url': avatarUrl.value,
       });
 
-      // Determine the app type for navigation
+      // Determine the app type for navigation.
+      // NOTE: New drivers go to driverRegistration (vehicle/document setup),
+      // NOT driverHome. Returning users with a complete profile are routed
+      // by AuthController._navigateAfterAuth() which sends approved drivers
+      // to driverHome. Keep both paths in sync if roles/statuses are added.
       final user = await FirestoreService.getUser(uid);
       if (user != null && user.type == UserType.driver) {
         Get.offAllNamed(AppRoutes.driverRegistration);

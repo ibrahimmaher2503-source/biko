@@ -102,6 +102,10 @@ class BiddingController extends GetxController {
         _baseFare = (config['base_fare'] as num?)?.toDouble() ?? 0;
         _pricePerKm = (config['price_per_km'] as num?)?.toDouble() ?? 0;
         _pricePerMin = (config['price_per_min'] as num?)?.toDouble() ?? 0;
+        final configMax = (config['max_bid_price'] as num?)?.toInt();
+        if (configMax != null && configMax > 0) {
+          maxOffer.value = configMax;
+        }
         // Only mark loaded if at least one pricing value is non-zero
         _pricingLoaded =
             _baseFare > 0 || _pricePerKm > 0 || _pricePerMin > 0;
@@ -124,6 +128,10 @@ class BiddingController extends GetxController {
           _baseFare = (config['base_fare'] as num?)?.toDouble() ?? 0;
           _pricePerKm = (config['price_per_km'] as num?)?.toDouble() ?? 0;
           _pricePerMin = (config['price_per_min'] as num?)?.toDouble() ?? 0;
+          final configMax = (config['max_bid_price'] as num?)?.toInt();
+          if (configMax != null && configMax > 0) {
+            maxOffer.value = configMax;
+          }
           _pricingLoaded =
               _baseFare > 0 || _pricePerKm > 0 || _pricePerMin > 0;
           isPricingLoaded.value = _pricingLoaded;
@@ -167,9 +175,14 @@ class BiddingController extends GetxController {
 
   // ==================== Offer Adjustment ====================
 
-  /// Increase offer by 5 EGP (max 999).
+  /// Maximum allowed offer price, loaded from app_config.
+  ///
+  /// Defaults to 9999 EGP until the config is fetched from Firestore.
+  final maxOffer = 9999.obs;
+
+  /// Increase offer by 5 EGP (max = [maxOffer]).
   void incrementOffer() {
-    if (offerAmount.value + 5 <= 999) {
+    if (offerAmount.value + 5 <= maxOffer.value) {
       offerAmount.value += 5;
     }
   }
@@ -204,6 +217,9 @@ class BiddingController extends GetxController {
 
   /// Create a trip document in Firestore and navigate to bids screen.
   Future<void> submitTrip() async {
+    // Prevent duplicate trips on retry — idempotency guard
+    if (isSubmitting.value) return;
+
     if (pickup.value == null || dropoff.value == null) return;
 
     // Pricing config guard

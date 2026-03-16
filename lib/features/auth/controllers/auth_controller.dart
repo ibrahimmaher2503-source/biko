@@ -76,14 +76,20 @@ class AuthController extends GetxController {
 
     final fullNumber = '+20$cleaned';
 
-    await AuthService.sendOtp(
-      phoneNumber: fullNumber,
-      resendToken: _resendToken.value,
-      onAutoVerify: _onAutoVerify,
-      onFailed: _onVerificationFailed,
-      onCodeSent: _onCodeSent,
-      onTimeout: _onTimeout,
-    );
+    try {
+      await AuthService.sendOtp(
+        phoneNumber: fullNumber,
+        resendToken: _resendToken.value,
+        onAutoVerify: _onAutoVerify,
+        onFailed: _onVerificationFailed,
+        onCodeSent: _onCodeSent,
+        onTimeout: _onTimeout,
+      );
+    } catch (e) {
+      debugPrint('sendOtp error: $e');
+      _authState.value = AuthState.idle;
+      errorMessage.value = 'error.unknown'.tr;
+    }
   }
 
   Future<void> _onAutoVerify(PhoneCredential credential) async {
@@ -117,6 +123,7 @@ class AuthController extends GetxController {
 
   /// Verify the user-entered OTP code
   Future<void> verifyOtp(String smsCode) async {
+    if (isLoading) return;
     if (smsCode.length != 6) return;
 
     _authState.value = AuthState.verifying;
@@ -126,10 +133,19 @@ class AuthController extends GetxController {
       await AuthService.verifyOtp(
         verificationId: _verificationId.value,
         smsCode: smsCode,
+      ).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          throw TimeoutException('OTP verification timed out');
+        },
       );
       _authState.value = AuthState.authenticated;
       _timer?.cancel();
+      _timer = null;
       await _navigateAfterAuth();
+    } on TimeoutException {
+      _authState.value = AuthState.error;
+      errorMessage.value = 'error.timeout'.tr;
     } catch (e) {
       _authState.value = AuthState.error;
       errorMessage.value = 'error.otp_failed'.tr;
@@ -152,6 +168,7 @@ class AuthController extends GetxController {
         secondsRemaining.value--;
       } else {
         timer.cancel();
+        _timer = null;
       }
     });
   }
@@ -160,8 +177,10 @@ class AuthController extends GetxController {
 
   /// Sign in with Google account
   Future<void> signInWithGoogle() async {
-    _authState.value = AuthState.signingInWithGoogle;
+    _verificationId.value = '';
+    _resendToken.value = null;
     errorMessage.value = '';
+    _authState.value = AuthState.signingInWithGoogle;
 
     try {
       final userCredential = await AuthService.signInWithGoogle();
@@ -185,8 +204,10 @@ class AuthController extends GetxController {
 
   /// Sign in with Facebook account
   Future<void> signInWithFacebook() async {
-    _authState.value = AuthState.signingInWithFacebook;
+    _verificationId.value = '';
+    _resendToken.value = null;
     errorMessage.value = '';
+    _authState.value = AuthState.signingInWithFacebook;
 
     try {
       final userCredential = await AuthService.signInWithFacebook();

@@ -1,23 +1,17 @@
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_button.dart';
-import 'package:biko/core/widgets/app_loading.dart';
-import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-/// WebView screen for Paymob payment processing.
+/// Placeholder screen shown in place of the Paymob WebView integration.
 ///
-/// Note: This is a placeholder that shows payment status.
-/// Full WebView integration requires `webview_flutter` package
-/// and a deployed Cloud Function to generate Paymob payment URLs.
+/// Full WebView integration requires `webview_flutter` and a deployed
+/// Cloud Function to generate Paymob payment URLs — disabled for MVP.
 class PaymentWebViewScreen extends StatelessWidget {
   const PaymentWebViewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final args = Get.arguments as Map<String, dynamic>?;
-    final amount = args?['amount'] as double? ?? 0;
-    final method = args?['method'] as String? ?? '';
     final colors = Theme.of(context).extension<AppColorsExtension>()!;
     final theme = Theme.of(context);
 
@@ -29,23 +23,23 @@ class PaymentWebViewScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const AppLoading(),
+              Icon(
+                Icons.account_balance_wallet_outlined,
+                size: 72,
+                color: colors.textMuted,
+              ),
               const SizedBox(height: 24),
               Text(
-                'wallet.processing_payment'.tr,
-                style: theme.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                '${amount.toStringAsFixed(2)} EGP via $method',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: colors.textMuted,
+                'wallet.topup_coming_soon'.tr,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
                 ),
+                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 12),
               Text(
-                'wallet.payment_pending_note'.tr,
-                style: theme.textTheme.bodySmall?.copyWith(
+                'wallet.topup_coming_soon_subtitle'.tr,
+                style: theme.textTheme.bodyMedium?.copyWith(
                   color: colors.textMuted,
                 ),
                 textAlign: TextAlign.center,
@@ -53,10 +47,7 @@ class PaymentWebViewScreen extends StatelessWidget {
               const SizedBox(height: 32),
               AppButton(
                 text: 'common.back'.tr,
-                onPressed: () {
-                  AppSnackbar.info('wallet.payment_pending'.tr);
-                  Get.back<void>();
-                },
+                onPressed: () => Get.back<void>(),
                 variant: ButtonVariant.outline,
               ),
             ],

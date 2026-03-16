@@ -1,4 +1,5 @@
 import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_dialog.dart';
 import 'package:biko/core/widgets/app_loading.dart';
 import 'package:biko/features/bidding/controllers/bids_controller.dart';
 import 'package:biko/features/bidding/widgets/bids_list.dart';
@@ -18,47 +19,64 @@ class BidsScreen extends GetView<BidsController> {
     final colors = Theme.of(context).extension<AppColorsExtension>()!;
     final theme = Theme.of(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('bids.incoming_bids'.tr),
-        actions: [
-          TextButton(
-            onPressed: () => _showCancelDialog(context),
-            child: Text(
-              'bids.cancel_search'.tr,
-              style: TextStyle(color: theme.colorScheme.error),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final confirmed = await AppDialog.confirm(
+          title: 'bids.cancel_trip_title'.tr,
+          content: 'bids.cancel_trip_message'.tr,
+          confirmText: 'bids.yes_cancel'.tr,
+          cancelText: 'common.no'.tr,
+          isDestructive: true,
+        );
+        if (confirmed) {
+          await controller.cancelTrip();
+          Get.back();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('bids.incoming_bids'.tr),
+          actions: [
+            TextButton(
+              onPressed: () => _showCancelDialog(context),
+              child: Text(
+                'bids.cancel_search'.tr,
+                style: TextStyle(color: theme.colorScheme.error),
+              ),
             ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Trip summary header
-          _TripSummaryHeader(colors: colors, theme: theme),
+          ],
+        ),
+        body: Column(
+          children: [
+            // Trip summary header
+            _TripSummaryHeader(colors: colors, theme: theme),
 
-          // Search timeout suggestion
-          Obx(
-            () => controller.hasTimedOut.value
-                ? const SearchTimeoutWidget()
-                : const SizedBox.shrink(),
-          ),
+            // Search timeout suggestion
+            Obx(
+              () => controller.hasTimedOut.value
+                  ? const SearchTimeoutWidget()
+                  : const SizedBox.shrink(),
+            ),
 
-          // Bids list
-          Expanded(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return const AppLoading();
-              }
+            // Bids list
+            Expanded(
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const AppLoading();
+                }
 
-              return BidsList(
-                bids: controller.bids,
-                onAccept: controller.acceptBid,
-                onReject: controller.rejectBid,
-                isAccepting: controller.isAcceptingBid.value,
-              );
-            }),
-          ),
-        ],
+                return BidsList(
+                  bids: controller.bids,
+                  onAccept: controller.acceptBid,
+                  onReject: controller.rejectBid,
+                  isAccepting: controller.isAcceptingBid.value,
+                );
+              }),
+            ),
+          ],
+        ),
       ),
     );
   }

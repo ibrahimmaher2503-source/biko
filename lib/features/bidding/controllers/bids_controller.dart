@@ -5,6 +5,7 @@ import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 /// Controller for the incoming bids screen.
@@ -43,6 +44,12 @@ class BidsController extends GetxController {
   StreamSubscription<List<BidModel>>? _bidsSub;
   Timer? _timeoutTimer;
 
+  /// Whether the trip was intentionally accepted/cancelled by user action.
+  ///
+  /// Set to `true` before any explicit navigation away from the screen so
+  /// that [onClose] does not redundantly cancel a trip that is already done.
+  bool _tripResolved = false;
+
   // ==================== Lifecycle ====================
 
   @override
@@ -59,6 +66,14 @@ class BidsController extends GetxController {
   void onClose() {
     _bidsSub?.cancel();
     _timeoutTimer?.cancel();
+    // If the user backed out without resolving the trip, cancel it silently
+    // so drivers are not left bidding on an abandoned trip.
+    if (!_tripResolved && tripId.value.isNotEmpty) {
+      FirestoreService.cancelTripSearch(tripId.value).catchError((Object e) {
+        debugPrint('⚠️ BidsController.onClose: silent cancel failed: $e');
+        return null;
+      });
+    }
     super.onClose();
   }
 
@@ -129,6 +144,7 @@ class BidsController extends GetxController {
         driverUid: bid.driverUid,
       );
 
+      _tripResolved = true;
       Get.offNamed(AppRoutes.trackTrip, arguments: {'trip_id': tripId.value});
     } catch (_) {
       AppSnackbar.error('bids.accept_error'.tr);
@@ -149,10 +165,24 @@ class BidsController extends GetxController {
   /// Cancel the driver search and go home.
   Future<void> cancelSearch() async {
     try {
+      _tripResolved = true;
       await FirestoreService.cancelTripSearch(tripId.value);
       Get.offAllNamed(AppRoutes.customerHome);
     } catch (_) {
       AppSnackbar.error('common.error'.tr);
+    }
+  }
+
+  /// Cancel the trip and allow the screen to be popped.
+  ///
+  /// Called by the [PopScope] confirmation dialog in [BidsScreen].
+  Future<void> cancelTrip() async {
+    if (tripId.value.isEmpty) return;
+    try {
+      _tripResolved = true;
+      await FirestoreService.cancelTripSearch(tripId.value);
+    } catch (e) {
+      debugPrint('❌ BidsController.cancelTrip: $e');
     }
   }
 }

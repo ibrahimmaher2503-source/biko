@@ -66,8 +66,7 @@ class ChatScreen extends GetView<ChatController> {
                 padding: const EdgeInsets.only(top: 16, bottom: 8),
                 itemCount: controller.messages.length,
                 itemBuilder: (context, index) {
-                  final msg = controller
-                      .messages[controller.messages.length - 1 - index];
+                  final msg = controller.messages[index];
                   return ChatBubble(
                     message: msg.message,
                     time: DateFormat('hh:mm a').format(msg.createdAt),

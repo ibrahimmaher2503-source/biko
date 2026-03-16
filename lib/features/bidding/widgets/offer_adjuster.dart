@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 ///
 /// Shows: circular "-" button | large bold amount | "EGP" label | circular "+" button
 /// Uses Obx to reactively read/write BiddingController.offerAmount.
-/// "-" is disabled at minOffer, "+" is disabled at 999 EGP.
+/// "-" is disabled at minOffer, "+" is disabled at [BiddingController.maxOffer].
 class OfferAdjuster extends GetView<BiddingController> {
   const OfferAdjuster({super.key});
 
@@ -55,11 +55,11 @@ class OfferAdjuster extends GetView<BiddingController> {
 
           const SizedBox(width: 24),
 
-          // Plus button
+          // Plus button — upper bound comes from app_config via controller
           Obx(
             () => _CircularButton(
               icon: Icons.add,
-              onTap: controller.offerAmount.value < 999
+              onTap: controller.offerAmount.value < controller.maxOffer.value
                   ? controller.incrementOffer
                   : null,
             ),

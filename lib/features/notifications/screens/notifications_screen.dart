@@ -1,3 +1,5 @@
+import 'package:biko/core/models/notification_model.dart';
+import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_empty_state.dart';
 import 'package:biko/core/widgets/app_loading.dart';
@@ -9,6 +11,24 @@ import 'package:get/get.dart';
 /// Notifications center screen with styled list items
 class NotificationsScreen extends GetView<NotificationsController> {
   const NotificationsScreen({super.key});
+
+  void _navigateToTarget(NotificationModel notif) {
+    final targetId = notif.data?['target_id'] as String?;
+    switch (notif.type) {
+      case 'trip':
+      case 'bid':
+        if (targetId?.isNotEmpty ?? false) {
+          Get.toNamed<void>(
+            AppRoutes.trackTrip,
+            arguments: {'tripId': targetId},
+          );
+        }
+      case 'wallet':
+        Get.toNamed<void>(AppRoutes.customerWallet);
+      default:
+        break; // non-navigable notification
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +72,10 @@ class NotificationsScreen extends GetView<NotificationsController> {
             final notif = controller.notifications[index];
             return NotificationListItem(
               notification: notif,
-              onTap: () => controller.markAsRead(notif.id),
+              onTap: () {
+                controller.markAsRead(notif.id);
+                _navigateToTarget(notif);
+              },
             );
           },
         );

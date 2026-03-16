@@ -40,6 +40,7 @@ class HomeController extends GetxController {
 
   // Internal subscriptions
   StreamSubscription<dynamic>? _driversSub;
+  StreamSubscription<dynamic>? _walletSub;
 
   @override
   void onInit() {
@@ -52,6 +53,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     _driversSub?.cancel();
+    _walletSub?.cancel();
     super.onClose();
   }
 
@@ -69,15 +71,27 @@ class HomeController extends GetxController {
       if (userModel != null) {
         userName.value = userModel.name;
         avatarUrl.value = userModel.avatarUrl;
-        walletBalance.value = userModel.walletBalance;
-        walletLoaded.value = true;
       }
+      // Keep wallet balance up-to-date via a real-time stream
+      _listenToWalletBalance(uid);
     } catch (e) {
       debugPrint('[HomeController] Failed to load user data: $e');
       walletLoaded.value = false;
     } finally {
       isLoading.value = false;
     }
+  }
+
+  void _listenToWalletBalance(String uid) {
+    _walletSub?.cancel();
+    _walletSub = FirestoreService.listenToWallet(uid).listen(
+      (walletModel) {
+        walletBalance.value = walletModel?.balance ?? 0.0;
+        walletLoaded.value = true;
+      },
+      onError: (Object e) =>
+          debugPrint('[HomeController] wallet stream error: $e'),
+    );
   }
 
   Future<void> _loadLocation() async {

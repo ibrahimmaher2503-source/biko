@@ -72,6 +72,7 @@ class AppTranslations extends Translations {
           'فشل تسجيل الدخول بفيسبوك. حاول مرة أخرى',
       'error.contact_support_failed': 'تعذر فتح تطبيق الدعم. حاول مرة أخرى',
       'error.send_message_failed': 'فشل في إرسال الرسالة',
+      'error.timeout': 'انتهت المهلة. حاول مرة أخرى',
 
       // Splash
       'splash.initializing': 'جاري التهيئة...',
@@ -278,6 +279,9 @@ class AppTranslations extends Translations {
       'bids.egp': 'جنيه',
       'bids.your_offer': 'عرضك',
       'bids.accept_error': 'فشل قبول العرض. حاول مرة أخرى.',
+      'bids.cancel_trip_title': 'إلغاء الرحلة',
+      'bids.cancel_trip_message': 'هل تريد إلغاء الرحلة؟ ستتوقف السائقون عن المزايدة.',
+      'bids.yes_cancel': 'نعم، إلغاء',
 
       // Tracking
       'tracking.driver_en_route': 'السائق في الطريق إليك',
@@ -295,6 +299,7 @@ class AppTranslations extends Translations {
       'tracking.cancel_error': 'فشل إلغاء الرحلة. حاول مرة أخرى.',
       'tracking.eta_minutes': '@minutes دقائق',
       'tracking.load_error': 'تعذّر تحميل بيانات الرحلة',
+      'tracking.timeout_error': 'انتهت مهلة الاتصال. يرجى التحقق من الإنترنت والمحاولة مرة أخرى.',
 
       // Trip Completion & Rating
       'completion.trip_completed': 'اكتملت الرحلة',
@@ -339,6 +344,9 @@ class AppTranslations extends Translations {
       'wallet.payment_failed': 'فشل الدفع',
       'wallet.topup_error': 'خطأ في إضافة الرصيد. حاول مرة أخرى.',
       'wallet.load_error': 'خطأ في تحميل المحفظة',
+      'wallet.topup_coming_soon': 'تكامل الدفع قريباً',
+      'wallet.topup_coming_soon_subtitle':
+          'الشحن الإلكتروني غير متاح حالياً. تواصل مع الدعم لإضافة رصيد.',
 
       // Profile & Settings
       'profile.my_profile': 'الملف الشخصي',
@@ -406,6 +414,7 @@ class AppTranslations extends Translations {
       'referral.reward': 'المكافأة',
       'referral.share_message': 'انضم إلى بايكرايد باستخدام رمز الإحالة الخاص بي:',
       'referral.copied': 'تم نسخ رمز الإحالة',
+      'referral.code_unavailable': 'رمز الإحالة غير متاح. اضغط للمحاولة مرة أخرى.',
 
       // Chat
       'chat.title': 'المحادثة',
@@ -1335,6 +1344,7 @@ class AppTranslations extends Translations {
       'error.contact_support_failed':
           'Could not open support app. Please try again',
       'error.send_message_failed': 'Failed to send message',
+      'error.timeout': 'Request timed out. Please try again',
 
       // Splash
       'splash.initializing': 'Initializing...',
@@ -1547,6 +1557,9 @@ class AppTranslations extends Translations {
       'bids.egp': 'EGP',
       'bids.your_offer': 'Your offer',
       'bids.accept_error': 'Failed to accept bid. Try again.',
+      'bids.cancel_trip_title': 'Cancel Trip',
+      'bids.cancel_trip_message': 'Cancel this trip? Drivers will stop bidding.',
+      'bids.yes_cancel': 'Yes, Cancel',
 
       // Tracking
       'tracking.driver_en_route': 'Driver is on the way',
@@ -1564,6 +1577,7 @@ class AppTranslations extends Translations {
       'tracking.cancel_error': 'Failed to cancel trip. Try again.',
       'tracking.eta_minutes': '@minutes min',
       'tracking.load_error': 'Failed to load trip data',
+      'tracking.timeout_error': 'Connection timed out. Please check your internet and try again.',
 
       // Trip Completion & Rating
       'completion.trip_completed': 'Trip Completed',
@@ -1608,6 +1622,9 @@ class AppTranslations extends Translations {
       'wallet.payment_failed': 'Payment Failed',
       'wallet.topup_error': 'Failed to top up. Try again.',
       'wallet.load_error': 'Failed to load wallet',
+      'wallet.topup_coming_soon': 'Payment Integration Coming Soon',
+      'wallet.topup_coming_soon_subtitle':
+          'Online top-up is not available yet. Please contact support to add funds.',
 
       // Profile & Settings
       'profile.my_profile': 'Profile',
@@ -1675,6 +1692,7 @@ class AppTranslations extends Translations {
       'referral.reward': 'Reward',
       'referral.share_message': 'Join BikeRide using my referral code:',
       'referral.copied': 'Referral code copied to clipboard',
+      'referral.code_unavailable': 'Referral code not available. Tap to retry.',
 
       // Chat
       'chat.title': 'Chat',

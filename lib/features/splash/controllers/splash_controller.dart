@@ -28,7 +28,7 @@ class SplashController extends GetxController {
     try {
       // Run minimum display time and initialization checks in parallel
       final results = await Future.wait([
-        Future.delayed(const Duration(seconds: 2)),
+        Future.delayed(const Duration(seconds: 1)),
         _determineDestination(),
       ]);
 

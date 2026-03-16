@@ -147,7 +147,9 @@ class WalletController extends GetxController {
       );
 
       if (requestId != null) {
-        Get.toNamed(
+        // Refresh transactions after returning from the payment screen.
+        // Wallet balance is kept up to date by the live stream in _listenToWallet.
+        await Get.toNamed<void>(
           AppRoutes.topUpWallet,
           arguments: {
             'requestId': requestId,
@@ -155,6 +157,7 @@ class WalletController extends GetxController {
             'method': selectedPaymentMethod.value,
           },
         );
+        await _loadTransactions();
       } else {
         AppSnackbar.error('wallet.topup_error'.tr);
       }

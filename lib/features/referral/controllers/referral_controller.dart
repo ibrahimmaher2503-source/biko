@@ -15,11 +15,19 @@ class ReferralController extends GetxController {
   final RxList<ReferralModel> referrals = <ReferralModel>[].obs;
   final RxBool isLoading = true.obs;
   final RxString referralCode = ''.obs;
+  final RxString errorMessage = ''.obs;
   final RxDouble totalEarnings = 0.0.obs;
 
   @override
   void onInit() {
     super.onInit();
+    _loadReferralData();
+  }
+
+  /// Retry loading referral data after an error
+  void retry() {
+    isLoading.value = true;
+    errorMessage.value = '';
     _loadReferralData();
   }
 
@@ -34,6 +42,9 @@ class ReferralController extends GetxController {
     try {
       final data = await FirestoreService.getReferralData(uid);
       referralCode.value = data['code'] as String? ?? '';
+      if (referralCode.value.isEmpty || referralCode.value == '---') {
+        errorMessage.value = 'referral.code_unavailable'.tr;
+      }
       totalEarnings.value =
           (data['totalEarnings'] as num?)?.toDouble() ?? 0.0;
       final referralList = data['referrals'] as List<ReferralModel>? ?? [];
