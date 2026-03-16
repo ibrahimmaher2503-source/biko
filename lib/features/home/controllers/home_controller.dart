@@ -143,27 +143,35 @@ class HomeController extends GetxController {
     }
   }
 
-  void _loadRecentLocations() {
-    // TODO(production): Load recent locations from Firestore/local storage.
-    // Currently only populated in debug mode for development.
-    if (kDebugMode) {
-      recentLocations.value = const [
-        RecentLocation(
-          name: 'Benha University',
-          address: 'Kafr Saad, Banha, Al Qalyubia',
-          lat: 30.4628,
-          lng: 31.1797,
-        ),
-        RecentLocation(
-          name: 'Office',
-          address: 'El-Shaheed Farid Nada St, Banha',
-          lat: 30.4590,
-          lng: 31.1780,
-          iconType: 'work',
-        ),
-      ];
+  Future<void> _loadRecentLocations() async {
+    final uid = AuthService.currentUid;
+    if (uid == null) return;
+
+    try {
+      final result = await FirestoreService.getTripHistoryPaginated(uid);
+      final seen = <String>{};
+      final locations = <RecentLocation>[];
+
+      for (final trip in result.items) {
+        final key = '${trip.dropoff.lat},${trip.dropoff.lng}';
+        if (!seen.contains(key)) {
+          seen.add(key);
+          locations.add(
+            RecentLocation(
+              name: trip.dropoff.name,
+              address: trip.dropoff.address,
+              lat: trip.dropoff.lat,
+              lng: trip.dropoff.lng,
+            ),
+          );
+          if (locations.length >= 5) break;
+        }
+      }
+      recentLocations.value = locations;
+    } catch (e) {
+      debugPrint('[HomeController] Failed to load recent locations: $e');
+      // Failure is silent — section is simply hidden when list is empty
     }
-    // In release mode, list stays empty → section hidden
   }
 
   // ==================== Nearby Drivers ====================

@@ -96,23 +96,24 @@ class _ConfirmDialog extends StatelessWidget {
           height: 40,
         ),
         const SizedBox(width: AppConstants.spacingSm),
-        isDestructive
-            ? TextButton(
-                onPressed: () => Get.back(result: true),
-                child: Text(
-                  confirmText,
-                  style: TextStyle(
-                    color: theme.colorScheme.error,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              )
-            : AppButton(
-                text: confirmText,
-                onPressed: () => Get.back(result: true),
-                width: null,
-                height: 40,
+        if (isDestructive)
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text(
+              confirmText,
+              style: TextStyle(
+                color: theme.colorScheme.error,
+                fontWeight: FontWeight.w600,
               ),
+            ),
+          )
+        else
+          AppButton(
+            text: confirmText,
+            onPressed: () => Get.back(result: true),
+            width: null,
+            height: 40,
+          ),
       ],
       actionsPadding: const EdgeInsetsDirectional.fromSTEB(
         AppConstants.spacingLg,

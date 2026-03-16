@@ -65,6 +65,9 @@ class TrackingController extends GetxController {
   /// Whether initial data has loaded
   final isLoading = true.obs;
 
+  /// Error message key when loading fails
+  final errorMessage = ''.obs;
+
   // ==================== Internal ====================
 
   StreamSubscription<Map<String, dynamic>>? _tripSub;
@@ -78,6 +81,12 @@ class TrackingController extends GetxController {
     _extractArguments();
     _listenToTrip();
     _listenToDriverLocation();
+    Future.delayed(const Duration(seconds: 10), () {
+      if (isLoading.value) {
+        isLoading.value = false;
+        errorMessage.value = 'tracking.load_error';
+      }
+    });
   }
 
   @override
@@ -110,6 +119,7 @@ class TrackingController extends GetxController {
       },
       onError: (_) {
         isLoading.value = false;
+        errorMessage.value = 'tracking.load_error';
       },
     );
   }

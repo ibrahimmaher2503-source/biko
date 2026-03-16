@@ -47,9 +47,6 @@ class ProfileSetupController extends GetxController {
     }
   }
 
-  /// Whether a valid Firebase user session exists.
-  bool get _hasAuthSession => AuthService.currentUid != null;
-
   /// Show bottom sheet to pick image from camera or gallery
   Future<void> pickAvatar() async {
     final source = await Get.bottomSheet<ImageSource>(

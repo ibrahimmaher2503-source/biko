@@ -1,10 +1,10 @@
+import 'package:biko/core/constants/app_constants.dart';
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_menu_item.dart';
 import 'package:biko/core/widgets/language_selector.dart';
 import 'package:biko/features/profile/controllers/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:biko/core/constants/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Settings screen with language, theme, and notification preferences
@@ -88,7 +88,7 @@ class SettingsScreen extends GetView<ProfileController> {
               AppMenuItem(
                 icon: Icons.info_outline_rounded,
                 title: 'settings.app_version'.tr,
-                subtitle: '1.0.0',
+                subtitle: AppConstants.appVersion,
                 trailing: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 10,
@@ -99,7 +99,7 @@ class SettingsScreen extends GetView<ProfileController> {
                     borderRadius: BorderRadius.circular(AppTheme.radiusFull),
                   ),
                   child: Text(
-                    'v1.0.0',
+                    'v${AppConstants.appVersion}',
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: ext.textMuted,
                       fontWeight: FontWeight.w600,

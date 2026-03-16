@@ -44,6 +44,11 @@ class WalletController extends GetxController {
     if (_uid.isEmpty) {
       _uid = AuthService.currentUid ?? '';
     }
+    if (_uid.isEmpty) {
+      errorMessage.value = 'wallet.load_error';
+      isLoading.value = false;
+      return;
+    }
     _listenToWallet();
     _loadTransactions();
   }

@@ -1,5 +1,4 @@
 import 'package:biko/core/models/directions_result.dart';
-import 'package:flutter/foundation.dart';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/place_model.dart';
 import 'package:biko/core/models/trip_model.dart';
@@ -8,6 +7,7 @@ import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/services/map_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 /// Controller for the Price Negotiation (bidding) screen.
@@ -49,6 +49,9 @@ class BiddingController extends GetxController {
 
   /// Whether trip creation is in progress
   final isSubmitting = false.obs;
+
+  /// Whether pricing config has been loaded successfully
+  final isPricingLoaded = false.obs;
 
   // ==================== Pricing config (loaded from app_config) ====================
 
@@ -102,6 +105,7 @@ class BiddingController extends GetxController {
         // Only mark loaded if at least one pricing value is non-zero
         _pricingLoaded =
             _baseFare > 0 || _pricePerKm > 0 || _pricePerMin > 0;
+        isPricingLoaded.value = _pricingLoaded;
       }
 
       // Apply directions
@@ -122,6 +126,7 @@ class BiddingController extends GetxController {
           _pricePerMin = (config['price_per_min'] as num?)?.toDouble() ?? 0;
           _pricingLoaded =
               _baseFare > 0 || _pricePerKm > 0 || _pricePerMin > 0;
+          isPricingLoaded.value = _pricingLoaded;
         }
 
         // Retry directions

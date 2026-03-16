@@ -248,7 +248,9 @@ class PriceNegotiationScreen extends GetView<BiddingController> {
           child: Obx(
             () => AppButton(
               text: 'trip.request_ride'.tr,
-              onPressed: controller.isSubmitting.value
+              onPressed: controller.isSubmitting.value ||
+                      !controller.isPricingLoaded.value ||
+                      controller.offerAmount.value == 0
                   ? null
                   : controller.submitTrip,
               isLoading: controller.isSubmitting.value,

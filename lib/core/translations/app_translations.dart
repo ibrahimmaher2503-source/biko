@@ -127,7 +127,7 @@ class AppTranslations extends Translations {
       // OTP Verification
       'otp.title': 'تحقق من رقمك',
       'otp.subtitle':
-          'أدخل الرمز المكون من 4 أرقام المرسل إلى رقم هاتفك المنتهي بـ',
+          'أدخل الرمز المكون من 6 أرقام المرسل إلى رقم هاتفك المنتهي بـ',
       'otp.verify': 'تحقق',
       'otp.didnt_receive': 'لم تستلم الرمز؟',
       'otp.resend': 'إعادة إرسال الرمز',
@@ -294,6 +294,7 @@ class AppTranslations extends Translations {
       'tracking.cancel_reason': 'سبب الإلغاء',
       'tracking.cancel_error': 'فشل إلغاء الرحلة. حاول مرة أخرى.',
       'tracking.eta_minutes': '@minutes دقائق',
+      'tracking.load_error': 'تعذّر تحميل بيانات الرحلة',
 
       // Trip Completion & Rating
       'completion.trip_completed': 'اكتملت الرحلة',
@@ -410,6 +411,7 @@ class AppTranslations extends Translations {
       'chat.title': 'المحادثة',
       'chat.type_message': 'اكتب رسالة...',
       'chat.no_messages': 'لا توجد رسائل بعد',
+      'chat.load_error': 'تعذّر تحميل المحادثة',
 
       // Notifications
       'notifications.title': 'الإشعارات',
@@ -1388,7 +1390,7 @@ class AppTranslations extends Translations {
       // OTP Verification
       'otp.title': 'Verify Your Number',
       'otp.subtitle':
-          'Enter the 4-digit code sent to your phone number ending in',
+          'Enter the 6-digit code sent to your phone number ending in',
       'otp.verify': 'Verify',
       'otp.didnt_receive': 'Didn\'t receive the code?',
       'otp.resend': 'Resend Code',
@@ -1561,6 +1563,7 @@ class AppTranslations extends Translations {
       'tracking.cancel_reason': 'Cancellation reason',
       'tracking.cancel_error': 'Failed to cancel trip. Try again.',
       'tracking.eta_minutes': '@minutes min',
+      'tracking.load_error': 'Failed to load trip data',
 
       // Trip Completion & Rating
       'completion.trip_completed': 'Trip Completed',
@@ -1677,6 +1680,7 @@ class AppTranslations extends Translations {
       'chat.title': 'Chat',
       'chat.type_message': 'Type a message...',
       'chat.no_messages': 'No messages yet',
+      'chat.load_error': 'Failed to load chat',
 
       // Notifications
       'notifications.title': 'Notifications',

@@ -87,6 +87,9 @@ class OnboardingPage extends StatelessWidget {
     final parts = fullTitle.split(highlight);
     if (parts.length < 2) {
       // Highlight word not found — render plain
+      debugPrint(
+        '⚠️ OnboardingPage: highlight word "$highlight" not found in "$fullTitle"',
+      );
       return Text(fullTitle, style: style, textAlign: TextAlign.center);
     }
 

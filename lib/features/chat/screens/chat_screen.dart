@@ -1,5 +1,7 @@
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_empty_state.dart';
+import 'package:biko/core/widgets/app_error_widget.dart';
+import 'package:biko/core/widgets/app_loading.dart';
 import 'package:biko/features/chat/controllers/chat_controller.dart';
 import 'package:biko/features/chat/widgets/chat_bubble.dart';
 import 'package:biko/features/chat/widgets/chat_input.dart';
@@ -40,6 +42,16 @@ class ChatScreen extends GetView<ChatController> {
           // Messages list
           Expanded(
             child: Obx(() {
+              if (controller.isLoading.value) {
+                return const Center(child: AppLoading());
+              }
+              if (controller.errorMessage.isNotEmpty) {
+                return Center(
+                  child: AppErrorWidget(
+                    message: controller.errorMessage.value.tr,
+                  ),
+                );
+              }
               if (controller.messages.isEmpty) {
                 return Center(
                   child: AppEmptyState(

@@ -14,6 +14,7 @@ class ChatController extends GetxController {
   final RxList<ChatMessageModel> messages = <ChatMessageModel>[].obs;
   final RxBool isLoading = true.obs;
   final RxBool isSending = false.obs;
+  final RxString errorMessage = ''.obs;
   final messageController = TextEditingController();
 
   String _tripId = '';
@@ -67,6 +68,7 @@ class ChatController extends GetxController {
       onError: (e) {
         debugPrint('[ChatController] Messages stream error: $e');
         isLoading.value = false;
+        errorMessage.value = 'chat.load_error';
       },
     );
   }

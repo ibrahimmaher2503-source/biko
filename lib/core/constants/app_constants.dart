@@ -36,4 +36,7 @@ class AppConstants {
   /// External URLs
   static const String termsUrl = 'https://biko.app/terms';
   static const String privacyUrl = 'https://biko.app/privacy';
+
+  /// App version — keep in sync with pubspec.yaml version field
+  static const String appVersion = '1.0.0';
 }
