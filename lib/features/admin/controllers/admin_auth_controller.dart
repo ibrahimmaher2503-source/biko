@@ -1,7 +1,6 @@
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/features/admin/models/admin_user_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +12,7 @@ import 'package:get/get.dart';
 /// All Firebase Auth access goes through [AuthService] (RULE-06 compliance).
 class AdminAuthController extends GetxController {
   final isAuthenticated = false.obs;
+  final isCheckingAuth = true.obs;
   final isLoading = false.obs;
   final errorMessage = ''.obs;
   final adminUser = Rxn<AdminUserModel>();
@@ -32,13 +32,13 @@ class AdminAuthController extends GetxController {
 
   /// Check if the current user has admin claims
   Future<void> checkAdminAccess() async {
-    final userInfo = AuthService.currentUserInfo;
-    if (userInfo == null) {
-      isAuthenticated.value = false;
-      return;
-    }
-
     try {
+      final userInfo = AuthService.currentUserInfo;
+      if (userInfo == null) {
+        isAuthenticated.value = false;
+        return;
+      }
+
       final token = await AuthService.getIdTokenResult();
       final role = token?.claims?['role'] as String?;
 
@@ -55,6 +55,8 @@ class AdminAuthController extends GetxController {
     } catch (e) {
       debugPrint('checkAdminAccess error: $e');
       isAuthenticated.value = false;
+    } finally {
+      isCheckingAuth.value = false;
     }
   }
 
@@ -96,7 +98,7 @@ class AdminAuthController extends GetxController {
       Get.offAllNamed(AppRoutes.adminDashboard);
     } catch (e) {
       debugPrint('AdminAuthController.signIn failed: $e');
-      if (e is FirebaseAuthException) {
+      if (e is AuthException) {
         switch (e.code) {
           case 'user-not-found':
           case 'wrong-password':

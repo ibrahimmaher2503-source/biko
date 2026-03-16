@@ -34,7 +34,7 @@ class AdminApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       // App metadata
-      title: 'admin.app_name'.tr,
+      title: 'BikeRide Admin',
       debugShowCheckedModeBanner: false,
 
       // Theme configuration

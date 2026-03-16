@@ -3,6 +3,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+/// Exception thrown by [AuthService] to shield controllers from
+/// `firebase_auth` types (RULE-06 compliance).
+class AuthException implements Exception {
+  const AuthException(this.code);
+  final String code;
+  @override
+  String toString() => 'AuthException($code)';
+}
+
 /// Opaque wrapper for phone auth credentials.
 ///
 /// Hides [PhoneAuthCredential] from controllers so they never
@@ -143,24 +152,30 @@ class AuthService {
 
   /// Sign in with email and password (used by admin panel).
   ///
-  /// Returns an [AuthUserInfo] on success, or throws on failure.
+  /// Returns an [AuthUserInfo] on success.
+  /// Throws [AuthException] on Firebase auth failures so controllers
+  /// never need to import `firebase_auth` directly (RULE-06).
   static Future<AuthUserInfo?> signInWithEmail({
     required String email,
     required String password,
   }) async {
-    final credential = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    final user = credential.user;
-    if (user == null) return null;
-    return AuthUserInfo._(
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      lastSignInTime: user.metadata.lastSignInTime,
-    );
+    try {
+      final credential = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      final user = credential.user;
+      if (user == null) return null;
+      return AuthUserInfo._(
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        lastSignInTime: user.metadata.lastSignInTime,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw AuthException(e.code);
+    }
   }
 
   /// Retrieve the ID token result for the current user.

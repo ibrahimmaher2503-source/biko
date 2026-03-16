@@ -7,9 +7,6 @@ class AppRoutes {
   /// Initial splash screen
   static const String splash = '/splash';
 
-  /// Language selection screen
-  static const String languageSelection = '/language-selection';
-
   /// Onboarding screens
   static const String onboarding = '/onboarding';
 

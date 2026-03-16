@@ -38,6 +38,7 @@ import 'package:biko/features/onboarding/bindings/onboarding_binding.dart';
 import 'package:biko/features/onboarding/screens/onboarding_screen.dart';
 import 'package:biko/features/splash/bindings/splash_binding.dart';
 import 'package:biko/features/splash/screens/splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 /// Driver app page registry
@@ -49,8 +50,13 @@ class DriverPages {
 
   static List<GetPage> get pages => [
     // ==================== Demo Routes ====================
-    GetPage(name: AppRoutes.demoTheme, page: () => const DemoThemeScreen()),
-    GetPage(name: AppRoutes.demoWidgets, page: () => const DemoWidgetsScreen()),
+    if (kDebugMode)
+      GetPage(name: AppRoutes.demoTheme, page: () => const DemoThemeScreen()),
+    if (kDebugMode)
+      GetPage(
+        name: AppRoutes.demoWidgets,
+        page: () => const DemoWidgetsScreen(),
+      ),
 
     // ==================== Shared Routes ====================
     GetPage(

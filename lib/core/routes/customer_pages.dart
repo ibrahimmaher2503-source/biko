@@ -44,6 +44,7 @@ import 'package:biko/features/trip/screens/trip_completed_screen.dart';
 import 'package:biko/features/wallet/bindings/wallet_binding.dart';
 import 'package:biko/features/wallet/screens/top_up_screen.dart';
 import 'package:biko/features/wallet/screens/wallet_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 /// Customer app page registry
@@ -55,8 +56,13 @@ class CustomerPages {
 
   static List<GetPage> get pages => [
     // ==================== Demo Routes ====================
-    GetPage(name: AppRoutes.demoTheme, page: () => const DemoThemeScreen()),
-    GetPage(name: AppRoutes.demoWidgets, page: () => const DemoWidgetsScreen()),
+    if (kDebugMode)
+      GetPage(name: AppRoutes.demoTheme, page: () => const DemoThemeScreen()),
+    if (kDebugMode)
+      GetPage(
+        name: AppRoutes.demoWidgets,
+        page: () => const DemoWidgetsScreen(),
+      ),
 
     // ==================== Shared Routes ====================
     GetPage(

@@ -287,10 +287,15 @@ class AdminPages {
 }
 
 /// Middleware that redirects to admin login if not authenticated.
+///
+/// Returns null (no redirect) while [AdminAuthController.isCheckingAuth] is
+/// true so the async token verification can finish before a decision is made.
 class AdminAuthGuard extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final auth = Get.find<AdminAuthController>();
+    // Still verifying claims — do not redirect yet
+    if (auth.isCheckingAuth.value) return null;
     if (!auth.isAuthenticated.value) {
       return const RouteSettings(name: AppRoutes.adminLogin);
     }

@@ -1,5 +1,7 @@
 import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
+import 'package:biko/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -7,7 +9,14 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 /// Top-level background message handler (required by Firebase Messaging)
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('📩 Background message: ${message.messageId}');
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  debugPrint('Background FCM: ${message.messageId}');
+  if (message.notification != null) {
+    // Background isolates cannot reliably show local notifications without a
+    // foreground service. The Firebase SDK handles displaying the system
+    // notification automatically when the app is in the background.
+    debugPrint('Notification: ${message.notification!.title}');
+  }
 }
 
 /// Firebase Cloud Messaging service
@@ -59,7 +68,12 @@ class FcmService {
     const androidSettings = AndroidInitializationSettings(
       '@mipmap/ic_launcher',
     );
-    const initSettings = InitializationSettings(android: androidSettings);
+    const darwinSettings = DarwinInitializationSettings();
+    const initSettings = InitializationSettings(
+      android: androidSettings,
+      iOS: darwinSettings,
+      macOS: darwinSettings,
+    );
     await _localNotifications.initialize(initSettings);
   }
 

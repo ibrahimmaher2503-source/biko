@@ -193,6 +193,9 @@ class FirestoreService {
   }
 
   /// Accept a bid — update Firestore trip + clean up Realtime DB bids.
+  ///
+  /// Uses a Firestore transaction to guard against race conditions.
+  /// RTDB cleanup runs only after the transaction succeeds.
   static Future<void> acceptBid({
     required String tripId,
     required String bidId,
@@ -200,20 +203,29 @@ class FirestoreService {
     required String driverUid,
   }) async {
     try {
-      final batch = _firestore.batch();
-
-      // Update trip status
       final tripRef = _firestore.collection('trips').doc(tripId);
-      batch.update(tripRef, {
-        'status': 'accepted',
-        'driver_uid': driverUid,
-        'accepted_price': finalPrice,
-        'accepted_at': FieldValue.serverTimestamp(),
+
+      await _firestore.runTransaction((transaction) async {
+        final tripSnapshot = await transaction.get(tripRef);
+
+        if (!tripSnapshot.exists || tripSnapshot.data() == null) {
+          throw Exception('Trip not found');
+        }
+
+        final status = tripSnapshot.data()!['status'] as String?;
+        if (status != 'pending') {
+          throw Exception('Trip is no longer available');
+        }
+
+        transaction.update(tripRef, {
+          'status': 'accepted',
+          'driver_uid': driverUid,
+          'accepted_price': finalPrice,
+          'accepted_at': FieldValue.serverTimestamp(),
+        });
       });
 
-      await batch.commit();
-
-      // Clean up live bids in Realtime DB
+      // Clean up live bids in Realtime DB — only runs if transaction succeeded
       await _realtimeDb.child('live_bids/$tripId').remove();
     } catch (e) {
       debugPrint('❌ FirestoreService.acceptBid failed: $e');
@@ -345,7 +357,8 @@ class FirestoreService {
 
   /// Submit a rating for a trip.
   ///
-  /// Creates a rating document and updates the driver's average rating.
+  /// Creates a rating document, updates the trip with the rating reference,
+  /// then runs a Firestore transaction to update the driver's avg_rating.
   static Future<void> submitRating(RatingModel rating) async {
     try {
       final batch = _firestore.batch();
@@ -359,6 +372,30 @@ class FirestoreService {
       batch.update(tripRef, {'rating_id': ratingRef.id});
 
       await batch.commit();
+
+      // Update driver's rolling average rating in a transaction
+      final driverProfileRef = _firestore
+          .collection('driver_profiles')
+          .doc(rating.rateeUid);
+
+      await _firestore.runTransaction((transaction) async {
+        final profileSnapshot = await transaction.get(driverProfileRef);
+
+        final data = profileSnapshot.data() ?? {};
+        final oldCount = (data['rating_count'] as num?)?.toInt() ?? 0;
+        final oldAvg = (data['avg_rating'] as num?)?.toDouble() ?? 0.0;
+        final newCount = oldCount + 1;
+        final newAvg = ((oldAvg * oldCount) + rating.score) / newCount;
+
+        transaction.set(
+          driverProfileRef,
+          {
+            'rating_count': newCount,
+            'avg_rating': newAvg,
+          },
+          SetOptions(merge: true),
+        );
+      });
     } catch (e) {
       debugPrint('❌ FirestoreService.submitRating failed: $e');
       rethrow;
@@ -914,6 +951,9 @@ class FirestoreService {
   }
 
   /// Mark all notifications as read for a user (batch write).
+  ///
+  /// Chunks documents into groups of 400 to stay under the 500-op Firestore
+  /// batch limit.
   static Future<void> markAllNotificationsRead(String uid) async {
     try {
       final snapshot = await _firestore
@@ -924,11 +964,17 @@ class FirestoreService {
 
       if (snapshot.docs.isEmpty) return;
 
-      final batch = _firestore.batch();
-      for (final doc in snapshot.docs) {
-        batch.update(doc.reference, {'is_read': true});
+      const chunkSize = 400;
+      final docs = snapshot.docs;
+      for (var i = 0; i < docs.length; i += chunkSize) {
+        final end = (i + chunkSize < docs.length) ? i + chunkSize : docs.length;
+        final chunk = docs.sublist(i, end);
+        final batch = _firestore.batch();
+        for (final doc in chunk) {
+          batch.update(doc.reference, {'is_read': true});
+        }
+        await batch.commit();
       }
-      await batch.commit();
     } catch (e) {
       debugPrint('❌ FirestoreService.markAllNotificationsRead failed: $e');
       rethrow;

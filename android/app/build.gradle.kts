@@ -48,9 +48,19 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // TODO: Configure production signing before submitting to Google Play.
+            // 1. Create a keystore: keytool -genkey -v -keystore bikeride.jks -keyalg RSA -keysize 2048 -validity 10000 -alias bikeride
+            // 2. Set environment variables: KEYSTORE_PATH, KEYSTORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
+            // 3. Uncomment the signingConfigs block and reference it here:
+            // signingConfigs {
+            //     create("release") {
+            //         storeFile = file(System.getenv("KEYSTORE_PATH") ?: "bikeride.jks")
+            //         storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+            //         keyAlias = System.getenv("KEY_ALIAS") ?: "bikeride"
+            //         keyPassword = System.getenv("KEY_PASSWORD") ?: ""
+            //     }
+            // }
+            // signingConfig = signingConfigs.getByName("release")
         }
     }
 }

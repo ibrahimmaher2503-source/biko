@@ -65,6 +65,15 @@ class BackgroundLocationService extends GetxService {
 
     // Set online status
     await _setOnlineStatus(uid, true);
+
+    // Register onDisconnect handler so RTDB marks driver offline if the
+    // connection is lost unexpectedly (network drop, app killed, etc.)
+    final disconnectRef = _realtimeDb.child('driver_locations/$uid');
+    await disconnectRef.onDisconnect().update({
+      'is_online': false,
+      'last_seen': ServerValue.timestamp,
+    });
+
     isOnline.value = true;
     debugPrint('✅ BackgroundLocationService started for $uid');
   }

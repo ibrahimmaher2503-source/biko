@@ -7,6 +7,7 @@ import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 /// Global authentication controller — registered permanently in AppInitializer
@@ -59,8 +60,8 @@ class AuthController extends GetxController {
       return;
     }
 
-    // Dev bypass: skip Firebase OTP entirely
-    if (DevConfig.skipOtp) {
+    // Dev bypass: skip Firebase OTP entirely (debug builds only)
+    if (kDebugMode && DevConfig.skipOtp) {
       phoneNumber.value = cleaned;
       // Note: No Firebase user is created in dev bypass mode.
       // ProfileSetupController handles the null-uid case gracefully.

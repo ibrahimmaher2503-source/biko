@@ -137,7 +137,7 @@ class TripRequestsController extends GetxController {
   }
 
   void _startCountdown(TripRequest request) {
-    _cancelCountdown(request.tripId);
+    if (_countdownTimers.containsKey(request.tripId)) return; // already running
 
     _countdownTimers[request
         .tripId] = Timer.periodic(const Duration(seconds: 1), (timer) {
