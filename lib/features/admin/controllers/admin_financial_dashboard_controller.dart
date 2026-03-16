@@ -55,9 +55,13 @@ class AdminFinancialDashboardController extends GetxController {
       final msg = e.toString();
       if (msg.contains('failed-precondition') ||
           msg.contains('requires an index')) {
-        AppSnackbar.error('admin.finance.index_required'.tr);
+        AppSnackbar.error(
+          'A Firestore index is required. Please check the Firebase console to create it.',
+        );
       } else {
-        AppSnackbar.error('admin.finance.load_error'.tr);
+        AppSnackbar.error(
+          'Failed to load financial data. Please try again.',
+        );
       }
     } finally {
       isLoading.value = false;

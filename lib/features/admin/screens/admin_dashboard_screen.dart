@@ -1,5 +1,4 @@
 import 'package:biko/core/theme/app_theme.dart';
-import 'package:biko/core/widgets/app_button.dart';
 import 'package:biko/core/widgets/app_card.dart';
 import 'package:biko/core/widgets/app_loading.dart';
 import 'package:biko/features/admin/controllers/admin_dashboard_controller.dart';
@@ -35,17 +34,20 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Refresh button row
+                // Refresh action
                 Align(
                   alignment: AlignmentDirectional.centerEnd,
                   child: Obx(
                     () => controller.isLoading.value
                         ? const AppLoading(size: 20)
-                        : AppButton(
-                            text: 'admin.dashboard.refresh'.tr,
-                            onPressed: controller.refreshDashboard,
-                            variant: ButtonVariant.outline,
-                            leadingIcon: Icons.refresh,
+                        : SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: IconButton(
+                              icon: const Icon(Icons.refresh),
+                              onPressed: controller.refreshDashboard,
+                              tooltip: 'admin.dashboard.refresh'.tr,
+                            ),
                           ),
                   ),
                 ),

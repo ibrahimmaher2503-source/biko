@@ -34,8 +34,10 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header actions
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+            Wrap(
+              alignment: WrapAlignment.end,
+              spacing: 16,
+              runSpacing: 8,
               children: [
                 Obx(
                   () => AdminDateRangePicker(
@@ -43,7 +45,6 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
                     onRangeSelected: controller.updateDateRange,
                   ),
                 ),
-                const SizedBox(width: 16),
                 AppButton(
                   text: 'admin.financial.export_csv'.tr,
                   onPressed: controller.exportCsv,
@@ -249,9 +250,13 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
 
             // Filters
             AppCard(
-              child: Row(
+              child: Wrap(
+                spacing: 16,
+                runSpacing: 8,
+                crossAxisAlignment: WrapCrossAlignment.end,
                 children: [
-                  Expanded(
+                  SizedBox(
+                    width: 250,
                     child: Obx(
                       () => DropdownButtonFormField<String>(
                         isExpanded: true,
@@ -287,8 +292,8 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
+                  SizedBox(
+                    width: 250,
                     child: Obx(
                       () => DropdownButtonFormField<String>(
                         isExpanded: true,
@@ -328,12 +333,10 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
                   AppButton(
                     text: 'admin.financial.apply_filters'.tr,
                     onPressed: controller.applyFilters,
                   ),
-                  const SizedBox(width: 8),
                   AppButton(
                     text: 'admin.financial.clear_filters'.tr,
                     onPressed: controller.clearFilters,
