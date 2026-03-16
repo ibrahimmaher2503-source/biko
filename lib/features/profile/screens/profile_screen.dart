@@ -45,9 +45,7 @@ class ProfileScreen extends GetView<ProfileController> {
               AppMenuItem(
                 icon: Icons.person_outline_rounded,
                 title: 'profile.edit_profile'.tr,
-                onTap: () => Get.toNamed(
-                  '${AppRoutes.customerProfile}/edit',
-                ),
+                onTap: () => Get.toNamed(AppRoutes.customerProfileEdit),
               ),
               AppMenuItem(
                 icon: Icons.account_balance_wallet_outlined,

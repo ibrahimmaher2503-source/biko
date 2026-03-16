@@ -71,7 +71,7 @@ class WalletController extends GetxController {
       onError: (Object e) {
         debugPrint('❌ WalletController._listenToWallet: $e');
         isLoading.value = false;
-        errorMessage.value = 'wallet.load_error';
+        errorMessage.value = 'wallet.load_error'.tr;
       },
     );
   }

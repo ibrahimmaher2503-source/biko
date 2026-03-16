@@ -351,6 +351,7 @@ class AppTranslations extends Translations {
       // Profile & Settings
       'profile.my_profile': 'الملف الشخصي',
       'profile.edit_profile': 'تعديل الملف الشخصي',
+      'profile.notification_error': 'فشل تحديث إعدادات الإشعارات',
       'profile.name': 'الاسم',
       'profile.phone_readonly': 'لا يمكن تغيير رقم الهاتف',
       'profile.settings': 'الإعدادات',
@@ -2297,6 +2298,7 @@ class AppTranslations extends Translations {
       // Profile & Settings
       'profile.my_profile': 'Profile',
       'profile.edit_profile': 'Edit Profile',
+      'profile.notification_error': 'Failed to update notification settings',
       'profile.name': 'Name',
       'profile.phone_readonly': 'Phone number cannot be changed',
       'profile.settings': 'Settings',

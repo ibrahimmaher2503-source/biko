@@ -70,6 +70,9 @@ class AppRoutes {
   /// Customer profile
   static const String customerProfile = '/customer/profile';
 
+  /// Customer profile edit
+  static const String customerProfileEdit = '/customer/profile/edit';
+
   /// Customer settings
   static const String customerSettings = '/customer/settings';
 

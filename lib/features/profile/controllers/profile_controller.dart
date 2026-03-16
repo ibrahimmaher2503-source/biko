@@ -141,6 +141,7 @@ class ProfileController extends GetxController {
   /// Toggle push notifications on/off — persists preference and updates FCM
   Future<void> toggleNotifications() async {
     final newValue = !notificationsEnabled.value;
+    final oldValue = notificationsEnabled.value;
     notificationsEnabled.value = newValue;
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -154,7 +155,9 @@ class ProfileController extends GetxController {
         await FcmService.clearToken();
       }
     } catch (e) {
+      notificationsEnabled.value = oldValue;
       debugPrint('❌ ProfileController.toggleNotifications: $e');
+      AppSnackbar.error('profile.notification_error'.tr);
     }
   }
 

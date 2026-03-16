@@ -176,7 +176,7 @@ class CustomerPages {
       transition: Transition.rightToLeft,
     ),
     GetPage(
-      name: '${AppRoutes.customerProfile}/edit',
+      name: AppRoutes.customerProfileEdit,
       page: () => const EditProfileScreen(),
       binding: ProfileBinding(),
       transition: Transition.rightToLeft,

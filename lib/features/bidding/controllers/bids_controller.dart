@@ -176,13 +176,16 @@ class BidsController extends GetxController {
   /// Cancel the trip and allow the screen to be popped.
   ///
   /// Called by the [PopScope] confirmation dialog in [BidsScreen].
-  Future<void> cancelTrip() async {
-    if (tripId.value.isEmpty) return;
+  Future<bool> cancelTrip() async {
+    if (tripId.value.isEmpty) return true;
     try {
       _tripResolved = true;
       await FirestoreService.cancelTripSearch(tripId.value);
+      return true;
     } catch (e) {
+      _tripResolved = false;
       debugPrint('❌ BidsController.cancelTrip: $e');
+      return false;
     }
   }
 }
