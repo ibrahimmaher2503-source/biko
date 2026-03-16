@@ -2,6 +2,7 @@ import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_button.dart';
 import 'package:biko/core/widgets/app_card.dart';
 import 'package:biko/core/widgets/app_loading.dart';
+import 'package:biko/core/widgets/app_text_field.dart';
 import 'package:biko/features/admin/controllers/admin_auth_controller.dart';
 import 'package:biko/features/admin/controllers/admin_config_controller.dart';
 import 'package:biko/features/admin/widgets/confirm_dialog.dart';
@@ -558,36 +559,14 @@ class _AdminConfigScreenState extends State<AdminConfigScreen> {
     required String suffix,
     bool isPercentage = false,
   }) {
-    final colors = Theme.of(context).extension<AppColorsExtension>()!;
-
-    return TextField(
+    return AppTextField(
       controller: ctrl,
+      label: label,
+      suffixText: suffix,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
       ],
-      decoration: InputDecoration(
-        labelText: label,
-        suffixText: suffix,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
-          borderSide: BorderSide(color: colors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
-          borderSide: BorderSide(color: colors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-            width: 2,
-          ),
-        ),
-        filled: true,
-        fillColor: colors.surfaceContainer,
-      ),
-      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       onChanged: (text) {
         final parsed = double.tryParse(text);
         if (parsed != null) {
@@ -605,33 +584,11 @@ class _AdminConfigScreenState extends State<AdminConfigScreen> {
     required TextInputType keyboardType,
     String? hint,
   }) {
-    final colors = Theme.of(context).extension<AppColorsExtension>()!;
-
-    return TextField(
+    return AppTextField(
       controller: ctrl,
+      label: label,
+      hint: hint,
       keyboardType: keyboardType,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
-          borderSide: BorderSide(color: colors.border),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
-          borderSide: BorderSide(color: colors.border),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
-          borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.primary,
-            width: 2,
-          ),
-        ),
-        filled: true,
-        fillColor: colors.surfaceContainer,
-      ),
-      style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
       onChanged: (text) {
         rxValue.value = text;
       },

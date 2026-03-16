@@ -1,11 +1,7 @@
-import 'package:biko/core/models/document_model.dart';
-import 'package:biko/core/models/driver_profile_model.dart';
-import 'package:biko/core/models/user_model.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/admin/models/approval_stats_model.dart';
 import 'package:biko/features/admin/models/driver_review_data.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:biko/features/admin/services/admin_firestore_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -21,8 +17,6 @@ class AdminApprovalController extends GetxController {
 
   /// Sort order: 'oldest' (default) or 'newest'.
   final sortBy = 'oldest'.obs;
-
-  final _firestore = FirebaseFirestore.instance;
 
   /// Returns the pending drivers list filtered by vehicle type
   /// and sorted according to the current sort order.
@@ -57,56 +51,11 @@ class AdminApprovalController extends GetxController {
     loadApprovalStats();
   }
 
-  @override
-  // ignore: unnecessary_overrides
-  void onClose() {
-    super.onClose();
-  }
-
   Future<void> loadPendingDrivers() async {
     try {
       isLoading.value = true;
-
-      final usersSnapshot = await _firestore
-          .collection('users')
-          .where('type', isEqualTo: 'driver')
-          .where('status', isEqualTo: 'pending_approval')
-          .orderBy('created_at', descending: false)
-          .get();
-
-      final List<DriverReviewData> results = [];
-
-      for (final userDoc in usersSnapshot.docs) {
-        final user = UserModel.fromJson(
-          userDoc.data(),
-        );
-
-        final profileDoc = await _firestore
-            .collection('driver_profiles')
-            .doc(user.uid)
-            .get();
-
-        final profile = profileDoc.exists
-            ? DriverProfileModel.fromJson(profileDoc.data()!)
-            : DriverProfileModel(uid: user.uid);
-
-        final docsSnapshot = await _firestore
-            .collection('documents')
-            .where('driver_uid', isEqualTo: user.uid)
-            .get();
-
-        final documents = docsSnapshot.docs
-            .map((d) => DocumentModel.fromJson(d.data()))
-            .toList();
-
-        results.add(DriverReviewData(
-          user: user,
-          driverProfile: profile,
-          documents: documents,
-        ));
-      }
-
-      pendingDrivers.value = results;
+      pendingDrivers.value =
+          await AdminFirestoreService.getPendingDriversWithProfiles();
     } catch (e, stack) {
       debugPrint('loadPendingDrivers error: $e\n$stack');
       AppSnackbar.error(e.toString());
@@ -119,35 +68,12 @@ class AdminApprovalController extends GetxController {
     try {
       isLoading.value = true;
 
-      final userDoc =
-          await _firestore.collection('users').doc(uid).get();
-      if (!userDoc.exists) {
+      final reviewData = await AdminFirestoreService.getDriverReviewData(uid);
+      if (reviewData == null) {
         AppSnackbar.error('admin.drivers.driver_not_found'.tr);
         return;
       }
-
-      final user = UserModel.fromJson(userDoc.data()!);
-
-      final profileDoc =
-          await _firestore.collection('driver_profiles').doc(uid).get();
-      final profile = profileDoc.exists
-          ? DriverProfileModel.fromJson(profileDoc.data()!)
-          : DriverProfileModel(uid: uid);
-
-      final docsSnapshot = await _firestore
-          .collection('documents')
-          .where('driver_uid', isEqualTo: uid)
-          .get();
-
-      final documents = docsSnapshot.docs
-          .map((d) => DocumentModel.fromJson(d.data()))
-          .toList();
-
-      selectedDriver.value = DriverReviewData(
-        user: user,
-        driverProfile: profile,
-        documents: documents,
-      );
+      selectedDriver.value = reviewData;
     } catch (e, stack) {
       debugPrint('selectDriver error: $e\n$stack');
       AppSnackbar.error(e.toString());
@@ -160,9 +86,10 @@ class AdminApprovalController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable =
-          FirebaseFunctions.instance.httpsCallable('approveDriver');
-      await callable.call({'uid': uid});
+      await AdminFirestoreService.callCloudFunction(
+        'approveDriver',
+        {'uid': uid},
+      );
 
       AppSnackbar.success('admin.approvals.driver_approved_success'.tr);
 
@@ -185,20 +112,7 @@ class AdminApprovalController extends GetxController {
     try {
       isLoading.value = true;
 
-      final batch = _firestore.batch();
-
-      for (final docId in docIds) {
-        batch.update(
-          _firestore.collection('documents').doc(docId),
-          {
-            'status': 'rejected',
-            'admin_note': reason,
-            'updated_at': FieldValue.serverTimestamp(),
-          },
-        );
-      }
-
-      await batch.commit();
+      await AdminFirestoreService.batchRejectDocumentsByIds(docIds, reason);
 
       AppSnackbar.success('admin.approvals.driver_rejected_success'.tr);
 
@@ -218,31 +132,7 @@ class AdminApprovalController extends GetxController {
     try {
       isLoading.value = true;
 
-      final batch = _firestore.batch();
-
-      batch.update(
-        _firestore.collection('users').doc(uid),
-        {
-          'status': 'suspended',
-          'rejection_reason': reason,
-          'updated_at': FieldValue.serverTimestamp(),
-        },
-      );
-
-      final docsSnapshot = await _firestore
-          .collection('documents')
-          .where('driver_uid', isEqualTo: uid)
-          .get();
-
-      for (final doc in docsSnapshot.docs) {
-        batch.update(doc.reference, {
-          'status': 'rejected',
-          'admin_note': reason,
-          'updated_at': FieldValue.serverTimestamp(),
-        });
-      }
-
-      await batch.commit();
+      await AdminFirestoreService.rejectDriverCompletely(uid, reason);
 
       AppSnackbar.success('admin.approvals.driver_rejected_success'.tr);
 
@@ -259,30 +149,7 @@ class AdminApprovalController extends GetxController {
 
   Future<void> loadApprovalStats() async {
     try {
-      final now = DateTime.now();
-      final startOfDay = DateTime(now.year, now.month, now.day);
-
-      final pendingCount = await _firestore
-          .collection('users')
-          .where('type', isEqualTo: 'driver')
-          .where('status', isEqualTo: 'pending_approval')
-          .count()
-          .get();
-
-      final approvedToday = await _firestore
-          .collection('driver_profiles')
-          .where('is_approved', isEqualTo: true)
-          .where(
-            'approved_at',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startOfDay),
-          )
-          .count()
-          .get();
-
-      approvalStats.value = ApprovalStatsModel(
-        pendingCount: pendingCount.count ?? 0,
-        approvedTodayCount: approvedToday.count ?? 0,
-      );
+      approvalStats.value = await AdminFirestoreService.getApprovalStats();
     } catch (e, stack) {
       debugPrint('loadApprovalStats error: $e\n$stack');
     }

@@ -1,11 +1,8 @@
 import 'package:biko/features/admin/controllers/admin_auth_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:biko/features/admin/services/admin_firestore_service.dart';
 import 'package:get/get.dart';
 
 class AdminConfigController extends GetxController {
-  final _firestore = FirebaseFirestore.instance;
-  final _functions = FirebaseFunctions.instance;
 
   // Config field observables
   final baseFare = 0.0.obs;
@@ -63,10 +60,9 @@ class AdminConfigController extends GetxController {
     try {
       isLoading.value = true;
 
-      final doc = await _firestore.collection('app_config').doc('config').get();
+      final data = await AdminFirestoreService.getAppConfig();
 
-      if (doc.exists) {
-        final data = doc.data()!;
+      if (data != null) {
         _updateValuesFromData(data);
         _storeOriginalValues(data);
       }
@@ -147,8 +143,10 @@ class AdminConfigController extends GetxController {
       };
 
       // Call Cloud Function to update config
-      final callable = _functions.httpsCallable('updateAppConfig');
-      await callable.call(configData);
+      await AdminFirestoreService.callCloudFunction(
+        'updateAppConfig',
+        configData,
+      );
 
       // Update original values
       _storeOriginalValues(configData);

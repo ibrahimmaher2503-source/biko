@@ -5,7 +5,6 @@ import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/admin/services/admin_firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -195,8 +194,10 @@ class AdminUsersController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = FirebaseFunctions.instance.httpsCallable('suspendUser');
-      await callable.call({'uid': uid, 'reason': reason, 'action': 'suspend'});
+      await AdminFirestoreService.callCloudFunction(
+        'suspendUser',
+        {'uid': uid, 'reason': reason, 'action': 'suspend'},
+      );
 
       AppSnackbar.success('admin.users.suspend_success'.tr);
 
@@ -214,8 +215,10 @@ class AdminUsersController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = FirebaseFunctions.instance.httpsCallable('suspendUser');
-      await callable.call({'uid': uid, 'action': 'activate'});
+      await AdminFirestoreService.callCloudFunction(
+        'suspendUser',
+        {'uid': uid, 'action': 'activate'},
+      );
 
       AppSnackbar.success('admin.users.activate_success'.tr);
 
@@ -233,10 +236,10 @@ class AdminUsersController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = FirebaseFunctions.instance.httpsCallable(
+      await AdminFirestoreService.callCloudFunction(
         'adjustWalletBalance',
+        {'uid': uid, 'amount': amount, 'reason': reason},
       );
-      await callable.call({'uid': uid, 'amount': amount, 'reason': reason});
 
       AppSnackbar.success('admin.users.wallet_adjust_success'.tr);
 

@@ -1,15 +1,11 @@
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:get/get.dart';
 
 import '../models/notification_record_model.dart';
+import '../services/admin_firestore_service.dart';
 import 'admin_auth_controller.dart';
 
 class AdminNotificationsController extends GetxController {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseFunctions _functions = FirebaseFunctions.instance;
-
   final targetSegment = 'all'.obs;
   final specificUid = ''.obs;
   final titleAr = ''.obs;
@@ -44,7 +40,7 @@ class AdminNotificationsController extends GetxController {
 
       if (targetSegment.value == 'specific') {
         // Send to specific user
-        await _functions.httpsCallable('sendToUser').call({
+        await AdminFirestoreService.callCloudFunction('sendToUser', {
           'uid': specificUid.value,
           'title_ar': titleAr.value,
           'title_en': titleEn.value,
@@ -53,7 +49,7 @@ class AdminNotificationsController extends GetxController {
         });
       } else {
         // Send to segment
-        await _functions.httpsCallable('sendToSegment').call({
+        await AdminFirestoreService.callCloudFunction('sendToSegment', {
           'segment': targetSegment.value,
           'title_ar': titleAr.value,
           'title_en': titleEn.value,
@@ -77,7 +73,7 @@ class AdminNotificationsController extends GetxController {
         sentAt: DateTime.now(),
       );
 
-      await _firestore.collection('admin_notifications').add(record.toJson());
+      await AdminFirestoreService.recordNotification(record.toJson());
 
       AppSnackbar.success('admin.notifications.send_success'.tr);
 
@@ -94,14 +90,10 @@ class AdminNotificationsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final snapshot = await _firestore
-          .collection('admin_notifications')
-          .orderBy('sent_at', descending: true)
-          .limit(100)
-          .get();
+      final docs = await AdminFirestoreService.getNotificationHistory();
 
-      sentHistory.value = snapshot.docs
-          .map((doc) => NotificationRecordModel.fromJson(doc.data(), doc.id))
+      sentHistory.value = docs
+          .map((map) => NotificationRecordModel.fromMap(map, map['id'] as String?))
           .toList();
     } catch (e) {
       AppSnackbar.error('admin.notifications.load_error'.tr);

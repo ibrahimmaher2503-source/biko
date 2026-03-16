@@ -159,7 +159,10 @@ class BidController extends GetxController {
               _bidStatusSubscription?.cancel();
               isWaiting.value = false;
               AppSnackbar.success('driver_trips.bid_accepted'.tr);
-              Get.offNamed(AppRoutes.navigateToPickup, arguments: tripId);
+              Get.offNamed(
+                AppRoutes.navigateToPickup,
+                arguments: {'tripId': tripId},
+              );
             } else if (status == 'rejected') {
               _bidStatusSubscription?.cancel();
               isWaiting.value = false;

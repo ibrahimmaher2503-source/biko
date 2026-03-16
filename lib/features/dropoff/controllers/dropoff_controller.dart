@@ -91,11 +91,24 @@ class DropoffController extends GetxController {
 
   // ==================== Initialization ====================
 
-  /// Extract pickup from route arguments.
+  /// Extract pickup and optional intended dropoff from route arguments.
   void _extractArguments() {
     final args = Get.arguments;
     if (args is Map<String, dynamic>) {
       pickupPlace = args['pickup'] as PlaceModel?;
+
+      // Pre-fill dropoff if intended dropoff was forwarded (e.g. recent location)
+      if (args.containsKey('intended_dropoff_lat')) {
+        final place = PlaceModel(
+          name: (args['intended_dropoff_name'] as String?) ?? '',
+          address: (args['intended_dropoff_address'] as String?) ?? '',
+          lat: (args['intended_dropoff_lat'] as num).toDouble(),
+          lng: (args['intended_dropoff_lng'] as num).toDouble(),
+        );
+        selectedDropoff.value = place;
+        mapCenter.value = place.latLng;
+        _animateCameraTo(place.latLng);
+      }
     }
   }
 

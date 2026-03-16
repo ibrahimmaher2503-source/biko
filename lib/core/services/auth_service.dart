@@ -12,6 +12,34 @@ class PhoneCredential {
   final PhoneAuthCredential _credential;
 }
 
+/// Opaque wrapper for ID token results.
+///
+/// Hides [IdTokenResult] from controllers so they never
+/// import `firebase_auth` directly (RULE-06 compliance).
+class AuthTokenResult {
+  AuthTokenResult._({this.claims});
+
+  /// Custom claims from the ID token (e.g. `role`, `permissions`).
+  final Map<String, dynamic>? claims;
+}
+
+/// Lightweight snapshot of the currently signed-in user.
+///
+/// Prevents controllers from depending on `firebase_auth.User`.
+class AuthUserInfo {
+  AuthUserInfo._({
+    required this.uid,
+    this.email,
+    this.displayName,
+    this.lastSignInTime,
+  });
+
+  final String uid;
+  final String? email;
+  final String? displayName;
+  final DateTime? lastSignInTime;
+}
+
 /// Wraps Firebase Phone Authentication
 class AuthService {
   AuthService._();
@@ -95,6 +123,50 @@ class AuthService {
     return _auth.signInWithCredential(credential);
   }
 
+  /// Sign in with email and password (used by admin panel).
+  ///
+  /// Returns an [AuthUserInfo] on success, or throws on failure.
+  static Future<AuthUserInfo?> signInWithEmail({
+    required String email,
+    required String password,
+  }) async {
+    final credential = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    final user = credential.user;
+    if (user == null) return null;
+    return AuthUserInfo._(
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      lastSignInTime: user.metadata.lastSignInTime,
+    );
+  }
+
+  /// Retrieve the ID token result for the current user.
+  ///
+  /// Returns null if no user is signed in.
+  static Future<AuthTokenResult?> getIdTokenResult() async {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    final token = await user.getIdTokenResult();
+    return AuthTokenResult._(claims: token.claims);
+  }
+
+  /// Returns a lightweight [AuthUserInfo] for the current user,
+  /// or null if not signed in.
+  static AuthUserInfo? get currentUserInfo {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    return AuthUserInfo._(
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      lastSignInTime: user.metadata.lastSignInTime,
+    );
+  }
+
   /// Sign out from all providers and Firebase
   static Future<void> signOut() async {
     try {
@@ -107,6 +179,13 @@ class AuthService {
     } catch (e) {
       debugPrint('FacebookAuth.logOut failed: $e');
     }
+    await _auth.signOut();
+  }
+
+  /// Sign out from Firebase only (no social provider sign-out).
+  ///
+  /// Useful for the admin panel where only email/password auth is used.
+  static Future<void> signOutFirebaseOnly() async {
     await _auth.signOut();
   }
 }

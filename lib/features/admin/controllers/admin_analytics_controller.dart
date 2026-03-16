@@ -1,16 +1,14 @@
 import 'dart:convert';
 
 import 'package:biko/core/services/web_download.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/widgets/app_snackbar.dart';
 import '../models/chart_data_point.dart';
+import '../services/admin_firestore_service.dart';
 
 class AdminAnalyticsController extends GetxController {
-  final _firestore = FirebaseFirestore.instance;
-
   final selectedPeriod = 30.obs;
   final tripVolumeData = <ChartDataPoint>[].obs;
   final paymentBreakdown = <String, double>{}.obs;
@@ -45,20 +43,15 @@ class AdminAnalyticsController extends GetxController {
   Future<void> _loadTripVolumeData(int period) async {
     try {
       final startDate = DateTime.now().subtract(Duration(days: period));
-      final snapshot = await _firestore
-          .collection('trips')
-          .where(
-            'created_at',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          )
-          .get();
+      final trips = await AdminFirestoreService.getTripsSince(startDate);
 
       // Group trips by date and type
       final Map<String, Map<String, int>> groupedData = {};
 
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
-        final createdAt = (data['created_at'] as Timestamp).toDate();
+      for (final data in trips) {
+        final createdAt =
+            AdminFirestoreService.timestampToDateTime(data['created_at']);
+        if (createdAt == null) continue;
         final dateKey = DateFormat('yyyy-MM-dd').format(createdAt);
         final tripType = data['type'] as String? ?? 'ride';
 
@@ -107,14 +100,8 @@ class AdminAnalyticsController extends GetxController {
   Future<void> _loadPaymentBreakdown(int period) async {
     try {
       final startDate = DateTime.now().subtract(Duration(days: period));
-      final snapshot = await _firestore
-          .collection('trips')
-          .where(
-            'created_at',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          )
-          .where('status', isEqualTo: 'completed')
-          .get();
+      final completedTrips =
+          await AdminFirestoreService.getCompletedTripsSince(startDate);
 
       final Map<String, double> breakdown = {
         'cash': 0.0,
@@ -124,8 +111,7 @@ class AdminAnalyticsController extends GetxController {
         'fawry': 0.0,
       };
 
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
+      for (final data in completedTrips) {
         final method = data['payment_method'] as String? ?? 'cash';
         final amount = (data['final_price'] as num?)?.toDouble() ?? 0.0;
         breakdown[method] = (breakdown[method] ?? 0.0) + amount;
@@ -140,20 +126,15 @@ class AdminAnalyticsController extends GetxController {
   Future<void> _loadCancellationTrend(int period) async {
     try {
       final startDate = DateTime.now().subtract(Duration(days: period));
-      final snapshot = await _firestore
-          .collection('trips')
-          .where(
-            'created_at',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          )
-          .get();
+      final trips = await AdminFirestoreService.getTripsSince(startDate);
 
       // Group by date
       final Map<String, Map<String, int>> groupedData = {};
 
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
-        final createdAt = (data['created_at'] as Timestamp).toDate();
+      for (final data in trips) {
+        final createdAt =
+            AdminFirestoreService.timestampToDateTime(data['created_at']);
+        if (createdAt == null) continue;
         final dateKey = DateFormat('yyyy-MM-dd').format(createdAt);
         final status = data['status'] as String? ?? 'completed';
 
@@ -197,20 +178,13 @@ class AdminAnalyticsController extends GetxController {
   Future<void> _loadTopDrivers(int period) async {
     try {
       final startDate = DateTime.now().subtract(Duration(days: period));
-      final snapshot = await _firestore
-          .collection('trips')
-          .where(
-            'created_at',
-            isGreaterThanOrEqualTo: Timestamp.fromDate(startDate),
-          )
-          .where('status', isEqualTo: 'completed')
-          .get();
+      final completedTrips =
+          await AdminFirestoreService.getCompletedTripsSince(startDate);
 
       // Aggregate by driver
       final Map<String, Map<String, dynamic>> driverStats = {};
 
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
+      for (final data in completedTrips) {
         final driverUid = data['driver_uid'] as String?;
         if (driverUid == null) continue;
 
@@ -236,25 +210,16 @@ class AdminAnalyticsController extends GetxController {
       // Fetch driver details
       final List<Map<String, dynamic>> driversWithDetails = [];
       for (final driverUid in driverStats.keys) {
-        final userDoc = await _firestore
-            .collection('users')
-            .doc(driverUid)
-            .get();
-        final driverDoc = await _firestore
-            .collection('driver_profiles')
-            .doc(driverUid)
-            .get();
+        final profileData =
+            await AdminFirestoreService.getUserAndDriverProfile(driverUid);
 
-        if (userDoc.exists && driverDoc.exists) {
-          final userData = userDoc.data()!;
-          final driverData = driverDoc.data()!;
-
+        if (profileData != null) {
           driversWithDetails.add({
             'uid': driverUid,
-            'name': userData['name'] ?? 'Unknown',
+            'name': profileData['name'],
             'trips': driverStats[driverUid]!['trips'],
             'earnings': driverStats[driverUid]!['earnings'],
-            'rating': (driverData['rating_avg'] as num?)?.toDouble() ?? 0.0,
+            'rating': profileData['rating_avg'],
           });
         }
       }

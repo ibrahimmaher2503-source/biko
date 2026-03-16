@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:biko/features/admin/services/admin_firestore_service.dart';
 import 'package:get/get.dart';
 
 class AdminPromosController extends GetxController {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   final promos = <Map<String, dynamic>>[].obs;
   final statusFilter = 'all'.obs;
   final isLoading = false.obs;
@@ -18,25 +16,14 @@ class AdminPromosController extends GetxController {
     try {
       isLoading.value = true;
 
-      final Query query = _firestore
-          .collection('promo_codes')
-          .orderBy('expiry_date', descending: true);
+      final allPromos = await AdminFirestoreService.getPromoCodes();
 
-      final snapshot = await query.get();
+      promos.value = allPromos.where((promo) {
+        if (statusFilter.value == 'all') return true;
 
-      promos.value = snapshot.docs
-          .map((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            data['code'] = doc.id;
-            return data;
-          })
-          .where((promo) {
-            if (statusFilter.value == 'all') return true;
-
-            final status = getStatusLabel(promo);
-            return status == statusFilter.value;
-          })
-          .toList();
+        final status = getStatusLabel(promo);
+        return status == statusFilter.value;
+      }).toList();
     } catch (e) {
       Get.snackbar(
         'admin.promos.error_title'.tr,
@@ -59,15 +46,14 @@ class AdminPromosController extends GetxController {
     try {
       isLoading.value = true;
 
-      await _firestore.collection('promo_codes').doc(code).set({
+      await AdminFirestoreService.createPromoCode(code, {
         'type': type,
         'value': value,
         'max_uses': maxUses,
         'used_count': 0,
         'min_trip_value': minTripValue,
-        'expiry_date': Timestamp.fromDate(expiryDate),
+        'expiry_date': expiryDate,
         'is_active': true,
-        'created_at': FieldValue.serverTimestamp(),
       });
 
       Get.snackbar(
@@ -92,15 +78,7 @@ class AdminPromosController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Convert DateTime to Timestamp if expiry_date is being updated
-      if (updates.containsKey('expiry_date') &&
-          updates['expiry_date'] is DateTime) {
-        updates['expiry_date'] = Timestamp.fromDate(
-          updates['expiry_date'] as DateTime,
-        );
-      }
-
-      await _firestore.collection('promo_codes').doc(code).update(updates);
+      await AdminFirestoreService.updatePromoCode(code, updates);
 
       Get.snackbar(
         'admin.promos.success_title'.tr,
@@ -124,7 +102,7 @@ class AdminPromosController extends GetxController {
     try {
       isLoading.value = true;
 
-      await _firestore.collection('promo_codes').doc(code).update({
+      await AdminFirestoreService.updatePromoCode(code, {
         'is_active': false,
       });
 
@@ -154,7 +132,8 @@ class AdminPromosController extends GetxController {
 
   String getStatusLabel(Map<String, dynamic> promo) {
     final isActive = promo['is_active'] as bool? ?? false;
-    final expiryDate = (promo['expiry_date'] as Timestamp?)?.toDate();
+    final expiryDate =
+        AdminFirestoreService.timestampToDateTime(promo['expiry_date']);
     final now = DateTime.now();
 
     if (!isActive) return 'inactive';

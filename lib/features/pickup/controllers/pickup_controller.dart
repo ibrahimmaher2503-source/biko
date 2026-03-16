@@ -87,25 +87,40 @@ class PickupController extends GetxController {
 
   // ==================== Initialization ====================
 
+  /// Intended dropoff forwarded from home (e.g. recent location tap).
+  /// Passed through to DropoffController when confirming pickup.
+  Map<String, dynamic>? _intendedDropoff;
+
   /// Check if route arguments contain a pre-filled location.
   /// If so, use it; otherwise, detect GPS.
   void _handleRouteArguments() {
     final args = Get.arguments;
-    if (args is Map<String, dynamic> &&
-        args.containsKey('pickup_lat') &&
-        args.containsKey('pickup_lng')) {
-      final place = PlaceModel(
-        name: (args['pickup_name'] as String?) ?? '',
-        address: (args['pickup_address'] as String?) ?? '',
-        lat: (args['pickup_lat'] as num).toDouble(),
-        lng: (args['pickup_lng'] as num).toDouble(),
-      );
-      selectedPlace.value = place;
-      mapCenter.value = place.latLng;
-      _animateCameraTo(place.latLng);
-    } else {
-      _detectGpsLocation();
+    if (args is Map<String, dynamic>) {
+      // Store intended dropoff for forwarding
+      if (args.containsKey('intended_dropoff_lat')) {
+        _intendedDropoff = {
+          'intended_dropoff_name': args['intended_dropoff_name'],
+          'intended_dropoff_address': args['intended_dropoff_address'],
+          'intended_dropoff_lat': args['intended_dropoff_lat'],
+          'intended_dropoff_lng': args['intended_dropoff_lng'],
+        };
+      }
+
+      // Pre-fill pickup if coordinates provided
+      if (args.containsKey('pickup_lat') && args.containsKey('pickup_lng')) {
+        final place = PlaceModel(
+          name: (args['pickup_name'] as String?) ?? '',
+          address: (args['pickup_address'] as String?) ?? '',
+          lat: (args['pickup_lat'] as num).toDouble(),
+          lng: (args['pickup_lng'] as num).toDouble(),
+        );
+        selectedPlace.value = place;
+        mapCenter.value = place.latLng;
+        _animateCameraTo(place.latLng);
+        return;
+      }
     }
+    _detectGpsLocation();
   }
 
   /// Detect GPS position, request permission, reverse-geocode.
@@ -353,10 +368,16 @@ class PickupController extends GetxController {
     // Cache this location for future fallback
     _cacheLastLocation(selectedPlace.value!.latLng);
 
-    Get.toNamed(
-      AppRoutes.setDropoff,
-      arguments: {'pickup': selectedPlace.value},
-    );
+    final dropoffArgs = <String, dynamic>{
+      'pickup': selectedPlace.value,
+    };
+
+    // Forward intended dropoff if present (from recent location tap)
+    if (_intendedDropoff != null) {
+      dropoffArgs.addAll(_intendedDropoff!);
+    }
+
+    Get.toNamed(AppRoutes.setDropoff, arguments: dropoffArgs);
   }
 
   /// Re-center map on current GPS position.

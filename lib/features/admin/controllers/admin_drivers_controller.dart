@@ -3,8 +3,8 @@ import 'package:biko/core/models/driver_profile_model.dart';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/user_model.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:biko/features/admin/services/admin_firestore_service.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AdminDriversController extends GetxController {
@@ -21,7 +21,10 @@ class AdminDriversController extends GetxController {
   final RxBool hasMore = true.obs;
   final RxInt currentPage = 1.obs;
   final int pageSize = 20;
-  DocumentSnapshot? lastDocument;
+  dynamic lastDocument;
+
+  /// Text controller for the search field in the drivers screen.
+  final TextEditingController searchTextController = TextEditingController();
 
   // Selected driver details
   final Rx<UserModel?> selectedDriver = Rx<UserModel?>(null);
@@ -49,6 +52,7 @@ class AdminDriversController extends GetxController {
   @override
   void onClose() {
     _searchDebounce?.dispose();
+    searchTextController.dispose();
     super.onClose();
   }
 
@@ -66,57 +70,27 @@ class AdminDriversController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Build query
-      Query query = FirebaseFirestore.instance
-          .collection('users')
-          .where('type', isEqualTo: 'driver');
+      final result = await AdminFirestoreService.getDriverUsersForAdmin(
+        search: searchQuery.value.isNotEmpty ? searchQuery.value : null,
+        startAfter: lastDocument,
+        pageSize: pageSize,
+      );
 
-      // Apply search filter
-      if (searchQuery.value.isNotEmpty) {
-        // Note: Firestore doesn't support case-insensitive search
-        // In production, use Algolia or similar for better search
-        query = query
-            .where('name', isGreaterThanOrEqualTo: searchQuery.value)
-            .where('name', isLessThanOrEqualTo: '${searchQuery.value}\uf8ff');
-      }
-
-      // Pagination
-      if (lastDocument != null) {
-        query = query.startAfterDocument(lastDocument!);
-      }
-
-      query = query.limit(pageSize);
-
-      final snapshot = await query.get();
-
-      if (snapshot.docs.isEmpty) {
+      if (result.items.isEmpty) {
         hasMore.value = false;
         return;
       }
 
-      if (snapshot.docs.length < pageSize) {
-        hasMore.value = false;
-      }
-
-      lastDocument = snapshot.docs.last;
+      hasMore.value = result.hasMore;
+      lastDocument = result.lastDocument;
 
       // Fetch driver profiles for each user
       final List<Map<String, dynamic>> loadedDrivers = [];
 
-      for (final doc in snapshot.docs) {
-        final user = UserModel.fromJson(doc.data() as Map<String, dynamic>);
+      for (final user in result.items) {
+        final profile = await AdminFirestoreService.getDriverProfile(user.uid);
 
-        // Fetch driver profile
-        final profileDoc = await FirebaseFirestore.instance
-            .collection('driver_profiles')
-            .doc(user.uid)
-            .get();
-
-        if (!profileDoc.exists) continue;
-
-        final profile = DriverProfileModel.fromJson(
-          profileDoc.data() as Map<String, dynamic>,
-        );
+        if (profile == null) continue;
 
         // Apply filters
         if (approvalFilter.value != 'all') {
@@ -166,42 +140,18 @@ class AdminDriversController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Fetch user
-      final userDoc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
-
-      if (!userDoc.exists) {
+      final user = await AdminFirestoreService.getUserById(uid);
+      if (user == null) {
         AppSnackbar.error('admin.drivers.driver_not_found'.tr);
         return;
       }
+      selectedDriver.value = user;
 
-      selectedDriver.value = UserModel.fromJson(
-        userDoc.data() as Map<String, dynamic>,
-      );
+      selectedDriverProfile.value =
+          await AdminFirestoreService.getDriverProfile(uid);
 
-      // Fetch driver profile
-      final profileDoc = await FirebaseFirestore.instance
-          .collection('driver_profiles')
-          .doc(uid)
-          .get();
-
-      if (profileDoc.exists) {
-        selectedDriverProfile.value = DriverProfileModel.fromJson(
-          profileDoc.data()!,
-        );
-      }
-
-      // Fetch documents
-      final documentsSnapshot = await FirebaseFirestore.instance
-          .collection('documents')
-          .where('driver_uid', isEqualTo: uid)
-          .get();
-
-      selectedDriverDocuments.value = documentsSnapshot.docs
-          .map((d) => DocumentModel.fromJson(d.data()))
-          .toList();
+      selectedDriverDocuments.value =
+          await AdminFirestoreService.getDriverDocuments(uid);
     } catch (e) {
       AppSnackbar.error(e.toString());
     } finally {
@@ -214,10 +164,10 @@ class AdminDriversController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = FirebaseFunctions.instance.httpsCallable(
+      await AdminFirestoreService.callCloudFunction(
         'approveDriver',
+        {'uid': uid},
       );
-      await callable.call({'uid': uid});
 
       AppSnackbar.success('admin.drivers.driver_approved'.tr);
 
@@ -238,23 +188,7 @@ class AdminDriversController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Update all documents to rejected status with reason
-      final documentsSnapshot = await FirebaseFirestore.instance
-          .collection('documents')
-          .where('driver_uid', isEqualTo: uid)
-          .get();
-
-      final batch = FirebaseFirestore.instance.batch();
-
-      for (final doc in documentsSnapshot.docs) {
-        batch.update(doc.reference, {
-          'status': 'rejected',
-          'admin_note': reason,
-          'updated_at': FieldValue.serverTimestamp(),
-        });
-      }
-
-      await batch.commit();
+      await AdminFirestoreService.batchRejectDocuments(uid, reason);
 
       AppSnackbar.success('admin.drivers.driver_rejected'.tr);
 
@@ -275,8 +209,10 @@ class AdminDriversController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = FirebaseFunctions.instance.httpsCallable('suspendUser');
-      await callable.call({'uid': uid, 'reason': reason});
+      await AdminFirestoreService.callCloudFunction(
+        'suspendUser',
+        {'uid': uid, 'reason': reason},
+      );
 
       AppSnackbar.success('admin.drivers.driver_suspended'.tr);
 
@@ -297,11 +233,7 @@ class AdminDriversController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Update user status to active
-      await FirebaseFirestore.instance.collection('users').doc(uid).update({
-        'status': 'active',
-        'updated_at': FieldValue.serverTimestamp(),
-      });
+      await AdminFirestoreService.updateUserStatus(uid, 'active');
 
       AppSnackbar.success('admin.drivers.driver_activated'.tr);
 

@@ -1,6 +1,8 @@
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/demo_theme_screen.dart';
 import 'package:biko/demo_widgets_screen.dart';
+import 'package:biko/features/auth/bindings/otp_verification_binding.dart';
+import 'package:biko/features/auth/bindings/phone_login_binding.dart';
 import 'package:biko/features/auth/bindings/profile_setup_binding.dart';
 import 'package:biko/features/auth/screens/otp_verification_screen.dart';
 import 'package:biko/features/auth/screens/phone_login_screen.dart';
@@ -68,11 +70,13 @@ class DriverPages {
     GetPage(
       name: AppRoutes.phoneLogin,
       page: () => const PhoneLoginScreen(),
+      binding: PhoneLoginBinding(),
       transition: Transition.fadeIn,
     ),
     GetPage(
       name: AppRoutes.otpVerification,
       page: OtpVerificationScreen.new,
+      binding: OtpVerificationBinding(),
       transition: Transition.rightToLeft,
     ),
     GetPage(

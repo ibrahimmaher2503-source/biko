@@ -57,7 +57,10 @@ class TripRequestsController extends GetxController {
       // Remove from list and navigate to pickup
       tripRequests.removeWhere((r) => r.tripId == request.tripId);
       _cancelCountdown(request.tripId);
-      Get.toNamed(AppRoutes.navigateToPickup, arguments: request.tripId);
+      Get.toNamed(
+        AppRoutes.navigateToPickup,
+        arguments: {'tripId': request.tripId},
+      );
     } catch (e) {
       debugPrint('❌ TripRequestsController.acceptTrip failed: $e');
       AppSnackbar.error('driver_trips.accept_failed'.tr);

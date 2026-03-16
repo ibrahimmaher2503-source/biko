@@ -39,6 +39,7 @@ class AdminApp extends StatelessWidget {
 
       // Theme configuration
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
 
       // Localization configuration
       translations: AppTranslations(),

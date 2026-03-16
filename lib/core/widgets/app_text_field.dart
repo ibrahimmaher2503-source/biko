@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// BikeRide branded text field widget with support for:
 /// - Material 3 styling following AppTheme
@@ -57,6 +58,8 @@ class AppTextField extends StatefulWidget {
     this.onEditingComplete,
     this.focusNode,
     this.autofocus = false,
+    this.inputFormatters,
+    this.suffixText,
   });
 
   /// Text editing controller (required)
@@ -113,6 +116,12 @@ class AppTextField extends StatefulWidget {
   /// Auto-focus this field when widget is built
   final bool autofocus;
 
+  /// Input formatters to restrict/format input (e.g., digits only)
+  final List<TextInputFormatter>? inputFormatters;
+
+  /// Suffix text displayed inside the field (e.g., "EGP", "%")
+  final String? suffixText;
+
   @override
   State<AppTextField> createState() => _AppTextFieldState();
 }
@@ -163,12 +172,14 @@ class _AppTextFieldState extends State<AppTextField> {
       onChanged: widget.onChanged,
       onEditingComplete: widget.onEditingComplete,
       autofocus: widget.autofocus,
+      inputFormatters: widget.inputFormatters,
       decoration: InputDecoration(
         labelText: widget.label,
         hintText: widget.hint,
         errorText: widget.errorText,
         prefixIcon: actualPrefixIcon != null ? Icon(actualPrefixIcon) : null,
         suffixIcon: actualSuffixIcon != null ? Icon(actualSuffixIcon) : null,
+        suffixText: widget.suffixText,
         // Error border styling is handled by theme InputDecorationTheme
         // but we can override specific properties here if needed
         floatingLabelBehavior: FloatingLabelBehavior.auto,

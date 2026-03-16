@@ -68,6 +68,7 @@ class TrackingController extends GetxController {
   // ==================== Internal ====================
 
   StreamSubscription<Map<String, dynamic>>? _tripSub;
+  StreamSubscription<Map<String, dynamic>>? _driverLocationSub;
 
   // ==================== Lifecycle ====================
 
@@ -76,11 +77,13 @@ class TrackingController extends GetxController {
     super.onInit();
     _extractArguments();
     _listenToTrip();
+    _listenToDriverLocation();
   }
 
   @override
   void onClose() {
     _tripSub?.cancel();
+    _driverLocationSub?.cancel();
     super.onClose();
   }
 
@@ -111,28 +114,42 @@ class TrackingController extends GetxController {
     );
   }
 
+  /// Listen to driver location from Realtime Database (sub-second updates).
+  void _listenToDriverLocation() {
+    if (tripId.value.isEmpty) return;
+
+    _driverLocationSub =
+        FirestoreService.listenToDriverLocation(tripId.value).listen(
+      (data) {
+        if (data.isEmpty) return;
+        _handleDriverLocationUpdate(data);
+      },
+    );
+  }
+
   // ==================== Status Updates ====================
 
-  void _handleTripUpdate(Map<String, dynamic> data) {
-    // Update driver location
+  /// Handle driver location update from RTDB.
+  void _handleDriverLocationUpdate(Map<String, dynamic> data) {
     final lat = (data['driver_lat'] as num?)?.toDouble();
     final lng = (data['driver_lng'] as num?)?.toDouble();
     if (lat != null && lng != null) {
       driverLocation.value = LatLng(lat, lng);
     }
 
-    // Update heading
     driverHeading.value = (data['driver_heading'] as num?)?.toDouble() ?? 0;
 
-    // Update ETA
     final etaMinutes = (data['eta_minutes'] as num?)?.toInt();
     if (etaMinutes != null) {
       eta.value = 'tracking.eta_minutes'.trParams({
         'minutes': etaMinutes.toString(),
       });
     }
+  }
 
-    // Update driver info
+  /// Handle trip data update from Firestore (status, driver info, locations).
+  void _handleTripUpdate(Map<String, dynamic> data) {
+    // Update driver info from Firestore
     driverName.value = (data['driver_name'] as String?) ?? '';
     driverPhotoUrl.value = data['driver_photo_url'] as String?;
     vehicleType.value = (data['vehicle_type'] as String?) ?? '';

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:biko/core/services/web_download.dart';
 import 'package:biko/features/admin/models/financial_summary_model.dart';
 import 'package:biko/features/admin/services/admin_firestore_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,7 +18,7 @@ class AdminFinancialController extends GetxController {
   final isLoading = false.obs;
   final hasMore = true.obs;
   final currentPage = 1.obs;
-  DocumentSnapshot? lastDocument;
+  dynamic lastDocument;
 
   @override
   void onInit() {
@@ -39,19 +38,10 @@ class AdminFinancialController extends GetxController {
     try {
       isLoading.value = true;
 
-      final tripsQuery = FirebaseFirestore.instance
-          .collection('trips')
-          .where('status', isEqualTo: 'completed')
-          .where('completed_at', isGreaterThanOrEqualTo: range.start)
-          .where('completed_at', isLessThanOrEqualTo: range.end);
-
-      final transactionsQuery = FirebaseFirestore.instance
-          .collection('transactions')
-          .where('created_at', isGreaterThanOrEqualTo: range.start)
-          .where('created_at', isLessThanOrEqualTo: range.end);
-
-      final tripsSnapshot = await tripsQuery.get();
-      final transactionsSnapshot = await transactionsQuery.get();
+      final tripsData =
+          await AdminFirestoreService.getCompletedTripsForSummary(range);
+      final transactionsData =
+          await AdminFirestoreService.getTransactionsInRange(range);
 
       double totalRevenue = 0.0;
       double totalCommission = 0.0;
@@ -59,8 +49,7 @@ class AdminFinancialController extends GetxController {
       double totalRefunds = 0.0;
 
       // Calculate from completed trips
-      for (final doc in tripsSnapshot.docs) {
-        final data = doc.data();
+      for (final data in tripsData) {
         final finalPrice = (data['final_price'] ?? 0.0).toDouble();
         final commission = (data['commission_amount'] ?? 0.0).toDouble();
         totalRevenue += finalPrice;
@@ -68,8 +57,7 @@ class AdminFinancialController extends GetxController {
       }
 
       // Calculate from transactions
-      for (final doc in transactionsSnapshot.docs) {
-        final data = doc.data();
+      for (final data in transactionsData) {
         final type = data['type'] as String?;
         final amount = (data['amount'] ?? 0.0).toDouble();
         final status = data['status'] as String?;
@@ -142,18 +130,12 @@ class AdminFinancialController extends GetxController {
 
   Future<void> loadCommissionBreakdown(DateTimeRange range) async {
     try {
-      final tripsQuery = FirebaseFirestore.instance
-          .collection('trips')
-          .where('status', isEqualTo: 'completed')
-          .where('completed_at', isGreaterThanOrEqualTo: range.start)
-          .where('completed_at', isLessThanOrEqualTo: range.end);
-
-      final snapshot = await tripsQuery.get();
+      final tripsData =
+          await AdminFirestoreService.getCompletedTripsForSummary(range);
 
       final Map<String, Map<String, dynamic>> breakdown = {};
 
-      for (final doc in snapshot.docs) {
-        final data = doc.data();
+      for (final data in tripsData) {
         final type = data['type'] as String? ?? 'ride';
         final finalPrice = (data['final_price'] ?? 0.0).toDouble();
         final commission = (data['commission_amount'] ?? 0.0).toDouble();
@@ -211,11 +193,10 @@ class AdminFinancialController extends GetxController {
         final amount = transaction['amount'] ?? 0.0;
         final method = transaction['method'] ?? '';
         final status = transaction['status'] ?? '';
-        final createdAt = transaction['created_at'] != null
-            ? (transaction['created_at'] as Timestamp)
-                  .toDate()
-                  .toIso8601String()
-            : '';
+        final createdAt = AdminFirestoreService.timestampToDateTime(
+              transaction['created_at'],
+            )?.toIso8601String() ??
+            '';
 
         csv.writeln('$id,$type,$uid,$amount,$method,$status,$createdAt');
       }
@@ -239,12 +220,6 @@ class AdminFinancialController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-  }
-
-  @override
-  // ignore: unnecessary_overrides
-  void onClose() {
-    super.onClose();
   }
 
   void applyFilters() {

@@ -1,9 +1,9 @@
 import 'package:biko/core/models/enums.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:biko/core/services/auth_service.dart';
 
 /// Represents the authenticated admin user.
 ///
-/// Constructed from [FirebaseAuth.instance.currentUser] + ID token claims.
+/// Constructed from [AuthUserInfo] + ID token claims.
 /// Not stored in Firestore — derived entirely from Firebase Auth.
 class AdminUserModel {
   const AdminUserModel({
@@ -14,17 +14,20 @@ class AdminUserModel {
     this.lastLoginAt,
   });
 
-  /// Construct from Firebase Auth current user + token claims.
-  factory AdminUserModel.fromFirebaseUser(
-    User user,
+  /// Construct from [AuthUserInfo] + token claims.
+  ///
+  /// Uses the service-layer wrapper instead of `firebase_auth.User`
+  /// to maintain RULE-06 compliance across models and controllers.
+  factory AdminUserModel.fromAuthUserInfo(
+    AuthUserInfo userInfo,
     Map<String, dynamic> claims,
   ) {
     return AdminUserModel(
-      uid: user.uid,
-      email: user.email ?? '',
-      displayName: user.displayName,
+      uid: userInfo.uid,
+      email: userInfo.email ?? '',
+      displayName: userInfo.displayName,
       role: AdminRole.fromJson(claims['role'] as String? ?? 'admin'),
-      lastLoginAt: user.metadata.lastSignInTime,
+      lastLoginAt: userInfo.lastSignInTime,
     );
   }
 

@@ -43,6 +43,7 @@ class TransactionModel {
     this.method = '',
     this.reference,
     this.tripId,
+    this.currency = 'EGP',
   });
 
   factory TransactionModel.fromMap(Map<String, dynamic> map) {
@@ -58,6 +59,7 @@ class TransactionModel {
       createdAt: map['created_at'] is Timestamp
           ? (map['created_at'] as Timestamp).toDate()
           : DateTime.now(),
+      currency: map['currency'] as String? ?? 'EGP',
     );
   }
 
@@ -70,11 +72,12 @@ class TransactionModel {
   final String? tripId;
   final TransactionStatus status;
   final DateTime createdAt;
+  final String currency;
 
   /// Formatted amount with sign
   String get formattedAmount {
     final sign = type == TransactionType.credit ? '+' : '-';
-    return '$sign${amount.toStringAsFixed(2)} EGP';
+    return '$sign${amount.toStringAsFixed(2)} $currency';
   }
 
   Map<String, dynamic> toMap() {
@@ -88,6 +91,7 @@ class TransactionModel {
       'trip_id': tripId,
       'status': status.toJson(),
       'created_at': FieldValue.serverTimestamp(),
+      'currency': currency,
     };
   }
 
@@ -101,6 +105,7 @@ class TransactionModel {
     String? tripId,
     TransactionStatus? status,
     DateTime? createdAt,
+    String? currency,
   }) {
     return TransactionModel(
       txnId: txnId ?? this.txnId,
@@ -112,6 +117,7 @@ class TransactionModel {
       tripId: tripId ?? this.tripId,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
+      currency: currency ?? this.currency,
     );
   }
 

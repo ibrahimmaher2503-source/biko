@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     // START: FlutterFire Configuration
@@ -8,7 +10,7 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
 }
 
-val localProperties = java.util.Properties()
+val localProperties = Properties()
 val localPropsFile = rootProject.file("local.properties")
 if (localPropsFile.exists()) {
     localPropsFile.inputStream().use { localProperties.load(it) }
@@ -20,6 +22,7 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -54,4 +57,8 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

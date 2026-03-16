@@ -3,8 +3,7 @@ import 'package:biko/core/models/trip_model.dart';
 import 'package:biko/core/models/user_model.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/admin/services/admin_firestore_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:get/get.dart';
 
@@ -132,52 +131,29 @@ class AdminTripsController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Load trip document
-      final tripDoc = await FirebaseFirestore.instance
-          .collection('trips')
-          .doc(tripId)
-          .get();
+      // Load trip document via service
+      final trip = await AdminFirestoreService.getTripById(tripId);
 
-      if (!tripDoc.exists || tripDoc.data() == null) {
+      if (trip == null) {
         AppSnackbar.error('admin.trips.trip_not_found_message'.tr);
         return;
       }
 
-      selectedTrip.value = TripModel.fromMap(tripDoc.data()!);
+      selectedTrip.value = trip;
 
-      // Load bids subcollection
-      final bidsSnapshot = await FirebaseFirestore.instance
-          .collection('trips')
-          .doc(tripId)
-          .collection('bids')
-          .orderBy('created_at', descending: false)
-          .get();
+      // Load bids subcollection via service
+      tripBids.value = await AdminFirestoreService.getTripBids(tripId);
 
-      tripBids.value = bidsSnapshot.docs.map((doc) => doc.data()).toList();
-
-      // Load customer user
-      if (selectedTrip.value!.customerUid.isNotEmpty) {
-        final customerDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(selectedTrip.value!.customerUid)
-            .get();
-
-        if (customerDoc.exists && customerDoc.data() != null) {
-          tripCustomer.value = UserModel.fromJson(customerDoc.data()!);
-        }
+      // Load customer user via service
+      if (trip.customerUid.isNotEmpty) {
+        tripCustomer.value =
+            await AdminFirestoreService.getUserById(trip.customerUid);
       }
 
-      // Load driver user (if assigned)
-      if (selectedTrip.value!.driverUid != null &&
-          selectedTrip.value!.driverUid!.isNotEmpty) {
-        final driverDoc = await FirebaseFirestore.instance
-            .collection('users')
-            .doc(selectedTrip.value!.driverUid)
-            .get();
-
-        if (driverDoc.exists && driverDoc.data() != null) {
-          tripDriver.value = UserModel.fromJson(driverDoc.data()!);
-        }
+      // Load driver user (if assigned) via service
+      if (trip.driverUid != null && trip.driverUid!.isNotEmpty) {
+        tripDriver.value =
+            await AdminFirestoreService.getUserById(trip.driverUid!);
       }
     } catch (e) {
       AppSnackbar.error('admin.trips.detail_error'.tr);
@@ -198,17 +174,16 @@ class AdminTripsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = FirebaseFunctions.instance.httpsCallable(
+      await AdminFirestoreService.callCloudFunction(
         'adjustWalletBalance',
+        {
+          'uid': customerUid,
+          'amount': amount,
+          'type': 'credit',
+          'reference': 'trip_credit_$tripId',
+          'reason': reason,
+        },
       );
-
-      await callable.call({
-        'uid': customerUid,
-        'amount': amount,
-        'type': 'credit',
-        'reference': 'trip_credit_$tripId',
-        'reason': reason,
-      });
 
       AppSnackbar.success('admin.trips.credit_issued_message'.tr);
 

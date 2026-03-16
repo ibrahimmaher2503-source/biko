@@ -2,15 +2,11 @@ import 'dart:async';
 import 'package:biko/core/models/document_model.dart';
 import 'package:biko/core/models/user_model.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:biko/features/admin/services/admin_firestore_service.dart';
 import 'package:get/get.dart';
 
 /// Controller for Admin Document Review feature.
 class AdminDocumentsController extends GetxController {
-  final _firestore = FirebaseFirestore.instance;
-  final _functions = FirebaseFunctions.instance;
-
   /// Map of driver UID to list of pending documents.
   final pendingDrivers = <String, List<DocumentModel>>{}.obs;
 
@@ -26,7 +22,7 @@ class AdminDocumentsController extends GetxController {
   /// Loading state.
   final isLoading = false.obs;
 
-  StreamSubscription<QuerySnapshot>? _documentsSubscription;
+  StreamSubscription<List<Map<String, dynamic>>>? _documentsSubscription;
 
   @override
   void onInit() {
@@ -44,16 +40,13 @@ class AdminDocumentsController extends GetxController {
   void loadPendingDrivers() {
     isLoading.value = true;
 
-    _documentsSubscription = _firestore
-        .collection('documents')
-        .where('status', isEqualTo: 'pending')
-        .snapshots()
-        .listen(
-          (snapshot) async {
+    _documentsSubscription =
+        AdminFirestoreService.streamPendingDocuments().listen(
+          (docMaps) async {
             final Map<String, List<DocumentModel>> groupedDocs = {};
 
-            for (final doc in snapshot.docs) {
-              final document = DocumentModel.fromJson(doc.data());
+            for (final docMap in docMaps) {
+              final document = DocumentModel.fromJson(docMap);
               final driverUid = document.driverUid;
 
               if (!groupedDocs.containsKey(driverUid)) {
@@ -63,12 +56,10 @@ class AdminDocumentsController extends GetxController {
 
               // Load driver user data if not already loaded.
               if (!driverUsers.containsKey(driverUid)) {
-                final userDoc = await _firestore
-                    .collection('users')
-                    .doc(driverUid)
-                    .get();
-                if (userDoc.exists && userDoc.data() != null) {
-                  driverUsers[driverUid] = UserModel.fromJson(userDoc.data()!);
+                final user =
+                    await AdminFirestoreService.getUserById(driverUid);
+                if (user != null) {
+                  driverUsers[driverUid] = user;
                 }
               }
             }
@@ -102,8 +93,10 @@ class AdminDocumentsController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = _functions.httpsCallable('approveDriver');
-      await callable.call({'driverUid': driverUid});
+      await AdminFirestoreService.callCloudFunction(
+        'approveDriver',
+        {'driverUid': driverUid},
+      );
 
       AppSnackbar.success('admin.documents.approve_confirm'.tr);
 
@@ -122,20 +115,7 @@ class AdminDocumentsController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Get all document IDs for this driver.
-      final docs = pendingDrivers[driverUid] ?? [];
-
-      // Update all documents to rejected status.
-      final batch = _firestore.batch();
-      for (final doc in docs) {
-        final docRef = _firestore.collection('documents').doc(doc.id);
-        batch.update(docRef, {
-          'status': 'rejected',
-          'admin_note': reason,
-          'updated_at': FieldValue.serverTimestamp(),
-        });
-      }
-      await batch.commit();
+      await AdminFirestoreService.batchRejectDocuments(driverUid, reason);
 
       AppSnackbar.success('admin.documents.reject_confirm'.tr);
 

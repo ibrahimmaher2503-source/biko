@@ -3,6 +3,7 @@ import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/user_model.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_text_field.dart';
 import 'package:biko/features/admin/controllers/admin_drivers_controller.dart';
 import 'package:biko/features/admin/utils/admin_status_colors.dart';
 import 'package:biko/features/admin/widgets/admin_data_table.dart';
@@ -67,20 +68,10 @@ class AdminDriversScreen extends GetView<AdminDriversController> {
                 // Search
                 Expanded(
                   flex: 2,
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: 'admin.drivers.search_hint'.tr,
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppTheme.radiusDefault,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                    ),
+                  child: AppTextField(
+                    controller: controller.searchTextController,
+                    hint: 'admin.drivers.search_hint'.tr,
+                    prefixIcon: Icons.search,
                     onChanged: (value) => controller.searchQuery.value = value,
                   ),
                 ),

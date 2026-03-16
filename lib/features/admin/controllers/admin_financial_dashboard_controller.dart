@@ -3,10 +3,10 @@ import 'package:biko/features/admin/models/finance/commission_breakdown_model.da
 import 'package:biko/features/admin/models/finance/daily_revenue_model.dart';
 import 'package:biko/features/admin/models/finance/financial_summary_model.dart';
 import 'package:biko/features/admin/models/finance/payment_stats_model.dart';
+import 'package:biko/features/admin/services/admin_firestore_service.dart';
 import 'package:biko/features/admin/services/commission_service.dart';
 import 'package:biko/features/admin/services/financial_service.dart';
 import 'package:biko/features/admin/services/revenue_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:get/get.dart';
@@ -76,15 +76,8 @@ class AdminFinancialDashboardController extends GetxController {
   }
 
   Future<void> _loadRecentTransactions() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('transactions')
-        .orderBy('created_at', descending: true)
-        .limit(20)
-        .get();
-
-    recentTransactions.value = snapshot.docs
-        .map((d) => d.data())
-        .toList();
+    recentTransactions.value =
+        await AdminFirestoreService.getRecentTransactions();
   }
 
   void setDateRange(String period) {

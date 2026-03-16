@@ -5,8 +5,6 @@ import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/admin/models/chart_data_point.dart';
 import 'package:biko/features/admin/models/dashboard_stats_model.dart';
 import 'package:biko/features/admin/services/admin_firestore_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -16,11 +14,8 @@ class AdminDashboardController extends GetxController {
   final recentTrips = <TripModel>[].obs;
   final isLoading = false.obs;
 
-  final _firestore = FirebaseFirestore.instance;
-  final _realtimeDb = FirebaseDatabase.instance;
-
   /// RTDB subscription for live driver count — cancelled in [onClose].
-  StreamSubscription<DatabaseEvent>? _driversOnlineSub;
+  StreamSubscription<int>? _driversOnlineSub;
 
   @override
   void onInit() {
@@ -58,7 +53,6 @@ class AdminDashboardController extends GetxController {
           DateTime(now.year, now.month, now.day).subtract(
             const Duration(days: 7),
           );
-      final weekStartTimestamp = Timestamp.fromDate(weekStart);
 
       // Trips today
       final tripsToday = await AdminFirestoreService.getTripsTodayCount();
@@ -67,39 +61,25 @@ class AdminDashboardController extends GetxController {
       final revenueToday = await AdminFirestoreService.getRevenueTodaySum();
 
       // Pending reviews (documents with status = 'pending')
-      final pendingDocsSnapshot = await _firestore
-          .collection('documents')
-          .where('status', isEqualTo: 'pending')
-          .get();
-      final pendingReviews = pendingDocsSnapshot.docs.length;
+      final pendingReviews =
+          await AdminFirestoreService.getPendingDocumentsCount();
 
       // Total customers
-      final customersSnapshot = await _firestore
-          .collection('users')
-          .where('type', isEqualTo: 'customer')
-          .count()
-          .get();
-      final totalCustomers = customersSnapshot.count ?? 0;
+      final totalCustomers =
+          await AdminFirestoreService.getUserCountByType('customer');
 
       // Total drivers
-      final driversSnapshot = await _firestore
-          .collection('users')
-          .where('type', isEqualTo: 'driver')
-          .count()
-          .get();
-      final totalDrivers = driversSnapshot.count ?? 0;
+      final totalDrivers =
+          await AdminFirestoreService.getUserCountByType('driver');
 
-      // Weekly trips
-      final weeklyTripsSnapshot = await _firestore
-          .collection('trips')
-          .where('created_at', isGreaterThanOrEqualTo: weekStartTimestamp)
-          .get();
-      final weeklyTrips = weeklyTripsSnapshot.docs.length;
+      // Weekly trips data
+      final weeklyTripsData =
+          await AdminFirestoreService.getTripsSince(weekStart);
+      final weeklyTrips = weeklyTripsData.length;
 
       // Weekly commission revenue
       double weeklyRevenue = 0.0;
-      for (final doc in weeklyTripsSnapshot.docs) {
-        final data = doc.data();
+      for (final data in weeklyTripsData) {
         if (data['status'] == 'completed') {
           weeklyRevenue +=
               (data['commission_amount'] as num?)?.toDouble() ?? 0.0;
@@ -107,21 +87,7 @@ class AdminDashboardController extends GetxController {
       }
 
       // Cancellation rate (last 100 trips)
-      final last100TripsSnapshot = await _firestore
-          .collection('trips')
-          .orderBy('created_at', descending: true)
-          .limit(100)
-          .get();
-
-      int cancelledCount = 0;
-      final int totalCount = last100TripsSnapshot.docs.length;
-      for (final doc in last100TripsSnapshot.docs) {
-        if (doc.data()['status'] == 'cancelled') {
-          cancelledCount++;
-        }
-      }
-      final cancellationRate =
-          totalCount > 0 ? (cancelledCount / totalCount) * 100 : 0.0;
+      final cancellationRate = await AdminFirestoreService.getCancellationRate();
 
       // Listen to drivers online from Realtime DB
       _listenToDriversOnline();
@@ -147,29 +113,9 @@ class AdminDashboardController extends GetxController {
     // Cancel previous subscription to avoid duplicates
     _driversOnlineSub?.cancel();
 
-    final ref = _realtimeDb.ref('driver_locations');
-    _driversOnlineSub = ref.onValue.listen((event) {
-      if (event.snapshot.value != null) {
-        final data = event.snapshot.value as Map<dynamic, dynamic>;
-        int onlineCount = 0;
-
-        data.forEach((key, value) {
-          if (value is Map && value['is_online'] == true) {
-            // Check if updated within last 5 minutes
-            final updatedAt = value['updated_at'] as int?;
-            if (updatedAt != null) {
-              final lastUpdate =
-                  DateTime.fromMillisecondsSinceEpoch(updatedAt);
-              final diff = DateTime.now().difference(lastUpdate);
-              if (diff.inMinutes < 5) {
-                onlineCount++;
-              }
-            }
-          }
-        });
-
-        stats.value = stats.value.copyWith(driversOnline: onlineCount);
-      }
+    _driversOnlineSub =
+        AdminFirestoreService.onlineDriversStream().listen((onlineCount) {
+      stats.value = stats.value.copyWith(driversOnline: onlineCount);
     });
   }
 
@@ -177,25 +123,20 @@ class AdminDashboardController extends GetxController {
     try {
       final now = DateTime.now();
       final thirtyDaysAgo = now.subtract(const Duration(days: 30));
-      final thirtyDaysAgoTimestamp = Timestamp.fromDate(thirtyDaysAgo);
 
       // Get all completed trips in last 30 days
-      final tripsSnapshot = await _firestore
-          .collection('trips')
-          .where('status', isEqualTo: 'completed')
-          .where(
-            'completed_at',
-            isGreaterThanOrEqualTo: thirtyDaysAgoTimestamp,
-          )
-          .orderBy('completed_at')
-          .get();
+      final tripsData = await AdminFirestoreService.getCompletedTripsInRange(
+        thirtyDaysAgo,
+        now,
+      );
 
       // Aggregate by day
       final Map<String, double> dailyRevenue = {};
 
-      for (final doc in tripsSnapshot.docs) {
-        final data = doc.data();
-        final completedAt = (data['completed_at'] as Timestamp?)?.toDate();
+      for (final data in tripsData) {
+        final completedAt = AdminFirestoreService.timestampToDateTime(
+          data['completed_at'],
+        );
         final commissionAmount =
             (data['commission_amount'] as num?)?.toDouble() ?? 0.0;
 
@@ -234,15 +175,7 @@ class AdminDashboardController extends GetxController {
 
   Future<void> loadRecentTrips() async {
     try {
-      final tripsSnapshot = await _firestore
-          .collection('trips')
-          .orderBy('created_at', descending: true)
-          .limit(10)
-          .get();
-
-      recentTrips.value = tripsSnapshot.docs
-          .map((doc) => TripModel.fromMap(doc.data()))
-          .toList();
+      recentTrips.value = await AdminFirestoreService.getRecentTrips();
     } catch (e) {
       AppSnackbar.error('admin.dashboard.trips_error'.tr);
     }

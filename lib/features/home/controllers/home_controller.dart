@@ -207,11 +207,11 @@ class HomeController extends GetxController {
   // ==================== Navigation Methods ====================
 
   void navigateToRideBooking() {
-    Get.toNamed(AppRoutes.createTrip);
+    Get.toNamed(AppRoutes.setPickup);
   }
 
   void navigateToDeliveryBooking() {
-    Get.toNamed(AppRoutes.createTrip, arguments: {'type': 'delivery'});
+    Get.toNamed(AppRoutes.setPickup, arguments: {'type': 'delivery'});
   }
 
   void navigateToWallet() {
@@ -226,14 +226,18 @@ class HomeController extends GetxController {
     Get.toNamed(AppRoutes.tripHistory);
   }
 
+  /// When user taps a recent location, go to pickup screen with the
+  /// recent location pre-filled as the intended dropoff. After pickup
+  /// is confirmed, PickupController forwards to dropoff (pre-filled),
+  /// then to price negotiation.
   void onRecentLocationTap(RecentLocation location) {
     Get.toNamed(
-      AppRoutes.createTrip,
+      AppRoutes.setPickup,
       arguments: {
-        'dropoff_name': location.name,
-        'dropoff_address': location.address,
-        'dropoff_lat': location.lat,
-        'dropoff_lng': location.lng,
+        'intended_dropoff_name': location.name,
+        'intended_dropoff_address': location.address,
+        'intended_dropoff_lat': location.lat,
+        'intended_dropoff_lng': location.lng,
       },
     );
   }

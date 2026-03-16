@@ -1,15 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import '../../../core/widgets/app_snackbar.dart';
 import '../models/referral_stats_model.dart';
+import '../services/admin_firestore_service.dart';
 import 'admin_auth_controller.dart';
 
 class AdminReferralController extends GetxController {
-  final _firestore = FirebaseFirestore.instance;
-  final _functions = FirebaseFunctions.instance;
   final _authController = Get.find<AdminAuthController>();
 
   final referralStats = const ReferralStatsModel().obs;
@@ -24,7 +21,7 @@ class AdminReferralController extends GetxController {
   final hasMore = true.obs;
   final currentPage = 0.obs;
 
-  DocumentSnapshot? lastDocument;
+  dynamic lastDocument;
 
   static const int pageSize = 20;
 
@@ -41,20 +38,17 @@ class AdminReferralController extends GetxController {
       isLoading.value = true;
 
       // Get total referrals
-      final totalSnapshot = await _firestore.collection('referrals').get();
-      final total = totalSnapshot.docs.length;
+      final allReferrals = await AdminFirestoreService.getAllReferrals();
+      final total = allReferrals.length;
 
       // Get rewarded referrals
-      final rewardedSnapshot = await _firestore
-          .collection('referrals')
-          .where('status', isEqualTo: 'rewarded')
-          .get();
-      final rewarded = rewardedSnapshot.docs.length;
+      final rewardedReferrals =
+          await AdminFirestoreService.getRewardedReferrals();
+      final rewarded = rewardedReferrals.length;
 
       // Calculate total payout
       double payout = 0.0;
-      for (final doc in rewardedSnapshot.docs) {
-        final data = doc.data();
+      for (final data in rewardedReferrals) {
         payout += (data['reward_amount'] as num?)?.toDouble() ?? 0.0;
       }
 
@@ -83,36 +77,20 @@ class AdminReferralController extends GetxController {
     try {
       isLoading.value = true;
 
-      Query query = _firestore
-          .collection('referrals')
-          .orderBy('created_at', descending: true)
-          .limit(pageSize);
+      final result = await AdminFirestoreService.getPaginatedReferrals(
+        startAfter: lastDocument,
+      );
 
-      if (lastDocument != null) {
-        query = query.startAfterDocument(lastDocument!);
-      }
-
-      final snapshot = await query.get();
-
-      if (snapshot.docs.isEmpty) {
+      if (result.items.isEmpty) {
         hasMore.value = false;
         return;
       }
 
-      if (snapshot.docs.length < pageSize) {
-        hasMore.value = false;
-      }
-
-      lastDocument = snapshot.docs.last;
+      hasMore.value = result.hasMore;
+      lastDocument = result.lastDocument;
       currentPage.value++;
 
-      final List<Map<String, dynamic>> newHistory = [];
-      for (final doc in snapshot.docs) {
-        final data = doc.data() as Map<String, dynamic>;
-        newHistory.add({'id': doc.id, ...data});
-      }
-
-      referralHistory.addAll(newHistory);
+      referralHistory.addAll(result.items);
     } catch (e) {
       AppSnackbar.error('Failed to load referral history');
     } finally {
@@ -122,12 +100,8 @@ class AdminReferralController extends GetxController {
 
   Future<void> _loadRewardConfig() async {
     try {
-      final configDoc = await _firestore
-          .collection('app_config')
-          .doc('config')
-          .get();
-      if (configDoc.exists) {
-        final data = configDoc.data()!;
+      final data = await AdminFirestoreService.getAppConfig();
+      if (data != null) {
         referrerReward.value =
             (data['referrer_reward'] as num?)?.toDouble() ?? 0.0;
         refereeReward.value =
@@ -154,8 +128,7 @@ class AdminReferralController extends GetxController {
     try {
       isLoading.value = true;
 
-      final callable = _functions.httpsCallable('updateAppConfig');
-      await callable.call({
+      await AdminFirestoreService.callCloudFunction('updateAppConfig', {
         'referrer_reward': referrerAmount,
         'referee_reward': refereeAmount,
       });

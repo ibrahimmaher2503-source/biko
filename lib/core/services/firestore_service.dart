@@ -716,6 +716,15 @@ class FirestoreService {
     });
   }
 
+  /// Listen to driver location updates from RTDB for customer tracking.
+  static Stream<Map<String, dynamic>> listenToDriverLocation(String tripId) {
+    return _realtimeDb.child('active_trips/$tripId').onValue.map((event) {
+      final data = event.snapshot.value;
+      if (data == null) return <String, dynamic>{};
+      return Map<String, dynamic>.from(data as Map);
+    });
+  }
+
   /// Write driver location to active trip in RTDB for customer tracking.
   static Future<void> updateActiveTripDriverLocation(
     String tripId,
