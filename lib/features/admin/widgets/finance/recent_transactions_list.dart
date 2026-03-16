@@ -113,7 +113,7 @@ class RecentTransactionsList extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppTheme.radiusFull),
       ),
       child: Text(
-        'admin.finance.status_$status'.tr,
+        'admin.finance.status_${status.toLowerCase()}'.tr,
         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: fg),
       ),
     );
