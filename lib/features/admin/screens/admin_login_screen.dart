@@ -86,6 +86,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         hint: 'admin@bikeride.eg',
                         prefixIcon: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
+                        autofocus: true,
+                        textInputAction: TextInputAction.next,
                         validator: (v) {
                           if (v == null || v.trim().isEmpty) {
                             return 'validation.required'.tr;
@@ -104,6 +106,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         label: 'admin.login.password'.tr,
                         prefixIcon: Icons.lock_outlined,
                         obscureText: true,
+                        textInputAction: TextInputAction.done,
                         validator: (v) {
                           if (v == null || v.isEmpty) {
                             return 'validation.required'.tr;

@@ -189,16 +189,16 @@ class AdminTopbar extends StatelessWidget {
       AppRoutes.adminApprovalQueue: 'admin.approvals.title',
       AppRoutes.adminDriverReview: 'admin.approvals.title',
       // Finance sub-screens
-      AppRoutes.adminFinancialDashboard: 'admin.sidebar.finance_dashboard',
-      AppRoutes.adminRevenue: 'admin.sidebar.revenue',
-      AppRoutes.adminCommissions: 'admin.sidebar.commissions',
-      AppRoutes.adminDriverEarnings: 'admin.sidebar.driver_earnings',
-      AppRoutes.adminDriverEarningsDetail: 'admin.sidebar.driver_earnings',
-      AppRoutes.adminWalletMonitoring: 'admin.sidebar.wallets',
-      AppRoutes.adminPaymentAnalytics: 'admin.sidebar.payment_analytics',
-      AppRoutes.adminTransactionMonitor: 'admin.sidebar.transactions',
-      AppRoutes.adminReports: 'admin.sidebar.reports',
-      AppRoutes.adminSettlement: 'admin.sidebar.settlement',
+      AppRoutes.adminFinancialDashboard: 'admin.finance.dashboard_title',
+      AppRoutes.adminRevenue: 'admin.revenue.title',
+      AppRoutes.adminCommissions: 'admin.commissions.title',
+      AppRoutes.adminDriverEarnings: 'admin.driver_earnings.title',
+      AppRoutes.adminDriverEarningsDetail: 'admin.driver_earnings.title',
+      AppRoutes.adminWalletMonitoring: 'admin.wallets.title',
+      AppRoutes.adminPaymentAnalytics: 'admin.payments.title',
+      AppRoutes.adminTransactionMonitor: 'admin.transactions.title',
+      AppRoutes.adminReports: 'admin.reports.title',
+      AppRoutes.adminSettlement: 'admin.settlement.title',
     };
     return map[route] ?? 'admin.dashboard.title';
   }

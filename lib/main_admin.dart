@@ -57,6 +57,16 @@ class AdminApp extends StatelessWidget {
         );
       },
 
+      // Keep AdminLayoutController.currentRoute in sync with every navigation,
+      // including Get.toNamed() calls that bypass navigateTo().
+      routingCallback: (routing) {
+        if (routing != null &&
+            Get.isRegistered<AdminLayoutController>()) {
+          Get.find<AdminLayoutController>()
+              .syncCurrentRoute(routing.current);
+        }
+      },
+
       // Routing configuration
       initialRoute: AppRoutes.adminLogin,
       getPages: AdminPages.pages,

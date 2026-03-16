@@ -181,6 +181,27 @@ class AdminLayoutController extends GetxController {
     return _sidebarItems.where((item) => !item.superAdminOnly).toList();
   }
 
+  @override
+  void onInit() {
+    super.onInit();
+    // Sync currentRoute with the actual active route on startup.
+    final initial = Get.currentRoute;
+    if (initial.isNotEmpty) {
+      currentRoute.value = initial;
+    }
+  }
+
+  /// Called by the global routing callback whenever a navigation occurs.
+  ///
+  /// Keeps [currentRoute] (and therefore the topbar title and sidebar
+  /// active-highlight) in sync even when navigation is triggered from
+  /// outside [navigateTo] (e.g. `Get.toNamed()` calls from screens).
+  void syncCurrentRoute(String route) {
+    if (route.isNotEmpty && route != currentRoute.value) {
+      currentRoute.value = route;
+    }
+  }
+
   /// Navigate to a route and update current route
   void navigateTo(String route) {
     if (currentRoute.value == route) return;
