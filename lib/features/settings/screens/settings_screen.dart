@@ -4,6 +4,7 @@ import 'package:biko/core/widgets/language_selector.dart';
 import 'package:biko/features/profile/controllers/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:biko/core/constants/app_constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Settings screen with language, theme, and notification preferences
@@ -111,7 +112,7 @@ class SettingsScreen extends GetView<ProfileController> {
                 icon: Icons.description_outlined,
                 title: 'settings.terms'.tr,
                 onTap: () => launchUrl(
-                  Uri.parse('https://biko.app/terms'),
+                  Uri.parse(AppConstants.termsUrl),
                   mode: LaunchMode.externalApplication,
                 ),
               ),
@@ -120,7 +121,7 @@ class SettingsScreen extends GetView<ProfileController> {
                 title: 'settings.privacy'.tr,
                 showDivider: false,
                 onTap: () => launchUrl(
-                  Uri.parse('https://biko.app/privacy'),
+                  Uri.parse(AppConstants.privacyUrl),
                   mode: LaunchMode.externalApplication,
                 ),
               ),
@@ -158,7 +159,7 @@ class _SectionHeader extends StatelessWidget {
     final ext = Theme.of(context).extension<AppColorsExtension>()!;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+      padding: const EdgeInsetsDirectional.fromSTEB(20, 24, 20, 8),
       child: Row(
         children: [
           Container(

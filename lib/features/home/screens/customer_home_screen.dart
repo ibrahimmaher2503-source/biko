@@ -33,9 +33,9 @@ class CustomerHomeScreen extends GetView<HomeController> {
         // Layer 2: Scrollable content
         Positioned.fill(
           child: SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: 20,
-              right: 20,
+            padding: EdgeInsetsDirectional.only(
+              start: 20,
+              end: 20,
               // Top padding: safe area + header height (~100dp)
               top: MediaQuery.of(context).padding.top + 100,
               bottom: 96, // space for bottom nav overlay

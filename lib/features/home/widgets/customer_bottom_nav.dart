@@ -24,11 +24,11 @@ class CustomerBottomNav extends GetView<HomeController> {
     final bottomPadding = MediaQuery.of(context).padding.bottom;
 
     return Container(
-      padding: EdgeInsets.only(
+      padding: EdgeInsetsDirectional.only(
         top: 12,
         bottom: bottomPadding + 8,
-        left: 24,
-        right: 24,
+        start: 24,
+        end: 24,
       ),
       decoration: BoxDecoration(
         color: ext.surfaceElevated,

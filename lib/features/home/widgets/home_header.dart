@@ -24,11 +24,11 @@ class HomeHeader extends GetView<HomeController> {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Container(
-          padding: EdgeInsets.only(
+          padding: EdgeInsetsDirectional.only(
             top: topPadding + 12,
             bottom: 16,
-            left: 20,
-            right: 20,
+            start: 20,
+            end: 20,
           ),
           decoration: BoxDecoration(
             color: ext.surfaceElevated.withValues(alpha: 0.95),
@@ -100,7 +100,7 @@ class HomeHeader extends GetView<HomeController> {
     return GestureDetector(
       onTap: onWalletTap,
       child: Container(
-        padding: const EdgeInsets.only(left: 8, right: 12, top: 6, bottom: 6),
+        padding: const EdgeInsetsDirectional.only(start: 8, end: 12, top: 6, bottom: 6),
         decoration: BoxDecoration(
           color: ext.surfaceContainer,
           borderRadius: BorderRadius.circular(9999),

@@ -32,4 +32,8 @@ class AppConstants {
   /// Phone number format (Egypt)
   static const String phonePrefix = '+20';
   static const int phoneLength = 11; // Including country code digits
+
+  /// External URLs
+  static const String termsUrl = 'https://biko.app/terms';
+  static const String privacyUrl = 'https://biko.app/privacy';
 }
