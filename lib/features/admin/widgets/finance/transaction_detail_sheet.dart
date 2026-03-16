@@ -73,7 +73,7 @@ class TransactionDetailSheet extends StatelessWidget {
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 20),
-              _detailRow(theme, colors, 'ID', id),
+              _detailRow(theme, colors, 'admin.finance.id'.tr, id),
               _detailRow(theme, colors, 'admin.finance.type'.tr, type),
               _detailRow(theme, colors, 'admin.finance.user'.tr, user),
               _detailRow(

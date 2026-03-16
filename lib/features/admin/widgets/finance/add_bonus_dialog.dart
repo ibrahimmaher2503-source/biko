@@ -37,6 +37,7 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
   late final TextEditingController _amountController;
   late final TextEditingController _reasonController;
   String? _reasonError;
+  String? _amountError;
 
   @override
   void initState() {
@@ -56,13 +57,23 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
     final amount = double.tryParse(_amountController.text);
     final reason = _reasonController.text.trim();
 
+    var hasError = false;
+
+    if (amount == null || amount <= 0) {
+      setState(() => _amountError = 'admin.finance.invalid_amount'.tr);
+      hasError = true;
+    } else {
+      setState(() => _amountError = null);
+    }
+
     if (reason.isEmpty) {
       setState(() => _reasonError = 'admin.finance.reason_required'.tr);
-      return;
+      hasError = true;
+    } else {
+      setState(() => _reasonError = null);
     }
-    setState(() => _reasonError = null);
 
-    if (amount == null || amount <= 0) return;
+    if (hasError) return;
 
     Get.back<Map<String, dynamic>>(
       result: {
@@ -108,6 +119,7 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
                   decimal: true,
                 ),
                 suffixIcon: Icons.payments_outlined,
+                errorText: _amountError,
               ),
               const SizedBox(height: 16),
               AppTextField(

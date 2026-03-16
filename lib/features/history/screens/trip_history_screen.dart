@@ -16,7 +16,7 @@ class TripHistoryScreen extends GetView<TripHistoryController> {
   void _showTripDetail(BuildContext context, TripModel trip) {
     final ext = Theme.of(context).extension<AppColorsExtension>()!;
     final theme = Theme.of(context);
-    final dateFormat = DateFormat('dd MMM yyyy, hh:mm a');
+    final dateFormat = DateFormat('dd MMM yyyy, hh:mm a', Get.locale?.languageCode);
     final isCancelled = trip.status.name == 'cancelled';
 
     Get.bottomSheet<void>(

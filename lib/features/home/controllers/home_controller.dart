@@ -89,8 +89,10 @@ class HomeController extends GetxController {
         walletBalance.value = walletModel?.balance ?? 0.0;
         walletLoaded.value = true;
       },
-      onError: (Object e) =>
-          debugPrint('[HomeController] wallet stream error: $e'),
+      onError: (Object e) {
+        debugPrint('[HomeController] wallet stream error: $e');
+        walletLoaded.value = false;
+      },
     );
   }
 

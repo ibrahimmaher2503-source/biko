@@ -98,7 +98,7 @@ class TrackingController extends GetxController {
     _loadingTimeoutTimer = Timer(const Duration(seconds: 15), () {
       if (isLoading.value) {
         isLoading.value = false;
-        errorMessage.value = 'tracking.timeout_error'.tr;
+        errorMessage.value = 'tracking.timeout_error';
         debugPrint('Tracking: loading timeout after 15s');
       }
     });
