@@ -133,7 +133,7 @@ class BackgroundLocationService extends GetxService {
 
   @override
   void onClose() {
-    stop();
+    unawaited(stop());
     super.onClose();
   }
 }

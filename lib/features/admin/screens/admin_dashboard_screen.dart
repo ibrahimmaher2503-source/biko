@@ -1,4 +1,5 @@
 import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/core/widgets/app_button.dart';
 import 'package:biko/core/widgets/app_card.dart';
 import 'package:biko/core/widgets/app_loading.dart';
 import 'package:biko/features/admin/controllers/admin_dashboard_controller.dart';
@@ -39,15 +40,12 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
                   alignment: AlignmentDirectional.centerEnd,
                   child: Obx(
                     () => controller.isLoading.value
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : IconButton(
-                            icon: const Icon(Icons.refresh),
+                        ? const AppLoading(size: 20)
+                        : AppButton(
+                            text: 'admin.dashboard.refresh'.tr,
                             onPressed: controller.refreshDashboard,
-                            tooltip: 'admin.dashboard.refresh'.tr,
+                            variant: ButtonVariant.outline,
+                            leadingIcon: Icons.refresh,
                           ),
                   ),
                 ),
