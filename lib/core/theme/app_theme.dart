@@ -20,6 +20,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     required this.successBg,
     required this.warning,
     required this.warningBg,
+    required this.accent,
   });
 
   /// Card backgrounds, elevated containers
@@ -58,6 +59,9 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
   /// Warning status background
   final Color warningBg;
 
+  /// Accent color for additional data categories (purple)
+  final Color accent;
+
   @override
   AppColorsExtension copyWith({
     Color? surfaceElevated,
@@ -72,6 +76,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     Color? successBg,
     Color? warning,
     Color? warningBg,
+    Color? accent,
   }) {
     return AppColorsExtension(
       surfaceElevated: surfaceElevated ?? this.surfaceElevated,
@@ -86,6 +91,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       successBg: successBg ?? this.successBg,
       warning: warning ?? this.warning,
       warningBg: warningBg ?? this.warningBg,
+      accent: accent ?? this.accent,
     );
   }
 
@@ -109,6 +115,7 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       successBg: Color.lerp(successBg, other.successBg, t)!,
       warning: Color.lerp(warning, other.warning, t)!,
       warningBg: Color.lerp(warningBg, other.warningBg, t)!,
+      accent: Color.lerp(accent, other.accent, t)!,
     );
   }
 }
@@ -368,6 +375,7 @@ class AppTheme {
           successBg: Color(0xFFDCFCE7),
           warning: Color(0xFFD97706),
           warningBg: Color(0xFFFEF3C7),
+          accent: Color(0xFF8B5CF6),
         ),
       ],
     );
@@ -553,6 +561,7 @@ class AppTheme {
           successBg: Color(0xFF14532D),
           warning: Color(0xFFFBBF24),
           warningBg: Color(0xFF78350F),
+          accent: Color(0xFFA78BFA),
         ),
       ],
     );

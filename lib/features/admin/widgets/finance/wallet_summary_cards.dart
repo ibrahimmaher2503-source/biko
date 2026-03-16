@@ -59,7 +59,7 @@ class WalletSummaryCards extends StatelessWidget {
             value: '${data.recentSpending.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.shopping_bag_outlined,
-            color: const Color(0xFF8B5CF6), // purple – no theme token
+            color: colors.accent,
           ),
         ),
       ],
