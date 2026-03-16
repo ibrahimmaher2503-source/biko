@@ -69,11 +69,7 @@ class AppSnackbar {
       message,
       backgroundColor: config.backgroundColor,
       colorText: Colors.white,
-      icon: Icon(
-        config.icon,
-        color: Colors.white,
-        size: 24,
-      ),
+      icon: Icon(config.icon, color: Colors.white, size: 24),
       duration: duration,
       isDismissible: true,
       dismissDirection: DismissDirection.horizontal,

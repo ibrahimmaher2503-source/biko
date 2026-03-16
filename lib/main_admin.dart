@@ -17,7 +17,12 @@ import 'package:get/get.dart';
 void main() async {
   await AppInitializer.init(
     appName: 'Admin',
-    appBuilder: () => const AdminApp(),
+    appBuilder: () {
+      // Register permanent admin controllers before building the widget tree.
+      Get.put(AdminAuthController(), permanent: true);
+      Get.put(AdminLayoutController(), permanent: true);
+      return const AdminApp();
+    },
   );
 }
 
@@ -27,13 +32,9 @@ class AdminApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Register permanent controllers
-    Get.put(AdminAuthController(), permanent: true);
-    Get.put(AdminLayoutController(), permanent: true);
-
     return GetMaterialApp(
       // App metadata
-      title: 'BikeRide Admin Panel',
+      title: 'admin.app_name'.tr,
       debugShowCheckedModeBanner: false,
 
       // Theme configuration
@@ -61,8 +62,8 @@ class AdminApp extends StatelessWidget {
       getPages: AdminPages.pages,
       unknownRoute: GetPage(
         name: AppRoutes.adminNotFound,
-        page: () => const Scaffold(
-          body: Center(child: Text('Page not found')),
+        page: () => Scaffold(
+          body: Center(child: Text('admin.not_found'.tr)),
         ),
       ),
     );

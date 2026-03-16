@@ -79,21 +79,15 @@ class AppLoading extends StatelessWidget {
         children: [
           // Semi-transparent overlay
           Positioned.fill(
-            child: ColoredBox(
-              color: Colors.black.withValues(alpha: 0.5),
-            ),
+            child: ColoredBox(color: Colors.black.withValues(alpha: 0.5)),
           ),
           // Centered spinner with message
-          Center(
-            child: contentWidget,
-          ),
+          Center(child: contentWidget),
         ],
       );
     } else {
       // Inline mode: simple centered spinner
-      return Center(
-        child: contentWidget,
-      );
+      return Center(child: contentWidget);
     }
   }
 }

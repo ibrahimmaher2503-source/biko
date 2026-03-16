@@ -97,11 +97,12 @@ class AppButton extends StatelessWidget {
     // Build appropriate button based on variant
     final button = _buildButton(context, content);
 
-    return SizedBox(
-      width: width,
-      height: height,
-      child: button,
-    );
+    // Only wrap in SizedBox if width is not infinite
+    // When width is infinite, let parent constraints determine width
+    if (width == double.infinity) {
+      return SizedBox(height: height, child: button);
+    }
+    return SizedBox(width: width, height: height, child: button);
   }
 
   /// Build button content (text with optional icons and loading indicator)
@@ -145,14 +146,13 @@ class AppButton extends StatelessWidget {
   /// Build appropriate button widget based on variant
   Widget _buildButton(BuildContext context, Widget content) {
     // Disable interaction when loading or disabled
-    final effectiveOnPressed = (isLoading || onPressed == null) ? null : onPressed;
+    final effectiveOnPressed = (isLoading || onPressed == null)
+        ? null
+        : onPressed;
 
     switch (variant) {
       case ButtonVariant.primary:
-        return FilledButton(
-          onPressed: effectiveOnPressed,
-          child: content,
-        );
+        return FilledButton(onPressed: effectiveOnPressed, child: content);
 
       case ButtonVariant.secondary:
         return FilledButton.tonal(
@@ -161,16 +161,10 @@ class AppButton extends StatelessWidget {
         );
 
       case ButtonVariant.outline:
-        return OutlinedButton(
-          onPressed: effectiveOnPressed,
-          child: content,
-        );
+        return OutlinedButton(onPressed: effectiveOnPressed, child: content);
 
       case ButtonVariant.text:
-        return TextButton(
-          onPressed: effectiveOnPressed,
-          child: content,
-        );
+        return TextButton(onPressed: effectiveOnPressed, child: content);
     }
   }
 }

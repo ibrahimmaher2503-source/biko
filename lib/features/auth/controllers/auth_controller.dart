@@ -7,7 +7,6 @@ import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 
 /// Global authentication controller — registered permanently in AppInitializer
@@ -29,7 +28,7 @@ class AuthController extends GetxController {
       _authState.value == AuthState.verifying ||
       _authState.value == AuthState.signingInWithGoogle ||
       _authState.value == AuthState.signingInWithFacebook;
-  bool get isAuthenticated => AuthService.currentUser != null;
+  bool get isAuthenticated => AuthService.currentUid != null;
   bool get isResendEnabled => secondsRemaining.value == 0;
 
   Timer? _timer;
@@ -63,6 +62,9 @@ class AuthController extends GetxController {
     // Dev bypass: skip Firebase OTP entirely
     if (DevConfig.skipOtp) {
       phoneNumber.value = cleaned;
+      // Note: No Firebase user is created in dev bypass mode.
+      // ProfileSetupController handles the null-uid case gracefully.
+      AppSnackbar.warning('Dev mode: OTP skipped — no Firebase auth');
       Get.offAllNamed(AppRoutes.profileSetup);
       return;
     }
@@ -83,21 +85,21 @@ class AuthController extends GetxController {
     );
   }
 
-  Future<void> _onAutoVerify(PhoneAuthCredential credential) async {
+  Future<void> _onAutoVerify(PhoneCredential credential) async {
     _authState.value = AuthState.verifying;
     try {
-      await AuthService.signInWithCredential(credential);
+      await AuthService.signInWithPhoneCredential(credential);
       _authState.value = AuthState.authenticated;
       await _navigateAfterAuth();
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       _authState.value = AuthState.error;
-      errorMessage.value = e.message ?? 'error.otp_failed'.tr;
+      errorMessage.value = 'error.otp_failed'.tr;
     }
   }
 
-  void _onVerificationFailed(FirebaseAuthException e) {
+  void _onVerificationFailed(String error) {
     _authState.value = AuthState.error;
-    errorMessage.value = e.message ?? 'error.otp_failed'.tr;
+    errorMessage.value = error;
   }
 
   void _onCodeSent(String verificationId, int? resendToken) {
@@ -114,7 +116,7 @@ class AuthController extends GetxController {
 
   /// Verify the user-entered OTP code
   Future<void> verifyOtp(String smsCode) async {
-    if (smsCode.length != 4) return;
+    if (smsCode.length != 6) return;
 
     _authState.value = AuthState.verifying;
     errorMessage.value = '';
@@ -127,9 +129,9 @@ class AuthController extends GetxController {
       _authState.value = AuthState.authenticated;
       _timer?.cancel();
       await _navigateAfterAuth();
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       _authState.value = AuthState.error;
-      errorMessage.value = e.message ?? 'error.otp_failed'.tr;
+      errorMessage.value = 'error.otp_failed'.tr;
     }
   }
 
@@ -206,13 +208,13 @@ class AuthController extends GetxController {
   // ==================== Post-Auth Navigation ====================
 
   Future<void> _navigateAfterAuth() async {
-    final user = AuthService.currentUser;
-    if (user == null) return;
+    final uid = AuthService.currentUid;
+    if (uid == null) return;
 
     // Initialize FCM: request permission, save token, set up listeners
     await FcmService.initialize();
 
-    final userModel = await FirestoreService.getUser(user.uid);
+    final userModel = await FirestoreService.getUser(uid);
 
     // New user or incomplete profile → profile setup
     if (userModel == null || !userModel.isProfileComplete) {

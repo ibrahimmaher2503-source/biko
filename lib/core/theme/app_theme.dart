@@ -94,8 +94,11 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
     if (other is! AppColorsExtension) return this;
     return AppColorsExtension(
       surfaceElevated: Color.lerp(surfaceElevated, other.surfaceElevated, t)!,
-      surfaceContainer:
-          Color.lerp(surfaceContainer, other.surfaceContainer, t)!,
+      surfaceContainer: Color.lerp(
+        surfaceContainer,
+        other.surfaceContainer,
+        t,
+      )!,
       border: Color.lerp(border, other.border, t)!,
       borderSubtle: Color.lerp(borderSubtle, other.borderSubtle, t)!,
       textMuted: Color.lerp(textMuted, other.textMuted, t)!,
@@ -278,7 +281,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
 
         // Border styles
         border: OutlineInputBorder(
@@ -345,10 +351,7 @@ class AppTheme {
       textTheme: _buildEnglishTextTheme(),
 
       // Icon theme
-      iconTheme: const IconThemeData(
-        color: Color(0xFF1C1B1F),
-        size: 24,
-      ),
+      iconTheme: const IconThemeData(color: Color(0xFF1C1B1F), size: 24),
 
       // Theme extensions
       extensions: const <ThemeExtension<dynamic>>[
@@ -463,7 +466,10 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: const Color(0xFF2D1316),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
 
         // Border styles
         border: OutlineInputBorder(
@@ -530,10 +536,7 @@ class AppTheme {
       textTheme: _buildEnglishTextTheme(forDarkMode: true),
 
       // Icon theme
-      iconTheme: const IconThemeData(
-        color: Color(0xFFE6E1E5),
-        size: 24,
-      ),
+      iconTheme: const IconThemeData(color: Color(0xFFE6E1E5), size: 24),
 
       // Theme extensions
       extensions: const <ThemeExtension<dynamic>>[
@@ -559,7 +562,9 @@ class AppTheme {
 
   /// Build English text theme using Plus Jakarta Sans
   static TextTheme _buildEnglishTextTheme({bool forDarkMode = false}) {
-    final textColor = forDarkMode ? const Color(0xFFE6E1E5) : const Color(0xFF1C1B1F);
+    final textColor = forDarkMode
+        ? const Color(0xFFE6E1E5)
+        : const Color(0xFF1C1B1F);
 
     return GoogleFonts.plusJakartaSansTextTheme(
       TextTheme(
@@ -653,7 +658,9 @@ class AppTheme {
 
   /// Build Arabic text theme using Cairo font
   static TextTheme buildArabicTextTheme({bool forDarkMode = false}) {
-    final textColor = forDarkMode ? const Color(0xFFE6E1E5) : const Color(0xFF1C1B1F);
+    final textColor = forDarkMode
+        ? const Color(0xFFE6E1E5)
+        : const Color(0xFF1C1B1F);
 
     return GoogleFonts.cairoTextTheme(
       TextTheme(

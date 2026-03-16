@@ -61,6 +61,40 @@ bikeride-release.keystore
 # Google Maps API key (iOS)
 ios/Flutter/Maps.xcconfig
 
+# Firebase config (inject via CI/CD secrets at build time)
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# AI editor rules (user-local)
+.cursorrules
+.windsurfrules
+
+# AI tool local session files
+.claude/*.local.*
+.claude/worktrees/
+
+# AI agent/tool workspace directories
+.agent/
+.agents/
+tools/
+
+# Temporary analysis files
+RALPH_LOOP_*.md
+RALPH_LOOP_PROMPT.md
+TODO_UPDATE_LIST.md
+admin_dashboard_analysis.md
+analyze_admin_dashboard.txt
+bikeride-driver-tasks.json
+codestyle.md
+driver_app_analysis.md
+user_app_analysis.md
+nul
+
+# Test, specs, and stitch design files (not tracked in repo)
+test/
+specs/
+stitch/
+
 # Helper scripts (keep for reference)
 !create_keystore.bat
 !check_keystore.bat

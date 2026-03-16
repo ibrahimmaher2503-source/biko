@@ -1,3 +1,4 @@
+import 'package:biko/core/services/background_location_service.dart';
 import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/services/firebase_service.dart';
 import 'package:biko/core/services/location_service.dart';
@@ -96,6 +97,11 @@ class AppInitializer {
       // Register AuthController as permanent (survives route changes)
       Get.put(AuthController(), permanent: true);
       Get.put(LocationService(), permanent: true);
+
+      // Register BackgroundLocationService for driver app only
+      if (appType == 'driver') {
+        Get.put(BackgroundLocationService(), permanent: true);
+      }
       debugPrint('✅ Global controllers registered');
     } catch (e) {
       debugPrint('❌ Error registering global controllers: $e');

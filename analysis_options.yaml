@@ -12,6 +12,7 @@ analyzer:
     - "**/*.freezed.dart"
     - "lib/generated/**"
     - "test/.test_coverage.dart"
+    - "test/**/goldens/**"  # Exclude golden test reference images from analysis
 
 linter:
   rules:

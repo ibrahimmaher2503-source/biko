@@ -30,20 +30,20 @@ class FirebaseService {
       );
 
       if (kDebugMode) {
-        print('✅ Firebase initialized successfully');
+        debugPrint('✅ Firebase initialized successfully');
       }
 
       return true;
     } on FirebaseException catch (e) {
       // Firebase-specific errors (already initialized, configuration issues, etc.)
       if (kDebugMode) {
-        print('❌ Firebase initialization failed: ${e.code} - ${e.message}');
+        debugPrint('❌ Firebase initialization failed: ${e.code} - ${e.message}');
       }
 
       // If Firebase is already initialized, consider it a success
       if (e.code == 'duplicate-app') {
         if (kDebugMode) {
-          print('ℹ️ Firebase already initialized');
+          debugPrint('ℹ️ Firebase already initialized');
         }
         return true;
       }
@@ -52,7 +52,7 @@ class FirebaseService {
     } catch (e) {
       // Generic errors (network issues, missing configuration files, etc.)
       if (kDebugMode) {
-        print('❌ Firebase initialization error: $e');
+        debugPrint('❌ Firebase initialization error: $e');
       }
       return false;
     }

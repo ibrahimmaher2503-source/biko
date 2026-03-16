@@ -26,7 +26,8 @@ class UserModel {
       name: json['name'] as String? ?? '',
       phone: json['phone'] as String? ?? '',
       email: json['email'] as String?,
-      authProviders: (json['auth_providers'] as List<dynamic>?)
+      authProviders:
+          (json['auth_providers'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           [],
@@ -77,7 +78,7 @@ class UserModel {
       'theme': theme,
       'avatar_url': avatarUrl,
       'fcm_token': fcmToken,
-      'created_at': FieldValue.serverTimestamp(),
+      'created_at': Timestamp.fromDate(createdAt),
     };
   }
 
@@ -117,6 +118,10 @@ class UserModel {
     );
   }
 
-  /// Whether the user's profile is considered complete
-  bool get isProfileComplete => name.trim().isNotEmpty;
+  /// Whether the user's profile is considered complete.
+  ///
+  /// Requires both name and phone to prevent social-login users
+  /// from bypassing profile setup without a phone number.
+  bool get isProfileComplete =>
+      name.trim().isNotEmpty && phone.trim().isNotEmpty;
 }

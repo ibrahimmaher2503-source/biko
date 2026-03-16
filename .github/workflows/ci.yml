@@ -1,0 +1,33 @@
+name: BikeRide CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  analyze:
+    name: Analyze & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: dart format --output none --set-exit-if-changed lib/
+
+  build-web:
+    name: Build Admin Web
+    runs-on: ubuntu-latest
+    needs: analyze
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - run: flutter pub get
+      - run: flutter build web --release --base-href /admin/ -t lib/main_admin.dart

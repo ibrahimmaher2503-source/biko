@@ -70,15 +70,9 @@ class AppCard extends StatelessWidget {
           ? InkWell(
               onTap: onTap,
               borderRadius: BorderRadius.circular(effectiveRadius),
-              child: Padding(
-                padding: EdgeInsets.all(padding),
-                child: child,
-              ),
+              child: Padding(padding: EdgeInsets.all(padding), child: child),
             )
-          : Padding(
-              padding: EdgeInsets.all(padding),
-              child: child,
-            ),
+          : Padding(padding: EdgeInsets.all(padding), child: child),
     );
   }
 }

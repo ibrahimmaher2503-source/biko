@@ -39,7 +39,6 @@ class AppDialog {
         cancelText: cancelText ?? 'cancel'.tr,
         isDestructive: isDestructive,
       ),
-      barrierDismissible: true,
     );
     return result ?? false;
   }
@@ -56,7 +55,6 @@ class AppDialog {
         content: content,
         buttonText: buttonText ?? 'ok'.tr,
       ),
-      barrierDismissible: true,
     );
   }
 }
@@ -81,13 +79,8 @@ class _ConfirmDialog extends StatelessWidget {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      title: Text(
-        title,
-        style: theme.textTheme.titleLarge,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(title, style: theme.textTheme.titleLarge),
       content: Text(
         content,
         style: theme.textTheme.bodyMedium?.copyWith(
@@ -103,13 +96,23 @@ class _ConfirmDialog extends StatelessWidget {
           height: 40,
         ),
         const SizedBox(width: AppConstants.spacingSm),
-        AppButton(
-          text: confirmText,
-          onPressed: () => Get.back(result: true),
-          variant: isDestructive ? ButtonVariant.primary : ButtonVariant.primary,
-          width: null,
-          height: 40,
-        ),
+        isDestructive
+            ? TextButton(
+                onPressed: () => Get.back(result: true),
+                child: Text(
+                  confirmText,
+                  style: TextStyle(
+                    color: theme.colorScheme.error,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              )
+            : AppButton(
+                text: confirmText,
+                onPressed: () => Get.back(result: true),
+                width: null,
+                height: 40,
+              ),
       ],
       actionsPadding: const EdgeInsetsDirectional.fromSTEB(
         AppConstants.spacingLg,
@@ -137,13 +140,8 @@ class _InfoDialog extends StatelessWidget {
     final theme = Theme.of(context);
 
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      title: Text(
-        title,
-        style: theme.textTheme.titleLarge,
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      title: Text(title, style: theme.textTheme.titleLarge),
       content: Text(
         content,
         style: theme.textTheme.bodyMedium?.copyWith(
@@ -153,8 +151,7 @@ class _InfoDialog extends StatelessWidget {
       actions: [
         AppButton(
           text: buttonText,
-          onPressed: () => Get.back(),
-          variant: ButtonVariant.primary,
+          onPressed: Get.back,
           width: null,
           height: 40,
         ),

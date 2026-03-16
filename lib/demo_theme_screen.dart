@@ -90,10 +90,7 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
   }
 
   Widget _buildSectionHeader(String title, ThemeData theme) {
-    return Text(
-      title,
-      style: theme.textTheme.headlineMedium,
-    );
+    return Text(title, style: theme.textTheme.headlineMedium);
   }
 
   Widget _buildColorGrid(ColorScheme colorScheme) {
@@ -200,10 +197,7 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                style.$1,
-                style: style.$2,
-              ),
+              Text(style.$1, style: style.$2),
               Text(
                 '${style.$2?.fontSize?.toStringAsFixed(0)}sp • '
                 '${_getFontWeightName(style.$2?.fontWeight)}',
@@ -232,20 +226,11 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        ElevatedButton(
-          onPressed: () {},
-          child: const Text('Elevated Button'),
-        ),
+        ElevatedButton(onPressed: () {}, child: const Text('Elevated Button')),
         const SizedBox(height: 12),
-        OutlinedButton(
-          onPressed: () {},
-          child: const Text('Outlined Button'),
-        ),
+        OutlinedButton(onPressed: () {}, child: const Text('Outlined Button')),
         const SizedBox(height: 12),
-        TextButton(
-          onPressed: () {},
-          child: const Text('Text Button'),
-        ),
+        TextButton(onPressed: () {}, child: const Text('Text Button')),
         const SizedBox(height: 12),
         TextField(
           decoration: InputDecoration(
@@ -321,9 +306,7 @@ class _DemoThemeScreenState extends State<DemoThemeScreen> {
           Text('Theme Mode: ${_isDarkMode ? "Dark" : "Light"}'),
           Text('Language: ${_isArabic ? "Arabic (العربية)" : "English"}'),
           Text('Text Direction: ${_isArabic ? "RTL" : "LTR"}'),
-          Text(
-            'Font Family: ${_isArabic ? "Cairo" : "Plus Jakarta Sans"}',
-          ),
+          Text('Font Family: ${_isArabic ? "Cairo" : "Plus Jakarta Sans"}'),
         ],
       ),
     );
