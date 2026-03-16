@@ -4,6 +4,7 @@ import 'dart:ui';
 
 import 'package:biko/core/models/user_model.dart';
 import 'package:biko/core/services/auth_service.dart';
+import 'package:biko/core/services/fcm_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/services/storage_service.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
@@ -11,6 +12,7 @@ import 'package:biko/features/auth/controllers/auth_controller.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Controller for profile and settings screens
 class ProfileController extends GetxController {
@@ -38,6 +40,7 @@ class ProfileController extends GetxController {
       _uid = AuthService.currentUid ?? '';
     }
     _listenToUser();
+    _loadNotificationPreference();
   }
 
   @override
@@ -124,10 +127,35 @@ class ProfileController extends GetxController {
     }
   }
 
-  /// Toggle push notifications on/off
-  void toggleNotifications() {
-    notificationsEnabled.value = !notificationsEnabled.value;
-    // TODO: persist preference and update FCM token registration
+  /// Load persisted notification preference from SharedPreferences
+  Future<void> _loadNotificationPreference() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      notificationsEnabled.value =
+          prefs.getBool('notifications_enabled') ?? true;
+    } catch (e) {
+      debugPrint('❌ ProfileController._loadNotificationPreference: $e');
+    }
+  }
+
+  /// Toggle push notifications on/off — persists preference and updates FCM
+  Future<void> toggleNotifications() async {
+    final newValue = !notificationsEnabled.value;
+    notificationsEnabled.value = newValue;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('notifications_enabled', newValue);
+
+      if (newValue) {
+        // Re-register FCM token so server can send notifications again
+        await FcmService.initialize();
+      } else {
+        // Delete FCM token so server stops sending notifications
+        await FcmService.clearToken();
+      }
+    } catch (e) {
+      debugPrint('❌ ProfileController.toggleNotifications: $e');
+    }
   }
 
   /// Logout — delegates to AuthController for proper Firebase sign-out

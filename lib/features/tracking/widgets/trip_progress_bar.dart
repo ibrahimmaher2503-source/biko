@@ -23,6 +23,8 @@ class TripProgressBar extends StatelessWidget {
         return 0.85;
       case TrackingStatus.completed:
         return 1.0;
+      case TrackingStatus.cancelled:
+        return 0.0;
     }
   }
 
@@ -53,14 +55,14 @@ class TripProgressBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'pickup.select_prompt'.tr,
+                'driver_trips.pickup'.tr,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: colors.textMuted,
                   fontSize: 10,
                 ),
               ),
               Text(
-                'dropoff.confirm_dropoff'.tr,
+                'driver_trips.dropoff'.tr,
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: colors.textMuted,
                   fontSize: 10,

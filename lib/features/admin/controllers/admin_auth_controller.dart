@@ -1,6 +1,7 @@
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/features/admin/models/admin_user_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
@@ -95,7 +96,21 @@ class AdminAuthController extends GetxController {
       Get.offAllNamed(AppRoutes.adminDashboard);
     } catch (e) {
       debugPrint('AdminAuthController.signIn failed: $e');
-      errorMessage.value = 'admin.login.error'.tr;
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'user-not-found':
+          case 'wrong-password':
+          case 'invalid-credential':
+          case 'invalid-email':
+            errorMessage.value = 'admin.login.error_invalid'.tr;
+          case 'network-request-failed':
+            errorMessage.value = 'admin.login.error_network'.tr;
+          default:
+            errorMessage.value = 'admin.login.error'.tr;
+        }
+      } else {
+        errorMessage.value = 'admin.login.error'.tr;
+      }
       isAuthenticated.value = false;
     } finally {
       isLoading.value = false;

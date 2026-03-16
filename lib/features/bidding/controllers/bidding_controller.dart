@@ -1,4 +1,5 @@
 import 'package:biko/core/models/directions_result.dart';
+import 'package:flutter/foundation.dart';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/place_model.dart';
 import 'package:biko/core/models/trip_model.dart';
@@ -109,7 +110,8 @@ class BiddingController extends GetxController {
 
       // Calculate suggested price
       _calculateSuggestedPrice(directions);
-    } catch (_) {
+    } catch (e) {
+      debugPrint('❌ BiddingController._loadRouteAndPricing (parallel): $e');
       // If parallel fetch fails, retry both directions and pricing
       try {
         // Retry pricing config
@@ -129,7 +131,8 @@ class BiddingController extends GetxController {
         );
         directionsResult.value = directions;
         _calculateSuggestedPrice(directions);
-      } catch (_) {
+      } catch (retryError) {
+        debugPrint('❌ BiddingController._loadRouteAndPricing (retry): $retryError');
         AppSnackbar.error('trip.create_failed'.tr);
       }
     } finally {
@@ -243,7 +246,8 @@ class BiddingController extends GetxController {
           'dropoff_address': dropoff.value?.address ?? '',
         },
       );
-    } catch (_) {
+    } catch (e) {
+      debugPrint('❌ BiddingController.submitTrip: $e');
       AppSnackbar.error('trip.create_failed'.tr);
     } finally {
       isSubmitting.value = false;

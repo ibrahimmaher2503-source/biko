@@ -3,6 +3,7 @@ import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_button.dart';
 import 'package:biko/core/widgets/app_loading.dart';
 import 'package:biko/core/widgets/app_menu_item.dart';
+import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/profile/controllers/profile_controller.dart';
 import 'package:biko/features/profile/widgets/profile_header.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +46,7 @@ class ProfileScreen extends GetView<ProfileController> {
                 icon: Icons.person_outline_rounded,
                 title: 'profile.edit_profile'.tr,
                 onTap: () => Get.toNamed(
-                  AppRoutes.customerProfile,
-                  arguments: {'screen': 'edit', 'uid': userData.uid},
+                  '${AppRoutes.customerProfile}/edit',
                 ),
               ),
               AppMenuItem(
@@ -67,7 +67,7 @@ class ProfileScreen extends GetView<ProfileController> {
               AppMenuItem(
                 icon: Icons.help_outline_rounded,
                 title: 'profile.help'.tr,
-                onTap: () {},
+                onTap: () => AppSnackbar.info('home.coming_soon'.tr),
               ),
               AppMenuItem(
                 icon: Icons.logout_rounded,

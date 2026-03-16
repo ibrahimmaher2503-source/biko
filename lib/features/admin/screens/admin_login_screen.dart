@@ -118,15 +118,34 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                         if (_controller.errorMessage.value.isEmpty) {
                           return const SizedBox.shrink();
                         }
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8, bottom: 8),
-                          child: Text(
-                            _controller.errorMessage.value,
-                            style: TextStyle(
-                              color: theme.colorScheme.error,
-                              fontSize: 13,
-                            ),
-                            textAlign: TextAlign.center,
+                        return Container(
+                          margin: const EdgeInsets.only(top: 8, bottom: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 10,
+                          ),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.errorContainer,
+                            borderRadius: BorderRadius.circular(AppTheme.radiusDefault),
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(
+                                Icons.error_outline,
+                                color: theme.colorScheme.error,
+                                size: 16,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  _controller.errorMessage.value,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onErrorContainer,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       }),

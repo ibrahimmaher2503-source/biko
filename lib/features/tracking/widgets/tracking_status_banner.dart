@@ -64,6 +64,8 @@ class TrackingStatusBanner extends StatelessWidget {
         return colors.warning;
       case TrackingStatus.completed:
         return colors.success;
+      case TrackingStatus.cancelled:
+        return Theme.of(context).colorScheme.error;
     }
   }
 
@@ -79,6 +81,8 @@ class TrackingStatusBanner extends StatelessWidget {
         return Icons.flag;
       case TrackingStatus.completed:
         return Icons.done_all;
+      case TrackingStatus.cancelled:
+        return Icons.cancel;
     }
   }
 }
