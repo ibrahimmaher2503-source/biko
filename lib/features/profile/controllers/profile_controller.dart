@@ -144,9 +144,6 @@ class ProfileController extends GetxController {
     final oldValue = notificationsEnabled.value;
     notificationsEnabled.value = newValue;
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('notifications_enabled', newValue);
-
       if (newValue) {
         // Re-register FCM token so server can send notifications again
         await FcmService.initialize();
@@ -154,6 +151,10 @@ class ProfileController extends GetxController {
         // Delete FCM token so server stops sending notifications
         await FcmService.clearToken();
       }
+
+      // Persist only after FCM operation succeeds
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('notifications_enabled', newValue);
     } catch (e) {
       notificationsEnabled.value = oldValue;
       debugPrint('❌ ProfileController.toggleNotifications: $e');

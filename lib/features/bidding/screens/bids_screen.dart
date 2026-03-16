@@ -31,8 +31,12 @@ class BidsScreen extends GetView<BidsController> {
           isDestructive: true,
         );
         if (confirmed) {
-          await controller.cancelTrip();
-          Get.back();
+          final success = await controller.cancelTrip();
+          if (success) {
+            Get.back();
+          } else {
+            AppSnackbar.error('common.error'.tr);
+          }
         }
       },
       child: Scaffold(

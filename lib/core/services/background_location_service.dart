@@ -25,6 +25,7 @@ class BackgroundLocationService extends GetxService {
   StreamSubscription<Position>? _locationSubscription;
   Timer? _publishTimer;
   Position? _lastPosition;
+  DatabaseReference? _disconnectRef;
 
   /// Whether the driver is currently online and publishing location
   final isOnline = false.obs;
@@ -68,8 +69,8 @@ class BackgroundLocationService extends GetxService {
 
     // Register onDisconnect handler so RTDB marks driver offline if the
     // connection is lost unexpectedly (network drop, app killed, etc.)
-    final disconnectRef = _realtimeDb.child('driver_locations/$uid');
-    await disconnectRef.onDisconnect().update({
+    _disconnectRef = _realtimeDb.child('driver_locations/$uid');
+    await _disconnectRef!.onDisconnect().update({
       'is_online': false,
       'last_seen': ServerValue.timestamp,
     });
@@ -87,6 +88,10 @@ class BackgroundLocationService extends GetxService {
     await _locationSubscription?.cancel();
     _locationSubscription = null;
     _lastPosition = null;
+
+    // Cancel onDisconnect handler since we're going offline intentionally
+    await _disconnectRef?.onDisconnect().cancel();
+    _disconnectRef = null;
 
     if (uid != null) {
       await _setOnlineStatus(uid, false);
