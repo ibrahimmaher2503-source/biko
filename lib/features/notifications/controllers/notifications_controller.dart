@@ -78,16 +78,24 @@ class NotificationsController extends GetxController {
     final uid = AuthService.currentUid;
     if (uid == null) return;
 
+    // Save original state for rollback
+    final originalList = List<NotificationModel>.from(notifications);
+    final originalUnread = unreadCount.value;
+
+    // Optimistic update
+    notifications.value = notifications
+        .map((n) => n.copyWith(isRead: true))
+        .toList();
+    unreadCount.value = 0;
+
     try {
       await FirestoreService.markAllNotificationsRead(uid);
-      // Optimistic update
-      notifications.value = notifications
-          .map((n) => n.copyWith(isRead: true))
-          .toList();
-      unreadCount.value = 0;
       AppSnackbar.success('notifications.all_read'.tr);
     } catch (e) {
+      // Rollback on failure
       debugPrint('[NotificationsController] markAllAsRead failed: $e');
+      notifications.value = originalList;
+      unreadCount.value = originalUnread;
       AppSnackbar.error('error.operation_failed'.tr);
     }
   }

@@ -23,9 +23,11 @@ class ChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final args = Get.arguments as Map<String, dynamic>?;
-    _tripId = args?['tripId'] as String? ?? '';
-    _currentUid = args?['uid'] as String? ?? '';
+    final args = Get.arguments;
+    if (args is Map<String, dynamic>) {
+      _tripId = args['tripId'] as String? ?? '';
+      _currentUid = args['uid'] as String? ?? '';
+    }
 
     if (_tripId.isNotEmpty) {
       _listenToMessages();

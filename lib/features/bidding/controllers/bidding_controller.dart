@@ -227,6 +227,8 @@ class BiddingController extends GetxController {
         paymentMethod: paymentMethod.value,
         distanceKm: directionsResult.value?.distanceKm,
         durationMinutes: directionsResult.value?.durationMins.toInt(),
+        passengerCount: passengerCount.value,
+        note: tripNote.value.isNotEmpty ? tripNote.value : null,
         createdAt: DateTime.now(),
       );
 
