@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
@@ -137,7 +138,7 @@ class ProfileSetupController extends GetxController {
 
       // Determine the app type for navigation
       final user = await FirestoreService.getUser(uid);
-      if (user != null && user.type.name == 'driver') {
+      if (user != null && user.type == UserType.driver) {
         Get.offAllNamed(AppRoutes.driverRegistration);
       } else {
         Get.offAllNamed(AppRoutes.customerHome);

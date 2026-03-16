@@ -50,7 +50,9 @@ class BidsController extends GetxController {
     super.onInit();
     _extractArguments();
     _listenToBids();
-    _startTimeoutTimer();
+    if (tripId.value.isNotEmpty) {
+      _startTimeoutTimer();
+    }
   }
 
   @override

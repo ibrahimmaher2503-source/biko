@@ -92,10 +92,10 @@ class SetDropoffScreen extends GetView<DropoffController> {
             () =>
                 controller.isPoorGpsAccuracy.value &&
                     !controller.isSearchActive.value
-                ? Positioned(
+                ? PositionedDirectional(
                     bottom: 230,
-                    left: 16,
-                    right: 16,
+                    start: 16,
+                    end: 16,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,

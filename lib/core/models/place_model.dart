@@ -34,7 +34,12 @@ class PlaceModel {
     ];
     final address = parts.isNotEmpty ? parts.join(', ') : '';
 
-    return PlaceModel(name: name, address: address, lat: lat, lng: lng);
+    return PlaceModel(
+      name: name,
+      address: address,
+      lat: lat,
+      lng: lng,
+    );
   }
 
   /// Create from Google Places API detail result
@@ -92,11 +97,17 @@ class PlaceModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is PlaceModel && other.placeId == placeId;
+    if (other is! PlaceModel) return false;
+    if (placeId.isNotEmpty && other.placeId.isNotEmpty) {
+      return other.placeId == placeId;
+    }
+    return other.lat == lat && other.lng == lng && other.name == name;
   }
 
   @override
-  int get hashCode => placeId.hashCode;
+  int get hashCode => placeId.isNotEmpty
+      ? placeId.hashCode
+      : Object.hash(lat, lng, name);
 }
 
 /// Autocomplete result from Google Places API

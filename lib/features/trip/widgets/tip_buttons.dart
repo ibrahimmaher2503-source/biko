@@ -7,13 +7,15 @@ class TipButtons extends StatelessWidget {
   const TipButtons({
     required this.selectedAmount,
     required this.onAmountSelected,
+    this.presets = const [5, 10, 15, 20],
     super.key,
   });
 
   final double? selectedAmount;
   final ValueChanged<double?> onAmountSelected;
 
-  static const List<double> _presets = [5, 10, 15, 20];
+  /// Tip preset amounts (loaded from app_config, with safe fallback).
+  final List<double> presets;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +62,7 @@ class TipButtons extends StatelessWidget {
               onTap: () => onAmountSelected(null),
             ),
             // Preset amounts
-            ..._presets.map(
+            ...presets.map(
               (amount) => _TipChip(
                 label: '${amount.toInt()} ${'common.egp'.tr}',
                 isSelected: selectedAmount == amount,

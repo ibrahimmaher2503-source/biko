@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 /// Centralized translations for BikeRide multi-app architecture
 ///
 /// Manages localization for Arabic and English across all three apps
-/// (Customer, Driver, Admin). Translations are loaded from JSON files
-/// in assets/lang/ directory.
+/// (Customer, Driver, Admin). Translations are defined inline as
+/// a GetX Translations class per project guidelines.
 ///
 /// Usage with GetX:
 /// ```dart
