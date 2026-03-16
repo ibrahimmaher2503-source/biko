@@ -132,8 +132,8 @@ class BackgroundLocationService extends GetxService {
   }
 
   @override
-  Future<void> onClose() async {
-    await stop();
+  void onClose() {
+    stop();
     super.onClose();
   }
 }
