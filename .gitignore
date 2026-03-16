@@ -90,6 +90,11 @@ driver_app_analysis.md
 user_app_analysis.md
 nul
 
+# Test, specs, and stitch design files (not tracked in repo)
+test/
+specs/
+stitch/
+
 # Helper scripts (keep for reference)
 !create_keystore.bat
 !check_keystore.bat
