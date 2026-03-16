@@ -1,3 +1,4 @@
+import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/features/admin/models/finance/settlement_summary_model.dart';
 import 'package:biko/features/admin/widgets/finance/financial_stat_card.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class SettlementSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColorsExtension>()!;
+
     return Wrap(
       spacing: 12,
       runSpacing: 12,
@@ -25,7 +28,7 @@ class SettlementSummaryCard extends StatelessWidget {
             title: 'finance.drivers_to_pay',
             value: data.driversToPayCount.toString(),
             icon: Icons.people_outline,
-            color: const Color(0xFF2563EB),
+            color: colors.info,
           ),
         ),
         SizedBox(
@@ -34,7 +37,7 @@ class SettlementSummaryCard extends StatelessWidget {
             title: 'finance.total_amount',
             value: '${data.totalAmount.toStringAsFixed(0)} ${'common.egp'.tr}',
             icon: Icons.payments_outlined,
-            color: const Color(0xFF16A34A),
+            color: colors.success,
           ),
         ),
         SizedBox(
@@ -43,7 +46,7 @@ class SettlementSummaryCard extends StatelessWidget {
             title: 'finance.pending_settlements',
             value: data.pendingSettlements.toString(),
             icon: Icons.hourglass_empty_rounded,
-            color: const Color(0xFFF97316),
+            color: colors.warning,
           ),
         ),
       ],

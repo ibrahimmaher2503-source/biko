@@ -99,8 +99,8 @@ class RecentTransactionsList extends StatelessWidget {
         bg = colors.warningBg;
         fg = colors.warning;
       case 'failed':
-        bg = const Color(0xFFFEE2E2);
-        fg = const Color(0xFFEF4444);
+        bg = Get.theme.colorScheme.error.withValues(alpha: 0.1);
+        fg = Get.theme.colorScheme.error;
       default:
         bg = colors.surfaceContainer;
         fg = colors.textMuted;

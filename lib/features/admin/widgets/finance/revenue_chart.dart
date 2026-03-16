@@ -37,7 +37,7 @@ class RevenueChart extends StatelessWidget {
     final yMax = (maxRevenue * 1.2).ceilToDouble();
 
     return Padding(
-      padding: const EdgeInsets.only(right: 16, top: 16),
+      padding: const EdgeInsetsDirectional.only(end: 16, top: 16),
       child: LineChart(
         LineChartData(
           gridData: FlGridData(

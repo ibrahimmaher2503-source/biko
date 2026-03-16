@@ -131,7 +131,7 @@ class _WalletAdjustmentDialogState extends State<WalletAdjustmentDialog> {
                       onSelected: (selected) {
                         if (selected) setState(() => _isAddition = false);
                       },
-                      selectedColor: const Color(0xFFFEE2E2),
+                      selectedColor: theme.colorScheme.error.withValues(alpha: 0.1),
                       labelStyle: TextStyle(
                         color: !_isAddition
                             ? theme.colorScheme.error

@@ -52,7 +52,7 @@ class CashVsDigitalChart extends StatelessWidget {
       children: [
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(right: 16, top: 16),
+            padding: const EdgeInsetsDirectional.only(end: 16, top: 16),
             child: LineChart(
               LineChartData(
                 gridData: FlGridData(

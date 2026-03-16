@@ -1,3 +1,4 @@
+import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/features/admin/models/finance/wallet_summary_model.dart';
 import 'package:biko/features/admin/widgets/finance/financial_stat_card.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,8 @@ class WalletSummaryCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColorsExtension>()!;
+
     return Wrap(
       spacing: 12,
       runSpacing: 12,
@@ -26,7 +29,7 @@ class WalletSummaryCards extends StatelessWidget {
             value: '${data.totalCustomerBalance.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.account_balance_wallet_outlined,
-            color: const Color(0xFF2563EB),
+            color: colors.info,
           ),
         ),
         SizedBox(
@@ -36,7 +39,7 @@ class WalletSummaryCards extends StatelessWidget {
             value: '${data.totalDriverBalance.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.two_wheeler_outlined,
-            color: const Color(0xFF16A34A),
+            color: colors.success,
           ),
         ),
         SizedBox(
@@ -46,7 +49,7 @@ class WalletSummaryCards extends StatelessWidget {
             value: '${data.recentTopUps.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.add_circle_outline,
-            color: const Color(0xFFF97316),
+            color: colors.warning,
           ),
         ),
         SizedBox(
@@ -56,7 +59,7 @@ class WalletSummaryCards extends StatelessWidget {
             value: '${data.recentSpending.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.shopping_bag_outlined,
-            color: const Color(0xFF8B5CF6),
+            color: const Color(0xFF8B5CF6), // purple – no theme token
           ),
         ),
       ],

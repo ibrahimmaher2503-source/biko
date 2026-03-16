@@ -28,7 +28,7 @@ class PaymentSuccessChart extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(right: 16, top: 16),
+      padding: const EdgeInsetsDirectional.only(end: 16, top: 16),
       child: BarChart(
         BarChartData(
           alignment: BarChartAlignment.spaceAround,

@@ -48,7 +48,7 @@ class FinancialStatCard extends StatelessWidget {
                 child: Icon(icon, color: effectiveColor, size: 22),
               ),
               const Spacer(),
-              if (changePercent != null) _buildChangeIndicator(colors),
+              if (changePercent != null) _buildChangeIndicator(colors, theme),
             ],
           ),
           const SizedBox(height: 12),
@@ -76,9 +76,9 @@ class FinancialStatCard extends StatelessWidget {
     );
   }
 
-  Widget _buildChangeIndicator(AppColorsExtension colors) {
+  Widget _buildChangeIndicator(AppColorsExtension colors, ThemeData theme) {
     final isPositive = changePercent! >= 0;
-    final changeColor = isPositive ? colors.success : const Color(0xFFEF4444);
+    final changeColor = isPositive ? colors.success : theme.colorScheme.error;
     final arrow = isPositive ? Icons.arrow_upward : Icons.arrow_downward;
 
     return Container(
