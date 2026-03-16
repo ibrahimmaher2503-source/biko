@@ -24,56 +24,45 @@ class AdminPromosScreen extends GetView<AdminPromosController> {
           Padding(
             padding: const EdgeInsets.all(24.0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'admin.promos.title'.tr,
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => DropdownButton<String>(
+                    value: controller.statusFilter.value,
+                    items: [
+                      DropdownMenuItem(
+                        value: 'all',
+                        child: Text('admin.promos.filters.all'.tr),
+                      ),
+                      DropdownMenuItem(
+                        value: 'active',
+                        child: Text('admin.promos.filters.active'.tr),
+                      ),
+                      DropdownMenuItem(
+                        value: 'expired',
+                        child: Text('admin.promos.filters.expired'.tr),
+                      ),
+                      DropdownMenuItem(
+                        value: 'inactive',
+                        child: Text('admin.promos.filters.inactive'.tr),
+                      ),
+                      DropdownMenuItem(
+                        value: 'exhausted',
+                        child: Text('admin.promos.filters.exhausted'.tr),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        controller.statusFilter.value = value;
+                        controller.loadPromos();
+                      }
+                    },
                   ),
                 ),
-                Row(
-                  children: [
-                    Obx(
-                      () => DropdownButton<String>(
-                        value: controller.statusFilter.value,
-                        items: [
-                          DropdownMenuItem(
-                            value: 'all',
-                            child: Text('admin.promos.filters.all'.tr),
-                          ),
-                          DropdownMenuItem(
-                            value: 'active',
-                            child: Text('admin.promos.filters.active'.tr),
-                          ),
-                          DropdownMenuItem(
-                            value: 'expired',
-                            child: Text('admin.promos.filters.expired'.tr),
-                          ),
-                          DropdownMenuItem(
-                            value: 'inactive',
-                            child: Text('admin.promos.filters.inactive'.tr),
-                          ),
-                          DropdownMenuItem(
-                            value: 'exhausted',
-                            child: Text('admin.promos.filters.exhausted'.tr),
-                          ),
-                        ],
-                        onChanged: (value) {
-                          if (value != null) {
-                            controller.statusFilter.value = value;
-                            controller.loadPromos();
-                          }
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    AppButton(
-                      text: 'admin.promos.create_new'.tr,
-                      onPressed: () => _showCreatePromoDialog(context),
-                    ),
-                  ],
+                const SizedBox(width: 16),
+                AppButton(
+                  text: 'admin.promos.create_new'.tr,
+                  onPressed: () => _showCreatePromoDialog(context),
                 ),
               ],
             ),

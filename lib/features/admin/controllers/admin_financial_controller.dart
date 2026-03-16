@@ -14,6 +14,7 @@ class AdminFinancialController extends GetxController {
   final dateRange = Rx<DateTimeRange?>(null);
   final paymentMethodFilter = RxnString();
   final transactionTypeFilter = RxnString();
+  final errorMessage = RxnString();
 
   final isLoading = false.obs;
   final hasMore = true.obs;
@@ -37,6 +38,7 @@ class AdminFinancialController extends GetxController {
   Future<void> loadSummary(DateTimeRange range) async {
     try {
       isLoading.value = true;
+      errorMessage.value = null;
 
       final tripsData =
           await AdminFirestoreService.getCompletedTripsForSummary(range);
@@ -80,6 +82,7 @@ class AdminFinancialController extends GetxController {
         dateTo: range.end,
       );
     } catch (e) {
+      errorMessage.value = 'admin.financial.load_summary_error'.tr;
       Get.snackbar(
         'admin.financial.error'.tr,
         'admin.financial.load_summary_error'.tr,
@@ -96,6 +99,7 @@ class AdminFinancialController extends GetxController {
 
     try {
       isLoading.value = true;
+      errorMessage.value = null;
 
       if (!loadMore) {
         transactions.clear();
@@ -118,6 +122,7 @@ class AdminFinancialController extends GetxController {
       hasMore.value = result.hasMore;
       if (loadMore) currentPage.value++;
     } catch (e) {
+      errorMessage.value = 'admin.financial.load_transactions_error'.tr;
       Get.snackbar(
         'admin.financial.error'.tr,
         'admin.financial.load_transactions_error'.tr,
@@ -130,6 +135,8 @@ class AdminFinancialController extends GetxController {
 
   Future<void> loadCommissionBreakdown(DateTimeRange range) async {
     try {
+      errorMessage.value = null;
+
       final tripsData =
           await AdminFirestoreService.getCompletedTripsForSummary(range);
 
@@ -168,6 +175,7 @@ class AdminFinancialController extends GetxController {
 
       commissionBreakdown.value = breakdown.values.toList();
     } catch (e) {
+      errorMessage.value = 'admin.financial.load_breakdown_error'.tr;
       Get.snackbar(
         'admin.financial.error'.tr,
         'admin.financial.load_breakdown_error'.tr,

@@ -22,40 +22,6 @@ class AdminDriversScreen extends GetView<AdminDriversController> {
     return Scaffold(
       body: Column(
         children: [
-          // Header
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: colors.surfaceContainer,
-              border: Border(bottom: BorderSide(color: colors.border)),
-            ),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.people_outline,
-                  size: 32,
-                  color: theme.colorScheme.primary,
-                ),
-                const SizedBox(width: 16),
-                Text(
-                  'admin.drivers.title'.tr,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                Obx(
-                  () => Text(
-                    '${'admin.drivers.total'.tr}: ${controller.drivers.length}',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: colors.textMuted,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
           // Filters
           Container(
             padding: const EdgeInsets.all(16),

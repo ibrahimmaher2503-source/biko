@@ -1,4 +1,5 @@
 import 'package:biko/core/theme/app_theme.dart';
+import 'package:biko/features/admin/controllers/admin_auth_controller.dart';
 import 'package:biko/features/admin/controllers/admin_layout_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,11 @@ class AdminSidebar extends GetView<AdminLayoutController> {
 
     return Obx(() {
       final expanded = controller.isSidebarExpanded.value;
+      // Explicitly read isSuperAdmin so this Obx rebuilds when it changes.
+      if (Get.isRegistered<AdminAuthController>()) {
+        // ignore: unused_local_variable
+        final _ = Get.find<AdminAuthController>().isSuperAdmin;
+      }
       final width = expanded ? expandedWidth : collapsedWidth;
 
       return AnimatedContainer(

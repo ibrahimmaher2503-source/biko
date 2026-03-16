@@ -33,32 +33,22 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
+            // Header actions
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  'admin.financial.title'.tr,
-                  style: theme.textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => AdminDateRangePicker(
+                    selectedRange: controller.dateRange.value,
+                    onRangeSelected: controller.updateDateRange,
                   ),
                 ),
-                Row(
-                  children: [
-                    Obx(
-                      () => AdminDateRangePicker(
-                        selectedRange: controller.dateRange.value,
-                        onRangeSelected: controller.updateDateRange,
-                      ),
-                    ),
-                    const SizedBox(width: 16),
-                    AppButton(
-                      text: 'admin.financial.export_csv'.tr,
-                      onPressed: controller.exportCsv,
-                      variant: ButtonVariant.outline,
-                      leadingIcon: Icons.download,
-                    ),
-                  ],
+                const SizedBox(width: 16),
+                AppButton(
+                  text: 'admin.financial.export_csv'.tr,
+                  onPressed: controller.exportCsv,
+                  variant: ButtonVariant.outline,
+                  leadingIcon: Icons.download,
                 ),
               ],
             ),
@@ -67,6 +57,33 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
             // Summary Cards
             Obx(() {
               final summaryData = controller.summary.value;
+              final error = controller.errorMessage.value;
+              if (error != null) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        error,
+                        style: TextStyle(color: theme.colorScheme.error),
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        text: 'admin.dashboard.refresh'.tr,
+                        onPressed: () => controller.loadSummary(
+                          controller.dateRange.value ??
+                              DateTimeRange(
+                                start: DateTime.now()
+                                    .subtract(const Duration(days: 30)),
+                                end: DateTime.now(),
+                              ),
+                        ),
+                        variant: ButtonVariant.outline,
+                      ),
+                    ],
+                  ),
+                );
+              }
               if (summaryData == null) {
                 return const Center(child: AppLoading());
               }
@@ -101,7 +118,7 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
                         iconColor: theme.colorScheme.primary,
                       ),
                       StatCard(
-                        titleKey: 'admin.financial.total_top_ups',
+                        titleKey: 'admin.financial.total_topups',
                         value: numberFormat.format(summaryData.totalTopUps),
                         icon: Icons.arrow_upward,
                         iconColor: colors.info,

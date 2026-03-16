@@ -1954,6 +1954,16 @@ class AppTranslations extends Translations {
       // admin.notifications dynamic segment values
       'admin.notifications.segments.all_drivers': 'جميع السائقين',
       'admin.notifications.segments.all_customers': 'جميع العملاء',
+
+      // admin.financial error/success/export keys
+      'admin.financial.error': 'خطأ',
+      'admin.financial.success': 'نجاح',
+      'admin.financial.load_summary_error': 'فشل تحميل ملخص المالية',
+      'admin.financial.load_transactions_error': 'فشل تحميل المعاملات',
+      'admin.financial.load_breakdown_error': 'فشل تحميل تفصيل العمولة',
+      'admin.financial.export_success': 'تم تصدير الملف بنجاح',
+      'admin.financial.export_error': 'فشل تصدير الملف',
+      'admin.financial.total_top_ups': 'إجمالي الشحن',
     },
 
     // English translations
@@ -3916,6 +3926,16 @@ class AppTranslations extends Translations {
       // admin.notifications dynamic segment values
       'admin.notifications.segments.all_drivers': 'All Drivers',
       'admin.notifications.segments.all_customers': 'All Customers',
+
+      // admin.financial error/success/export keys
+      'admin.financial.error': 'Error',
+      'admin.financial.success': 'Success',
+      'admin.financial.load_summary_error': 'Failed to load financial summary',
+      'admin.financial.load_transactions_error': 'Failed to load transactions',
+      'admin.financial.load_breakdown_error': 'Failed to load commission breakdown',
+      'admin.financial.export_success': 'File exported successfully',
+      'admin.financial.export_error': 'Failed to export file',
+      'admin.financial.total_top_ups': 'Total Top-ups',
     },
   };
 }
