@@ -32,7 +32,7 @@ class DriverProfileController extends GetxController {
   }
 
   Future<void> _init() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;
@@ -63,7 +63,7 @@ class DriverProfileController extends GetxController {
 
   /// Pick and upload a new avatar.
   Future<void> changeAvatar() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
 
     final file = await StorageService.pickImage(source: ImageSource.gallery);
@@ -84,7 +84,7 @@ class DriverProfileController extends GetxController {
 
   /// Update display name.
   Future<void> updateName() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
 
     final name = nameController.text.trim();

@@ -43,7 +43,7 @@ class DriverRegistrationController extends GetxController {
     if (file == null) return;
 
     try {
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid == null) {
         AppSnackbar.error('error.session_expired'.tr);
         return;
@@ -88,7 +88,7 @@ class DriverRegistrationController extends GetxController {
 
     isSubmitting.value = true;
     try {
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid == null) {
         AppSnackbar.error('error.session_expired'.tr);
         return;

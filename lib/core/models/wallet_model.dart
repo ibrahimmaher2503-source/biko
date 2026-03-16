@@ -33,7 +33,9 @@ class WalletModel {
       'uid': uid,
       'balance': balance,
       'currency': currency,
-      'last_updated': FieldValue.serverTimestamp(),
+      'last_updated': lastUpdated != null
+          ? Timestamp.fromDate(lastUpdated!)
+          : FieldValue.serverTimestamp(),
     };
   }
 

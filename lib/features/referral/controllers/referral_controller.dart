@@ -25,7 +25,7 @@ class ReferralController extends GetxController {
 
   /// Load referral data from Firestore
   Future<void> _loadReferralData() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;

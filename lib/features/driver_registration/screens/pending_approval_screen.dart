@@ -18,7 +18,7 @@ class PendingApprovalScreen extends StatelessWidget {
   static const _defaultSupportEmail = 'support@bikeride.eg';
 
   Future<void> _contactSupport() async {
-    final uid = AuthService.currentUser?.uid ?? '';
+    final uid = AuthService.currentUid ?? '';
     final message = 'pending.support_message'.trParams({'uid': uid});
     final subject = 'pending.support_email_subject'.trParams({'uid': uid});
 

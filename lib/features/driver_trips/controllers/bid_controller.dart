@@ -68,7 +68,7 @@ class BidController extends GetxController {
 
     try {
       isSubmitting.value = true;
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid == null) return;
 
       final user = await FirestoreService.getUser(uid);

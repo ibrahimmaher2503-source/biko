@@ -20,7 +20,9 @@ class ChatMessageModel {
       isRead: map['is_read'] as bool? ?? false,
       createdAt: map['created_at'] is Timestamp
           ? (map['created_at'] as Timestamp).toDate()
-          : DateTime.now(),
+          : map['created_at'] is int
+              ? DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int)
+              : DateTime.now(),
     );
   }
 
@@ -38,7 +40,7 @@ class ChatMessageModel {
       'sender_uid': senderUid,
       'message': message,
       'is_read': isRead,
-      'created_at': FieldValue.serverTimestamp(),
+      'created_at': Timestamp.fromDate(createdAt),
     };
   }
 

@@ -21,7 +21,7 @@ class RatingsController extends GetxController {
 
   Future<void> _loadData() async {
     isLoading.value = true;
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;

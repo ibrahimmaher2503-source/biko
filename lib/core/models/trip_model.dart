@@ -121,7 +121,7 @@ class TripModel {
       'cancellation_reason': cancellationReason,
       'note': note,
       'passenger_count': passengerCount,
-      'created_at': FieldValue.serverTimestamp(),
+      'created_at': Timestamp.fromDate(createdAt),
       'accepted_at': acceptedAt != null
           ? Timestamp.fromDate(acceptedAt!)
           : null,

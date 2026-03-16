@@ -250,7 +250,8 @@ enum TrackingStatus {
   driverArrived,
   tripInProgress,
   arrivingSoon,
-  completed;
+  completed,
+  cancelled;
 
   String toJson() {
     switch (this) {
@@ -264,6 +265,8 @@ enum TrackingStatus {
         return 'arriving_soon';
       case TrackingStatus.completed:
         return 'completed';
+      case TrackingStatus.cancelled:
+        return 'cancelled';
     }
   }
 
@@ -279,6 +282,8 @@ enum TrackingStatus {
         return TrackingStatus.arrivingSoon;
       case 'completed':
         return TrackingStatus.completed;
+      case 'cancelled':
+        return TrackingStatus.cancelled;
       default:
         return TrackingStatus.driverEnRoute;
     }
@@ -297,6 +302,8 @@ enum TrackingStatus {
         return 'tracking.arriving_soon';
       case TrackingStatus.completed:
         return 'tracking.completed';
+      case TrackingStatus.cancelled:
+        return 'tracking.cancelled';
     }
   }
 }

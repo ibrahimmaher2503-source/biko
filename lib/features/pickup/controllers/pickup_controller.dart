@@ -392,12 +392,15 @@ class PickupController extends GetxController {
   // ==================== Camera Helpers ====================
 
   /// Animate the Google Map camera to [target].
+  ///
+  /// Times out after 5 seconds if the map controller never initializes.
   Future<void> _animateCameraTo(LatLng target) async {
     try {
-      final controller = await mapControllerCompleter.future;
+      final controller = await mapControllerCompleter.future
+          .timeout(const Duration(seconds: 5));
       await controller.animateCamera(CameraUpdate.newLatLngZoom(target, 16));
     } catch (_) {
-      // Map not ready yet — will center via initialCameraPosition
+      // Map not ready or timed out — will center via initialCameraPosition
     }
   }
 }

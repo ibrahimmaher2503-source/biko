@@ -24,7 +24,7 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     tripId = Get.arguments as String? ?? '';
-    _currentUid = AuthService.currentUser?.uid;
+    _currentUid = AuthService.currentUid;
 
     if (tripId.isNotEmpty) {
       _listenToMessages();

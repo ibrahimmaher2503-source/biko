@@ -52,7 +52,7 @@ class DriverHomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _uid = AuthService.currentUser?.uid;
+    _uid = AuthService.currentUid;
     if (_uid != null) {
       _loadStats();
       _listenToWallet();

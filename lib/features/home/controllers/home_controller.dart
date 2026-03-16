@@ -58,14 +58,14 @@ class HomeController extends GetxController {
   // ==================== Data Loading ====================
 
   Future<void> _loadUserData() async {
-    final user = AuthService.currentUser;
-    if (user == null) {
+    final uid = AuthService.currentUid;
+    if (uid == null) {
       isLoading.value = false;
       return;
     }
 
     try {
-      final userModel = await FirestoreService.getUser(user.uid);
+      final userModel = await FirestoreService.getUser(uid);
       if (userModel != null) {
         userName.value = userModel.name;
         avatarUrl.value = userModel.avatarUrl;
@@ -144,7 +144,8 @@ class HomeController extends GetxController {
   }
 
   void _loadRecentLocations() {
-    // Placeholder demo data in debug mode
+    // TODO(production): Load recent locations from Firestore/local storage.
+    // Currently only populated in debug mode for development.
     if (kDebugMode) {
       recentLocations.value = const [
         RecentLocation(

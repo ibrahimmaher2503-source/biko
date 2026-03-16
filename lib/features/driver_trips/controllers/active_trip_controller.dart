@@ -139,7 +139,7 @@ class ActiveTripController extends GetxController {
       });
 
       // Update driver location in RTDB
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid != null) {
         FirestoreService.updateActiveTripDriverLocation(currentTrip.id, {
           'driver_lat': position.latitude,

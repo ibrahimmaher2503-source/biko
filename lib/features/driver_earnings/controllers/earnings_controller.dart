@@ -38,7 +38,7 @@ class EarningsController extends GetxController
 
   Future<void> _loadEarnings() async {
     isLoading.value = true;
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;

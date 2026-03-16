@@ -32,7 +32,7 @@ class NotificationsController extends GetxController {
 
   /// Load notifications from Firestore
   void _loadNotifications() {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;
@@ -53,22 +53,29 @@ class NotificationsController extends GetxController {
 
   /// Mark a single notification as read
   Future<void> markAsRead(String notificationId) async {
+    // Optimistic update
+    final index = notifications.indexWhere((n) => n.id == notificationId);
+    if (index == -1) return;
+
+    final original = notifications[index];
+    if (original.isRead) return; // Already read
+
+    notifications[index] = original.copyWith(isRead: true);
+    unreadCount.value = notifications.where((n) => !n.isRead).length;
+
     try {
       await FirestoreService.markNotificationRead(notificationId);
-      // Optimistic update
-      final index = notifications.indexWhere((n) => n.id == notificationId);
-      if (index != -1) {
-        notifications[index] = notifications[index].copyWith(isRead: true);
-        unreadCount.value = notifications.where((n) => !n.isRead).length;
-      }
     } catch (e) {
+      // Rollback on failure
       debugPrint('[NotificationsController] markAsRead failed: $e');
+      notifications[index] = original;
+      unreadCount.value = notifications.where((n) => !n.isRead).length;
     }
   }
 
   /// Mark all notifications as read
   Future<void> markAllAsRead() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
 
     try {

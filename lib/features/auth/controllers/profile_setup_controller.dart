@@ -46,6 +46,9 @@ class ProfileSetupController extends GetxController {
     }
   }
 
+  /// Whether a valid Firebase user session exists.
+  bool get _hasAuthSession => AuthService.currentUid != null;
+
   /// Show bottom sheet to pick image from camera or gallery
   Future<void> pickAvatar() async {
     final source = await Get.bottomSheet<ImageSource>(
@@ -80,15 +83,15 @@ class ProfileSetupController extends GetxController {
 
     isUploading.value = true;
     try {
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid == null) {
         AppSnackbar.error('error.session_expired'.tr);
         return;
       }
       final url = await StorageService.uploadAvatar(uid, File(file.path));
       avatarUrl.value = url;
-    } catch (e) {
-      AppSnackbar.error(e.toString());
+    } catch (_) {
+      AppSnackbar.error('error.upload_failed'.tr);
     } finally {
       isUploading.value = false;
     }
@@ -118,9 +121,11 @@ class ProfileSetupController extends GetxController {
 
     isSaving.value = true;
     try {
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid == null) {
         AppSnackbar.error('error.session_expired'.tr);
+        // Navigate back to login so user can re-authenticate
+        Get.offAllNamed(AppRoutes.phoneLogin);
         return;
       }
       await FirestoreService.updateUser(uid, {
@@ -137,8 +142,8 @@ class ProfileSetupController extends GetxController {
       } else {
         Get.offAllNamed(AppRoutes.customerHome);
       }
-    } catch (e) {
-      AppSnackbar.error(e.toString());
+    } catch (_) {
+      AppSnackbar.error('error.save_failed'.tr);
     } finally {
       isSaving.value = false;
     }

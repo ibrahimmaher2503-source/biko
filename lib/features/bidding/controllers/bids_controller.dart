@@ -85,10 +85,13 @@ class BidsController extends GetxController {
         );
         isLoading.value = false;
 
-        // Reset timeout when bids arrive
-        if (bidList.isNotEmpty) {
+        // Reset timeout when pending bids exist
+        if (bids.isNotEmpty) {
           hasTimedOut.value = false;
           _timeoutTimer?.cancel();
+        } else if (bids.isEmpty && bidList.isNotEmpty) {
+          // All bids were rejected/expired — restart timeout
+          _restartTimeoutTimer();
         }
       },
       onError: (_) {
@@ -98,11 +101,17 @@ class BidsController extends GetxController {
   }
 
   void _startTimeoutTimer() {
+    _timeoutTimer?.cancel();
     _timeoutTimer = Timer(const Duration(seconds: 60), () {
       if (bids.isEmpty) {
         hasTimedOut.value = true;
       }
     });
+  }
+
+  /// Restart the timeout timer (e.g. after all bids are rejected).
+  void _restartTimeoutTimer() {
+    _startTimeoutTimer();
   }
 
   // ==================== Actions ====================

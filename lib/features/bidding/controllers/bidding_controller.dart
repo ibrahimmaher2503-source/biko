@@ -110,8 +110,19 @@ class BiddingController extends GetxController {
       // Calculate suggested price
       _calculateSuggestedPrice(directions);
     } catch (_) {
-      // If directions fail entirely, try fallback
+      // If parallel fetch fails, retry both directions and pricing
       try {
+        // Retry pricing config
+        final config = await FirestoreService.getAppConfig();
+        if (config != null) {
+          _baseFare = (config['base_fare'] as num?)?.toDouble() ?? 0;
+          _pricePerKm = (config['price_per_km'] as num?)?.toDouble() ?? 0;
+          _pricePerMin = (config['price_per_min'] as num?)?.toDouble() ?? 0;
+          _pricingLoaded =
+              _baseFare > 0 || _pricePerKm > 0 || _pricePerMin > 0;
+        }
+
+        // Retry directions
         final directions = await MapService.getDirections(
           pickup.value!.latLng,
           dropoff.value!.latLng,
@@ -128,6 +139,12 @@ class BiddingController extends GetxController {
 
   /// Calculate the system-suggested fare from route data.
   void _calculateSuggestedPrice(DirectionsResult directions) {
+    if (!_pricingLoaded) {
+      // Pricing config failed — show error instead of 0 EGP
+      AppSnackbar.error('trip.pricing_unavailable'.tr);
+      return;
+    }
+
     final rawPrice =
         _baseFare +
         (_pricePerKm * directions.distanceKm) +
@@ -193,7 +210,7 @@ class BiddingController extends GetxController {
       return;
     }
 
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
 
     isSubmitting.value = true;

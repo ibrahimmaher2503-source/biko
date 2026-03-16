@@ -97,7 +97,7 @@ class TripCompleteController extends GetxController {
     final currentTrip = trip.value;
     if (currentTrip == null) return;
 
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
 
     isSubmitting.value = true;

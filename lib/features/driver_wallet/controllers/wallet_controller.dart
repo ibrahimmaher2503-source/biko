@@ -26,7 +26,7 @@ class WalletController extends GetxController {
   }
 
   Future<void> _init() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;
@@ -44,7 +44,7 @@ class WalletController extends GetxController {
 
   Future<void> _loadTransactions() async {
     isLoading.value = true;
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;
@@ -65,7 +65,7 @@ class WalletController extends GetxController {
   /// Returns the payment request ID for tracking.
   Future<String?> initiateTopUp(double amount, String method) async {
     isTopUpLoading.value = true;
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isTopUpLoading.value = false;
       return null;

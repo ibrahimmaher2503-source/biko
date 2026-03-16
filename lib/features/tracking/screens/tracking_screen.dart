@@ -27,15 +27,14 @@ class TrackingScreen extends GetView<TrackingController> {
 
         return Stack(
           children: [
-            // Full-screen map
-            Obx(
-              () => TrackingMapWidget(
+            // Full-screen map — uses its own Obx; outer Obx only
+            // gates on isLoading, so inner rebuilds are independent.
+            TrackingMapWidget(
                 driverLocation: controller.driverLocation.value,
                 driverHeading: controller.driverHeading.value,
                 pickupLocation: controller.pickupLocation.value,
                 dropoffLocation: controller.dropoffLocation.value,
               ),
-            ),
 
             // Status banner (top)
             PositionedDirectional(

@@ -65,7 +65,7 @@ class FcmService {
 
   /// Persist FCM token to Firestore for the current user
   static Future<void> _persistToken(String token) async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
     await FirestoreService.updateFcmToken(uid, token);
   }
@@ -89,7 +89,7 @@ class FcmService {
   static Future<void> clearToken() async {
     try {
       // Clear from Firestore first
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid != null) {
         await FirestoreService.clearFcmToken(uid);
       }

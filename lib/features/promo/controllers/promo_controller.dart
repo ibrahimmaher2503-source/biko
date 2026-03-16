@@ -24,7 +24,7 @@ class PromoController extends GetxController {
 
   /// Load user's promo codes from Firestore
   Future<void> _loadPromoCodes() async {
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) {
       isLoading.value = false;
       return;
@@ -47,7 +47,7 @@ class PromoController extends GetxController {
       return;
     }
 
-    final uid = AuthService.currentUser?.uid;
+    final uid = AuthService.currentUid;
     if (uid == null) return;
 
     isApplying.value = true;

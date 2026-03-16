@@ -44,7 +44,7 @@ class TripRequestsController extends GetxController {
   /// Accept trip at the customer's offered price.
   Future<void> acceptTrip(TripRequest request) async {
     try {
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid == null) return;
 
       await FirestoreService.acceptBid(

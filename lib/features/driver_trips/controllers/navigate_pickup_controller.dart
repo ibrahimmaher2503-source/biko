@@ -144,7 +144,7 @@ class NavigatePickupController extends GetxController {
       });
 
       // Update driver location in RTDB for customer tracking
-      final uid = AuthService.currentUser?.uid;
+      final uid = AuthService.currentUid;
       if (uid != null) {
         FirestoreService.updateActiveTripDriverLocation(currentTrip.id, {
           'driver_lat': position.latitude,

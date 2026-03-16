@@ -1,4 +1,5 @@
 import 'package:biko/core/models/trip_model.dart';
+import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -27,6 +28,10 @@ class TripHistoryController extends GetxController {
     super.onInit();
     final args = Get.arguments as Map<String, dynamic>?;
     _uid = args?['uid'] as String? ?? '';
+    // Fallback to current auth user if arguments are missing
+    if (_uid.isEmpty) {
+      _uid = AuthService.currentUid ?? '';
+    }
     _loadTrips();
   }
 

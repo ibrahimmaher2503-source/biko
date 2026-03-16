@@ -200,6 +200,12 @@ class TrackingController extends GetxController {
         },
       );
     }
+
+    // Handle cancellation by driver
+    if (newStatus == TrackingStatus.cancelled) {
+      AppSnackbar.error('tracking.trip_cancelled_by_driver'.tr);
+      Get.offAllNamed(AppRoutes.customerHome);
+    }
   }
 
   // ==================== Actions ====================

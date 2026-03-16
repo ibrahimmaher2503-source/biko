@@ -31,12 +31,14 @@ class AuthUserInfo {
     required this.uid,
     this.email,
     this.displayName,
+    this.photoURL,
     this.lastSignInTime,
   });
 
   final String uid;
   final String? email;
   final String? displayName;
+  final String? photoURL;
   final DateTime? lastSignInTime;
 }
 
@@ -46,8 +48,24 @@ class AuthService {
 
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  /// Current authenticated user (null if not signed in)
-  static User? get currentUser => _auth.currentUser;
+  /// Current authenticated user UID (null if not signed in).
+  ///
+  /// Use this instead of exposing `firebase_auth.User` to keep
+  /// controllers independent of Firebase types (RULE-06).
+  static String? get currentUid => _auth.currentUser?.uid;
+
+  /// Current authenticated user as [AuthUserInfo] (null if not signed in).
+  static AuthUserInfo? get currentUser {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    return AuthUserInfo._(
+      uid: user.uid,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      lastSignInTime: user.metadata.lastSignInTime,
+    );
+  }
 
   /// Send OTP to the given phone number (E.164 format: +20XXXXXXXXXX)
   ///
@@ -140,6 +158,7 @@ class AuthService {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
+      photoURL: user.photoURL,
       lastSignInTime: user.metadata.lastSignInTime,
     );
   }
@@ -154,18 +173,8 @@ class AuthService {
     return AuthTokenResult._(claims: token.claims);
   }
 
-  /// Returns a lightweight [AuthUserInfo] for the current user,
-  /// or null if not signed in.
-  static AuthUserInfo? get currentUserInfo {
-    final user = _auth.currentUser;
-    if (user == null) return null;
-    return AuthUserInfo._(
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      lastSignInTime: user.metadata.lastSignInTime,
-    );
-  }
+  /// Alias for [currentUser] — kept for backward compatibility.
+  static AuthUserInfo? get currentUserInfo => currentUser;
 
   /// Sign out from all providers and Firebase
   static Future<void> signOut() async {
