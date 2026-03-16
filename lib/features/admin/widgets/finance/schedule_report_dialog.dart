@@ -93,7 +93,7 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: _frequency,
+                initialValue: _frequency,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppTheme.radiusXl),
@@ -123,7 +123,7 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
               ),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
-                value: _reportType,
+                initialValue: _reportType,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(AppTheme.radiusXl),
