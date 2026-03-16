@@ -35,6 +35,11 @@ class BackgroundLocationService extends GetxService {
   /// Subscribes to [LocationService] GPS stream and writes
   /// lat/lng/heading/updatedAt every 3 seconds.
   Future<void> start() async {
+    if (isOnline.value) {
+      debugPrint('⚠️ BackgroundLocationService: Already started');
+      return;
+    }
+
     final uid = AuthService.currentUid;
     if (uid == null) {
       debugPrint('⚠️ BackgroundLocationService: No authenticated user');
