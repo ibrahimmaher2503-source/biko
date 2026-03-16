@@ -247,7 +247,7 @@ class TripCompleteScreen extends GetView<TripCompleteController> {
 
             // Fixed bottom button
             Container(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 16),
+              padding: const EdgeInsetsDirectional.fromSTEB(20, 12, 20, 16),
               decoration: BoxDecoration(
                 color: ext.surfaceElevated,
                 border: Border(top: BorderSide(color: ext.borderSubtle)),
