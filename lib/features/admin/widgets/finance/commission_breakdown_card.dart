@@ -24,14 +24,14 @@ class CommissionBreakdownCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'finance.commission_breakdown'.tr,
+            'admin.finance.commission_breakdown'.tr,
             style: theme.textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
           const SizedBox(height: 4),
           Text(
-            '${'finance.total'.tr}: '
+            '${'admin.finance.total'.tr}: '
             '${data.totalCommission.toStringAsFixed(0)} '
             '${'common.egp'.tr}',
             style: theme.textTheme.headlineSmall?.copyWith(
@@ -43,7 +43,7 @@ class CommissionBreakdownCard extends StatelessWidget {
           const SizedBox(height: 16),
           _buildRow(
             context,
-            label: 'finance.ride'.tr,
+            label: 'admin.finance.ride'.tr,
             amount: data.rideCommission,
             rate: data.rideRate,
             color: colors.info,
@@ -52,7 +52,7 @@ class CommissionBreakdownCard extends StatelessWidget {
           const SizedBox(height: 12),
           _buildRow(
             context,
-            label: 'finance.c2c'.tr,
+            label: 'admin.finance.c2c'.tr,
             amount: data.c2cCommission,
             rate: data.c2cRate,
             color: colors.success,
@@ -61,7 +61,7 @@ class CommissionBreakdownCard extends StatelessWidget {
           const SizedBox(height: 12),
           _buildRow(
             context,
-            label: 'finance.b2b'.tr,
+            label: 'admin.finance.b2b'.tr,
             amount: data.b2bCommission,
             rate: data.b2bRate,
             color: colors.warning,

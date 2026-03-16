@@ -25,7 +25,7 @@ class SettlementSummaryCard extends StatelessWidget {
         SizedBox(
           width: 220,
           child: FinancialStatCard(
-            title: 'finance.drivers_to_pay',
+            title: 'admin.finance.drivers_to_pay',
             value: data.driversToPayCount.toString(),
             icon: Icons.people_outline,
             color: colors.info,
@@ -34,7 +34,7 @@ class SettlementSummaryCard extends StatelessWidget {
         SizedBox(
           width: 220,
           child: FinancialStatCard(
-            title: 'finance.total_amount',
+            title: 'admin.finance.total_amount',
             value: '${data.totalAmount.toStringAsFixed(0)} ${'common.egp'.tr}',
             icon: Icons.payments_outlined,
             color: colors.success,
@@ -43,7 +43,7 @@ class SettlementSummaryCard extends StatelessWidget {
         SizedBox(
           width: 220,
           child: FinancialStatCard(
-            title: 'finance.pending_settlements',
+            title: 'admin.finance.pending_settlements',
             value: data.pendingSettlements.toString(),
             icon: Icons.hourglass_empty_rounded,
             color: colors.warning,

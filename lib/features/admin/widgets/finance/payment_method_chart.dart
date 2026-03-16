@@ -30,7 +30,7 @@ class PaymentMethodChart extends StatelessWidget {
     if (data.isEmpty) {
       return Center(
         child: Text(
-          'finance.no_payment_data'.tr,
+          'admin.finance.no_payment_data'.tr,
           style: TextStyle(color: colors.textMuted),
         ),
       );

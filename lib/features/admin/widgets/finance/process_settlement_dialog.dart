@@ -56,14 +56,14 @@ class ProcessSettlementDialog extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Text(
-                    'finance.process_settlement'.tr,
+                    'admin.finance.process_settlement'.tr,
                     style: theme.textTheme.titleLarge,
                   ),
                 ],
               ),
               const SizedBox(height: 20),
               Text(
-                'finance.settlement_confirmation_message'.tr,
+                'admin.finance.settlement_confirmation_message'.tr,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   color: colors.textMuted,
                 ),
@@ -84,14 +84,14 @@ class ProcessSettlementDialog extends StatelessWidget {
                     _breakdownRow(
                       theme,
                       colors,
-                      label: 'finance.selected_drivers'.tr,
+                      label: 'admin.finance.selected_drivers'.tr,
                       value: selectedCount.toString(),
                     ),
                     const SizedBox(height: 8),
                     _breakdownRow(
                       theme,
                       colors,
-                      label: 'finance.total_amount'.tr,
+                      label: 'admin.finance.total_amount'.tr,
                       value: '${summary.totalAmount.toStringAsFixed(0)} '
                           '${'common.egp'.tr}',
                       isBold: true,
@@ -100,7 +100,7 @@ class ProcessSettlementDialog extends StatelessWidget {
                     _breakdownRow(
                       theme,
                       colors,
-                      label: 'finance.pending_settlements'.tr,
+                      label: 'admin.finance.pending_settlements'.tr,
                       value: summary.pendingSettlements.toString(),
                     ),
                   ],
@@ -122,7 +122,7 @@ class ProcessSettlementDialog extends StatelessWidget {
                   SizedBox(
                     width: 160,
                     child: AppButton(
-                      text: 'finance.confirm_settlement'.tr,
+                      text: 'admin.finance.confirm_settlement'.tr,
                       onPressed: () => Get.back<bool?>(result: true),
                     ),
                   ),

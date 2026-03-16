@@ -26,7 +26,7 @@ class RevenueByTypeChart extends StatelessWidget {
     if (data.isEmpty) {
       return Center(
         child: Text(
-          'finance.no_revenue_data'.tr,
+          'admin.finance.no_revenue_data'.tr,
           style: TextStyle(color: colors.textMuted),
         ),
       );
@@ -59,7 +59,7 @@ class RevenueByTypeChart extends StatelessWidget {
                         TextStyle(color: colors.surfaceElevated, fontSize: 12),
                         children: [
                           TextSpan(
-                            text: '${'finance.ride'.tr}: '
+                            text: '${'admin.finance.ride'.tr}: '
                                 '${entry.tripRevenue.toStringAsFixed(0)}\n',
                             style: const TextStyle(
                               color: _rideColor,
@@ -67,7 +67,7 @@ class RevenueByTypeChart extends StatelessWidget {
                             ),
                           ),
                           TextSpan(
-                            text: '${'finance.delivery'.tr}: '
+                            text: '${'admin.finance.delivery'.tr}: '
                                 '${entry.deliveryRevenue.toStringAsFixed(0)}',
                             style: const TextStyle(
                               color: _deliveryColor,
@@ -164,11 +164,11 @@ class RevenueByTypeChart extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _legendDot(_rideColor, 'finance.ride'.tr, theme, colors),
+            _legendDot(_rideColor, 'admin.finance.ride'.tr, theme, colors),
             const SizedBox(width: 16),
-            _legendDot(_deliveryColor, 'finance.delivery'.tr, theme, colors),
+            _legendDot(_deliveryColor, 'admin.finance.delivery'.tr, theme, colors),
             const SizedBox(width: 16),
-            _legendDot(_b2bColor, 'finance.b2b'.tr, theme, colors),
+            _legendDot(_b2bColor, 'admin.finance.b2b'.tr, theme, colors),
           ],
         ),
       ],

@@ -102,7 +102,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
           child: DropdownButtonFormField<String>(
             initialValue: _selectedType,
             decoration: InputDecoration(
-              labelText: 'finance.type'.tr,
+              labelText: 'admin.finance.type'.tr,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
                 vertical: 10,
@@ -118,7 +118,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
                 child: Text(
                   type == 'all'
                       ? 'common.all'.tr
-                      : 'finance.type_$type'.tr,
+                      : 'admin.finance.type_$type'.tr,
                   style: const TextStyle(fontSize: 13),
                 ),
               );
@@ -135,7 +135,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
           child: DropdownButtonFormField<String>(
             initialValue: _selectedStatus,
             decoration: InputDecoration(
-              labelText: 'finance.status'.tr,
+              labelText: 'admin.finance.status'.tr,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
                 vertical: 10,
@@ -151,7 +151,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
                 child: Text(
                   status == 'all'
                       ? 'common.all'.tr
-                      : 'finance.status_$status'.tr,
+                      : 'admin.finance.status_$status'.tr,
                   style: const TextStyle(fontSize: 13),
                 ),
               );
@@ -172,7 +172,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
               _dateRange != null
                   ? '${_dateRange!.start.day}/${_dateRange!.start.month} - '
                       '${_dateRange!.end.day}/${_dateRange!.end.month}'
-                  : 'finance.date_range'.tr,
+                  : 'admin.finance.date_range'.tr,
               style: const TextStyle(fontSize: 13),
             ),
             style: OutlinedButton.styleFrom(
@@ -190,7 +190,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
           child: TextField(
             controller: _minAmountController,
             decoration: InputDecoration(
-              labelText: 'finance.min'.tr,
+              labelText: 'admin.finance.min'.tr,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
                 vertical: 10,
@@ -210,7 +210,7 @@ class _TransactionFilterPanelState extends State<TransactionFilterPanel> {
           child: TextField(
             controller: _maxAmountController,
             decoration: InputDecoration(
-              labelText: 'finance.max'.tr,
+              labelText: 'admin.finance.max'.tr,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
                 vertical: 10,

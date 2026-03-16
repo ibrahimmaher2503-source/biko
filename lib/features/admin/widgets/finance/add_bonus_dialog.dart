@@ -57,7 +57,7 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
     final reason = _reasonController.text.trim();
 
     if (reason.isEmpty) {
-      setState(() => _reasonError = 'finance.reason_required'.tr);
+      setState(() => _reasonError = 'admin.finance.reason_required'.tr);
       return;
     }
     setState(() => _reasonError = null);
@@ -91,19 +91,19 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'finance.add_bonus'.tr,
+                'admin.finance.add_bonus'.tr,
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
-                '${'finance.driver'.tr}: ${widget.driverName}',
+                '${'admin.finance.driver'.tr}: ${widget.driverName}',
                 style: TextStyle(color: colors.textMuted),
               ),
               const SizedBox(height: 20),
               AppTextField(
                 controller: _amountController,
-                label: 'finance.amount'.tr,
-                hint: 'finance.enter_amount'.tr,
+                label: 'admin.finance.amount'.tr,
+                hint: 'admin.finance.enter_amount'.tr,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -112,8 +112,8 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
               const SizedBox(height: 16),
               AppTextField(
                 controller: _reasonController,
-                label: 'finance.reason'.tr,
-                hint: 'finance.enter_reason'.tr,
+                label: 'admin.finance.reason'.tr,
+                hint: 'admin.finance.enter_reason'.tr,
                 errorText: _reasonError,
                 maxLines: 3,
               ),
@@ -133,7 +133,7 @@ class _AddBonusDialogState extends State<AddBonusDialog> {
                   SizedBox(
                     width: 140,
                     child: AppButton(
-                      text: 'finance.add_bonus'.tr,
+                      text: 'admin.finance.add_bonus'.tr,
                       onPressed: _confirm,
                     ),
                   ),

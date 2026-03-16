@@ -27,7 +27,7 @@ class DriverSettlementTable extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_settlements'.tr,
+            'admin.finance.no_settlements'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -41,10 +41,10 @@ class DriverSettlementTable extends StatelessWidget {
         columnSpacing: 20,
         columns: [
           const DataColumn(label: SizedBox(width: 32)),
-          DataColumn(label: Text('finance.driver'.tr)),
-          DataColumn(label: Text('finance.amount'.tr), numeric: true),
-          DataColumn(label: Text('finance.bank_details'.tr)),
-          DataColumn(label: Text('finance.status'.tr)),
+          DataColumn(label: Text('admin.finance.driver'.tr)),
+          DataColumn(label: Text('admin.finance.amount'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.bank_details'.tr)),
+          DataColumn(label: Text('admin.finance.status'.tr)),
         ],
         rows: data.map((settlement) {
           final isSelected = selectedUids.contains(settlement.driverUid);
@@ -80,7 +80,7 @@ class DriverSettlementTable extends StatelessWidget {
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxWidth: 180),
                   child: Text(
-                    settlement.bankDetails ?? 'finance.no_bank_details'.tr,
+                    settlement.bankDetails ?? 'admin.finance.no_bank_details'.tr,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 12,

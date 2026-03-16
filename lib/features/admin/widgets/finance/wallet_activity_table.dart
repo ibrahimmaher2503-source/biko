@@ -24,7 +24,7 @@ class WalletActivityTable extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_wallet_activity'.tr,
+            'admin.finance.no_wallet_activity'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -37,11 +37,11 @@ class WalletActivityTable extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 24,
         columns: [
-          DataColumn(label: Text('finance.user'.tr)),
-          DataColumn(label: Text('finance.type'.tr)),
-          DataColumn(label: Text('finance.amount'.tr), numeric: true),
-          DataColumn(label: Text('finance.balance_after'.tr), numeric: true),
-          DataColumn(label: Text('finance.timestamp'.tr)),
+          DataColumn(label: Text('admin.finance.user'.tr)),
+          DataColumn(label: Text('admin.finance.type'.tr)),
+          DataColumn(label: Text('admin.finance.amount'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.balance_after'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.timestamp'.tr)),
         ],
         rows: data.map((activity) {
           final isCredit = activity.amount >= 0;

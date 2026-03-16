@@ -21,7 +21,7 @@ class FinancialLeaderboard extends StatelessWidget {
         Expanded(
           child: _buildColumn(
             context,
-            title: 'finance.top_drivers'.tr,
+            title: 'admin.finance.top_drivers'.tr,
             items: topDrivers,
           ),
         ),
@@ -29,7 +29,7 @@ class FinancialLeaderboard extends StatelessWidget {
         Expanded(
           child: _buildColumn(
             context,
-            title: 'finance.top_customers'.tr,
+            title: 'admin.finance.top_customers'.tr,
             items: topCustomers,
           ),
         ),

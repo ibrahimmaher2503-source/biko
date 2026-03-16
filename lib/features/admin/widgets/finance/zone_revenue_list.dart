@@ -21,7 +21,7 @@ class ZoneRevenueList extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_zone_data'.tr,
+            'admin.finance.no_zone_data'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -34,10 +34,10 @@ class ZoneRevenueList extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 24,
         columns: [
-          DataColumn(label: Text('finance.zone_name'.tr)),
-          DataColumn(label: Text('finance.trips'.tr), numeric: true),
-          DataColumn(label: Text('finance.revenue'.tr), numeric: true),
-          DataColumn(label: Text('finance.avg_per_trip'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.zone_name'.tr)),
+          DataColumn(label: Text('admin.finance.trips'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.revenue'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.avg_per_trip'.tr), numeric: true),
         ],
         rows: zones.map((zone) {
           final name = zone['name'] as String? ?? '';

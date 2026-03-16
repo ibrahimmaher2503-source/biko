@@ -24,7 +24,7 @@ class ReportHistoryList extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_reports'.tr,
+            'admin.finance.no_reports'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -37,10 +37,10 @@ class ReportHistoryList extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 24,
         columns: [
-          DataColumn(label: Text('finance.report_name'.tr)),
-          DataColumn(label: Text('finance.type'.tr)),
-          DataColumn(label: Text('finance.generated_at'.tr)),
-          DataColumn(label: Text('finance.download'.tr)),
+          DataColumn(label: Text('admin.finance.report_name'.tr)),
+          DataColumn(label: Text('admin.finance.type'.tr)),
+          DataColumn(label: Text('admin.finance.generated_at'.tr)),
+          DataColumn(label: Text('admin.finance.download'.tr)),
         ],
         rows: data.map((report) {
           return DataRow(
@@ -90,13 +90,13 @@ class ReportHistoryList extends StatelessWidget {
                           color: theme.colorScheme.primary,
                           size: 20,
                         ),
-                        tooltip: 'finance.download'.tr,
+                        tooltip: 'admin.finance.download'.tr,
                         onPressed: () {
                           // Download handled by controller
                         },
                       )
                     : Text(
-                        'finance.unavailable'.tr,
+                        'admin.finance.unavailable'.tr,
                         style: TextStyle(
                           fontSize: 12,
                           color: colors.textMuted,

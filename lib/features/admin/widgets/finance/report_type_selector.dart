@@ -32,7 +32,7 @@ class ReportTypeSelector extends StatelessWidget {
       children: _reportTypes.map((type) {
         final isSelected = type == selectedType;
         return ChoiceChip(
-          label: Text('finance.report_$type'.tr),
+          label: Text('admin.finance.report_$type'.tr),
           selected: isSelected,
           onSelected: (selected) {
             if (selected) onChanged(type);

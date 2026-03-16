@@ -25,7 +25,7 @@ class WalletSummaryCards extends StatelessWidget {
         SizedBox(
           width: 240,
           child: FinancialStatCard(
-            title: 'finance.customer_balance',
+            title: 'admin.finance.customer_balance',
             value: '${data.totalCustomerBalance.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.account_balance_wallet_outlined,
@@ -35,7 +35,7 @@ class WalletSummaryCards extends StatelessWidget {
         SizedBox(
           width: 240,
           child: FinancialStatCard(
-            title: 'finance.driver_balance',
+            title: 'admin.finance.driver_balance',
             value: '${data.totalDriverBalance.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.two_wheeler_outlined,
@@ -45,7 +45,7 @@ class WalletSummaryCards extends StatelessWidget {
         SizedBox(
           width: 240,
           child: FinancialStatCard(
-            title: 'finance.recent_top_ups',
+            title: 'admin.finance.recent_top_ups',
             value: '${data.recentTopUps.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.add_circle_outline,
@@ -55,7 +55,7 @@ class WalletSummaryCards extends StatelessWidget {
         SizedBox(
           width: 240,
           child: FinancialStatCard(
-            title: 'finance.recent_spending',
+            title: 'admin.finance.recent_spending',
             value: '${data.recentSpending.toStringAsFixed(0)} '
                 '${'common.egp'.tr}',
             icon: Icons.shopping_bag_outlined,

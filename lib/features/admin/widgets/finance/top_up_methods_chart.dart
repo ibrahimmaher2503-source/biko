@@ -29,7 +29,7 @@ class TopUpMethodsChart extends StatelessWidget {
     if (methodData.isEmpty) {
       return Center(
         child: Text(
-          'finance.no_top_up_data'.tr,
+          'admin.finance.no_top_up_data'.tr,
           style: TextStyle(color: colors.textMuted),
         ),
       );

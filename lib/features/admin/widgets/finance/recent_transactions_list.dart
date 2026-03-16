@@ -25,7 +25,7 @@ class RecentTransactionsList extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_transactions'.tr,
+            'admin.finance.no_transactions'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -38,11 +38,11 @@ class RecentTransactionsList extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 24,
         columns: [
-          DataColumn(label: Text('finance.time'.tr)),
-          DataColumn(label: Text('finance.type'.tr)),
-          DataColumn(label: Text('finance.user'.tr)),
-          DataColumn(label: Text('finance.amount'.tr), numeric: true),
-          DataColumn(label: Text('finance.status'.tr)),
+          DataColumn(label: Text('admin.finance.time'.tr)),
+          DataColumn(label: Text('admin.finance.type'.tr)),
+          DataColumn(label: Text('admin.finance.user'.tr)),
+          DataColumn(label: Text('admin.finance.amount'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.status'.tr)),
         ],
         rows: transactions.map((tx) {
           final timestamp = tx['timestamp'];

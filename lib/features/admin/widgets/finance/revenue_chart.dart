@@ -22,7 +22,7 @@ class RevenueChart extends StatelessWidget {
     if (data.isEmpty) {
       return Center(
         child: Text(
-          'finance.no_revenue_data'.tr,
+          'admin.finance.no_revenue_data'.tr,
           style: TextStyle(color: colors.textMuted),
         ),
       );

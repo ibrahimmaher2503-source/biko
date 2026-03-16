@@ -69,36 +69,36 @@ class TransactionDetailSheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Text(
-                'finance.transaction_details'.tr,
+                'admin.finance.transaction_details'.tr,
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 20),
               _detailRow(theme, colors, 'ID', id),
-              _detailRow(theme, colors, 'finance.type'.tr, type),
-              _detailRow(theme, colors, 'finance.user'.tr, user),
+              _detailRow(theme, colors, 'admin.finance.type'.tr, type),
+              _detailRow(theme, colors, 'admin.finance.user'.tr, user),
               _detailRow(
                 theme,
                 colors,
-                'finance.amount'.tr,
+                'admin.finance.amount'.tr,
                 '${amount.toStringAsFixed(2)} ${'common.egp'.tr}',
                 valueColor: amount >= 0
                     ? colors.success
                     : theme.colorScheme.error,
               ),
-              _detailRow(theme, colors, 'finance.status'.tr, status),
-              _detailRow(theme, colors, 'finance.timestamp'.tr, timeStr),
+              _detailRow(theme, colors, 'admin.finance.status'.tr, status),
+              _detailRow(theme, colors, 'admin.finance.timestamp'.tr, timeStr),
               if (method.isNotEmpty)
-                _detailRow(theme, colors, 'finance.method'.tr, method),
+                _detailRow(theme, colors, 'admin.finance.method'.tr, method),
               if (tripId.isNotEmpty)
-                _detailRow(theme, colors, 'finance.trip'.tr, tripId),
+                _detailRow(theme, colors, 'admin.finance.trip'.tr, tripId),
               if (notes.isNotEmpty)
-                _detailRow(theme, colors, 'finance.notes'.tr, notes),
+                _detailRow(theme, colors, 'admin.finance.notes'.tr, notes),
               const SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
                     child: AppButton(
-                      text: 'finance.flag_transaction'.tr,
+                      text: 'admin.finance.flag_transaction'.tr,
                       variant: ButtonVariant.outline,
                       leadingIcon: Icons.flag_outlined,
                       onPressed: Get.back,

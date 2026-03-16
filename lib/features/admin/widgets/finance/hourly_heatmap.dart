@@ -32,7 +32,7 @@ class HourlyHeatmap extends StatelessWidget {
 
             return Expanded(
               child: Tooltip(
-                message: '${'finance.hour'.tr} $hour:00\n'
+                message: '${'admin.finance.hour'.tr} $hour:00\n'
                     '${value.toStringAsFixed(0)} ${'common.egp'.tr}',
                 child: Container(
                   height: 36,

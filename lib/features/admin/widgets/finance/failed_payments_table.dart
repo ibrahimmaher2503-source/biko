@@ -23,7 +23,7 @@ class FailedPaymentsTable extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_failed_payments'.tr,
+            'admin.finance.no_failed_payments'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -36,12 +36,12 @@ class FailedPaymentsTable extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 20,
         columns: [
-          DataColumn(label: Text('finance.trip'.tr)),
-          DataColumn(label: Text('finance.user'.tr)),
-          DataColumn(label: Text('finance.amount'.tr), numeric: true),
-          DataColumn(label: Text('finance.method'.tr)),
-          DataColumn(label: Text('finance.error'.tr)),
-          DataColumn(label: Text('finance.timestamp'.tr)),
+          DataColumn(label: Text('admin.finance.trip'.tr)),
+          DataColumn(label: Text('admin.finance.user'.tr)),
+          DataColumn(label: Text('admin.finance.amount'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.method'.tr)),
+          DataColumn(label: Text('admin.finance.error'.tr)),
+          DataColumn(label: Text('admin.finance.timestamp'.tr)),
         ],
         rows: data.map((row) {
           final trip = row['trip'] as String? ?? '';

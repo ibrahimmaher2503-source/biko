@@ -29,7 +29,7 @@ class SuspiciousTransactionsList extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_suspicious_transactions'.tr,
+            'admin.finance.no_suspicious_transactions'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -42,12 +42,12 @@ class SuspiciousTransactionsList extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 16,
         columns: [
-          DataColumn(label: Text('finance.user'.tr)),
-          DataColumn(label: Text('finance.amount'.tr), numeric: true),
-          DataColumn(label: Text('finance.reason'.tr)),
-          DataColumn(label: Text('finance.flagged_at'.tr)),
-          DataColumn(label: Text('finance.status'.tr)),
-          DataColumn(label: Text('finance.actions'.tr)),
+          DataColumn(label: Text('admin.finance.user'.tr)),
+          DataColumn(label: Text('admin.finance.amount'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.reason'.tr)),
+          DataColumn(label: Text('admin.finance.flagged_at'.tr)),
+          DataColumn(label: Text('admin.finance.status'.tr)),
+          DataColumn(label: Text('admin.finance.actions'.tr)),
         ],
         rows: data.map((item) {
           return DataRow(
@@ -101,8 +101,8 @@ class SuspiciousTransactionsList extends StatelessWidget {
                   ),
                   child: Text(
                     item.isReviewed
-                        ? 'finance.reviewed'.tr
-                        : 'finance.pending_review'.tr,
+                        ? 'admin.finance.reviewed'.tr
+                        : 'admin.finance.pending_review'.tr,
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.w600,
@@ -122,7 +122,7 @@ class SuspiciousTransactionsList extends StatelessWidget {
                         width: 80,
                         height: 32,
                         child: AppButton(
-                          text: 'finance.review'.tr,
+                          text: 'admin.finance.review'.tr,
                           variant: ButtonVariant.outline,
                           height: 32,
                           onPressed: () => onReview(item.id),
@@ -134,7 +134,7 @@ class SuspiciousTransactionsList extends StatelessWidget {
                       width: 70,
                       height: 32,
                       child: AppButton(
-                        text: 'finance.clear'.tr,
+                        text: 'admin.finance.clear'.tr,
                         variant: ButtonVariant.text,
                         height: 32,
                         onPressed: () => onClear(item.id),

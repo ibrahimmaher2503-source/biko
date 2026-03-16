@@ -25,7 +25,7 @@ class CashVsDigitalChart extends StatelessWidget {
     if (data.isEmpty) {
       return Center(
         child: Text(
-          'finance.no_payment_data'.tr,
+          'admin.finance.no_payment_data'.tr,
           style: TextStyle(color: colors.textMuted),
         ),
       );
@@ -118,7 +118,7 @@ class CashVsDigitalChart extends StatelessWidget {
                       return touchedSpots.map((spot) {
                         final isCash = spot.barIndex == 0;
                         return LineTooltipItem(
-                          '${isCash ? 'finance.cash'.tr : 'finance.digital'.tr}'
+                          '${isCash ? 'admin.finance.cash'.tr : 'admin.finance.digital'.tr}'
                           '\n${spot.y.toStringAsFixed(0)} ${'common.egp'.tr}',
                           TextStyle(
                             color: isCash ? _cashColor : _digitalColor,
@@ -138,9 +138,9 @@ class CashVsDigitalChart extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _legendDot(_cashColor, 'finance.cash'.tr, theme, colors),
+            _legendDot(_cashColor, 'admin.finance.cash'.tr, theme, colors),
             const SizedBox(width: 24),
-            _legendDot(_digitalColor, 'finance.digital'.tr, theme, colors),
+            _legendDot(_digitalColor, 'admin.finance.digital'.tr, theme, colors),
           ],
         ),
       ],

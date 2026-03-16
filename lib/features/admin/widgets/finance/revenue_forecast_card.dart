@@ -36,7 +36,7 @@ class RevenueForecastCard extends StatelessWidget {
               Icon(Icons.auto_graph_rounded, color: colors.info, size: 20),
               const SizedBox(width: 8),
               Text(
-                'finance.revenue_forecast'.tr,
+                'admin.finance.revenue_forecast'.tr,
                 style: theme.textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -53,7 +53,7 @@ class RevenueForecastCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'finance.projected'.tr,
+                      'admin.finance.projected'.tr,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colors.textMuted,
                       ),
@@ -74,7 +74,7 @@ class RevenueForecastCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'finance.current'.tr,
+                      'admin.finance.current'.tr,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colors.textMuted,
                       ),

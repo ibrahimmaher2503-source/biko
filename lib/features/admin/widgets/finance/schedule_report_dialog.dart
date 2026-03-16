@@ -80,13 +80,13 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'finance.schedule_report'.tr,
+                'admin.finance.schedule_report'.tr,
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 20),
               // Frequency dropdown
               Text(
-                'finance.frequency'.tr,
+                'admin.finance.frequency'.tr,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -106,7 +106,7 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
                 items: _frequencies.map((freq) {
                   return DropdownMenuItem(
                     value: freq,
-                    child: Text('finance.freq_$freq'.tr),
+                    child: Text('admin.finance.freq_$freq'.tr),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -116,7 +116,7 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
               const SizedBox(height: 16),
               // Report type dropdown
               Text(
-                'finance.report_type'.tr,
+                'admin.finance.report_type'.tr,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -136,7 +136,7 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
                 items: _reportTypes.map((type) {
                   return DropdownMenuItem(
                     value: type,
-                    child: Text('finance.report_$type'.tr),
+                    child: Text('admin.finance.report_$type'.tr),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -147,8 +147,8 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
               // Email field
               AppTextField(
                 controller: _emailController,
-                label: 'finance.email'.tr,
-                hint: 'finance.enter_email'.tr,
+                label: 'admin.finance.email'.tr,
+                hint: 'admin.finance.enter_email'.tr,
                 keyboardType: TextInputType.emailAddress,
                 prefixIcon: Icons.email_outlined,
               ),
@@ -168,7 +168,7 @@ class _ScheduleReportDialogState extends State<ScheduleReportDialog> {
                   SizedBox(
                     width: 140,
                     child: AppButton(
-                      text: 'finance.schedule'.tr,
+                      text: 'admin.finance.schedule'.tr,
                       onPressed: _confirm,
                     ),
                   ),

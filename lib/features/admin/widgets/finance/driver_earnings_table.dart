@@ -25,7 +25,7 @@ class DriverEarningsTable extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Text(
-            'finance.no_earnings_data'.tr,
+            'admin.finance.no_earnings_data'.tr,
             style: TextStyle(color: colors.textMuted),
           ),
         ),
@@ -38,13 +38,13 @@ class DriverEarningsTable extends StatelessWidget {
         headingRowColor: WidgetStateProperty.all(colors.surfaceContainer),
         columnSpacing: 20,
         columns: [
-          DataColumn(label: Text('finance.driver'.tr)),
-          DataColumn(label: Text('finance.trips'.tr), numeric: true),
-          DataColumn(label: Text('finance.gross'.tr), numeric: true),
-          DataColumn(label: Text('finance.commission'.tr), numeric: true),
-          DataColumn(label: Text('finance.tips'.tr), numeric: true),
-          DataColumn(label: Text('finance.bonuses'.tr), numeric: true),
-          DataColumn(label: Text('finance.net'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.driver'.tr)),
+          DataColumn(label: Text('admin.finance.trips'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.gross'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.commission'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.tips'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.bonuses'.tr), numeric: true),
+          DataColumn(label: Text('admin.finance.net'.tr), numeric: true),
         ],
         rows: data.map((driver) {
           return DataRow(

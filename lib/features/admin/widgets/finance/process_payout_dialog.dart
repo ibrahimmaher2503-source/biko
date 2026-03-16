@@ -84,23 +84,23 @@ class _ProcessPayoutDialogState extends State<ProcessPayoutDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'finance.process_payout'.tr,
+                'admin.finance.process_payout'.tr,
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
-                '${'finance.driver'.tr}: ${widget.driverName}',
+                '${'admin.finance.driver'.tr}: ${widget.driverName}',
                 style: TextStyle(color: colors.textMuted),
               ),
               Text(
-                '${'finance.pending'.tr}: '
+                '${'admin.finance.pending'.tr}: '
                 '${widget.pendingAmount.toStringAsFixed(2)} '
                 '${'common.egp'.tr}',
                 style: TextStyle(color: colors.textMuted),
               ),
               const SizedBox(height: 20),
               Text(
-                'finance.payout_method'.tr,
+                'admin.finance.payout_method'.tr,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),
@@ -120,7 +120,7 @@ class _ProcessPayoutDialogState extends State<ProcessPayoutDialog> {
                 items: _methods.map((method) {
                   return DropdownMenuItem(
                     value: method,
-                    child: Text('finance.method_$method'.tr),
+                    child: Text('admin.finance.method_$method'.tr),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -130,7 +130,7 @@ class _ProcessPayoutDialogState extends State<ProcessPayoutDialog> {
               const SizedBox(height: 16),
               AppTextField(
                 controller: _amountController,
-                label: 'finance.amount'.tr,
+                label: 'admin.finance.amount'.tr,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -152,7 +152,7 @@ class _ProcessPayoutDialogState extends State<ProcessPayoutDialog> {
                   SizedBox(
                     width: 140,
                     child: AppButton(
-                      text: 'finance.confirm_payout'.tr,
+                      text: 'admin.finance.confirm_payout'.tr,
                       onPressed: _confirm,
                     ),
                   ),

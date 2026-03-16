@@ -45,7 +45,7 @@ class DriverEarningsDetailCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '${data.totalTrips} ${'finance.trips'.tr}',
+                      '${data.totalTrips} ${'admin.finance.trips'.tr}',
                       style: TextStyle(
                         fontSize: 13,
                         color: colors.textMuted,
@@ -58,7 +58,7 @@ class DriverEarningsDetailCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'finance.net'.tr,
+                    'admin.finance.net'.tr,
                     style: TextStyle(fontSize: 11, color: colors.textMuted),
                   ),
                   Text(
@@ -79,26 +79,26 @@ class DriverEarningsDetailCard extends StatelessWidget {
           _row(
             theme,
             colors,
-            label: 'finance.gross'.tr,
+            label: 'admin.finance.gross'.tr,
             value: data.grossEarnings,
           ),
           _row(
             theme,
             colors,
-            label: 'finance.commission'.tr,
+            label: 'admin.finance.commission'.tr,
             value: -data.commission,
             isNegative: true,
           ),
           _row(
             theme,
             colors,
-            label: 'finance.tips'.tr,
+            label: 'admin.finance.tips'.tr,
             value: data.tips,
           ),
           _row(
             theme,
             colors,
-            label: 'finance.bonuses'.tr,
+            label: 'admin.finance.bonuses'.tr,
             value: data.bonuses,
           ),
           const SizedBox(height: 8),
@@ -107,7 +107,7 @@ class DriverEarningsDetailCard extends StatelessWidget {
           _row(
             theme,
             colors,
-            label: 'finance.avg_per_trip'.tr,
+            label: 'admin.finance.avg_per_trip'.tr,
             value: data.avgPerTrip,
             isBold: true,
           ),

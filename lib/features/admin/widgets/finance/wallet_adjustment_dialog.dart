@@ -93,14 +93,14 @@ class _WalletAdjustmentDialogState extends State<WalletAdjustmentDialog> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'finance.wallet_adjustment'.tr,
+                'admin.finance.wallet_adjustment'.tr,
                 style: theme.textTheme.titleLarge,
               ),
               const SizedBox(height: 20),
               AppTextField(
                 controller: _userController,
-                label: 'finance.user'.tr,
-                hint: 'finance.enter_user'.tr,
+                label: 'admin.finance.user'.tr,
+                hint: 'admin.finance.enter_user'.tr,
                 enabled: widget.preselectedUserUid == null,
                 prefixIcon: Icons.person_outline,
               ),
@@ -109,7 +109,7 @@ class _WalletAdjustmentDialogState extends State<WalletAdjustmentDialog> {
                 children: [
                   Expanded(
                     child: ChoiceChip(
-                      label: Text('finance.add_funds'.tr),
+                      label: Text('admin.finance.add_funds'.tr),
                       selected: _isAddition,
                       onSelected: (selected) {
                         if (selected) setState(() => _isAddition = true);
@@ -126,7 +126,7 @@ class _WalletAdjustmentDialogState extends State<WalletAdjustmentDialog> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: ChoiceChip(
-                      label: Text('finance.deduct_funds'.tr),
+                      label: Text('admin.finance.deduct_funds'.tr),
                       selected: !_isAddition,
                       onSelected: (selected) {
                         if (selected) setState(() => _isAddition = false);
@@ -145,8 +145,8 @@ class _WalletAdjustmentDialogState extends State<WalletAdjustmentDialog> {
               const SizedBox(height: 16),
               AppTextField(
                 controller: _amountController,
-                label: 'finance.amount'.tr,
-                hint: 'finance.enter_amount'.tr,
+                label: 'admin.finance.amount'.tr,
+                hint: 'admin.finance.enter_amount'.tr,
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
@@ -155,8 +155,8 @@ class _WalletAdjustmentDialogState extends State<WalletAdjustmentDialog> {
               const SizedBox(height: 16),
               AppTextField(
                 controller: _reasonController,
-                label: 'finance.reason'.tr,
-                hint: 'finance.enter_reason'.tr,
+                label: 'admin.finance.reason'.tr,
+                hint: 'admin.finance.enter_reason'.tr,
                 maxLines: 2,
               ),
               const SizedBox(height: 24),

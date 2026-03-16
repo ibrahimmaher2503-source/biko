@@ -21,7 +21,7 @@ class PaymentSuccessChart extends StatelessWidget {
     if (data.isEmpty) {
       return Center(
         child: Text(
-          'finance.no_payment_data'.tr,
+          'admin.finance.no_payment_data'.tr,
           style: TextStyle(color: colors.textMuted),
         ),
       );
@@ -43,7 +43,7 @@ class PaymentSuccessChart extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: '${entry.successRate.toStringAsFixed(1)}% '
-                          '${'finance.success_rate'.tr}\n',
+                          '${'admin.finance.success_rate'.tr}\n',
                       style: TextStyle(
                         color: colors.success,
                         fontSize: 11,

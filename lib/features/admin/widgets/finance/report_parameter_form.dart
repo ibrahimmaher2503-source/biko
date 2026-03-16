@@ -51,7 +51,7 @@ class _ReportParameterFormState extends State<ReportParameterForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'finance.report_parameters'.tr,
+          'admin.finance.report_parameters'.tr,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.w600,
           ),
@@ -68,7 +68,7 @@ class _ReportParameterFormState extends State<ReportParameterForm> {
                       ? '${DateFormat('dd/MM/yyyy').format(_dateRange!.start)}'
                           ' - '
                           '${DateFormat('dd/MM/yyyy').format(_dateRange!.end)}'
-                      : 'finance.select_date_range'.tr,
+                      : 'admin.finance.select_date_range'.tr,
                   style: const TextStyle(fontSize: 13),
                 ),
                 style: OutlinedButton.styleFrom(
@@ -89,7 +89,7 @@ class _ReportParameterFormState extends State<ReportParameterForm> {
             SizedBox(
               width: 160,
               child: AppButton(
-                text: 'finance.generate_report'.tr,
+                text: 'admin.finance.generate_report'.tr,
                 leadingIcon: Icons.download_rounded,
                 onPressed: _dateRange != null ? _generate : null,
               ),
