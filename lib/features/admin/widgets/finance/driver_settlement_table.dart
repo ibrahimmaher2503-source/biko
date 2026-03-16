@@ -125,7 +125,9 @@ class DriverSettlementTable extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppTheme.radiusFull),
       ),
       child: Text(
-        'admin.finance.status_${status.toLowerCase()}'.tr,
+        status.isEmpty
+            ? 'admin.finance.status_unknown'.tr
+            : 'admin.finance.status_${status.toLowerCase()}'.tr,
         style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: fg),
       ),
     );
