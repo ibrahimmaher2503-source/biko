@@ -84,8 +84,37 @@ class AdminFinancialScreen extends GetView<AdminFinancialController> {
                   ),
                 );
               }
-              if (summaryData == null) {
+              if (summaryData == null && controller.isLoading.value) {
                 return const Center(child: AppLoading());
+              }
+              if (summaryData == null) {
+                return Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.account_balance_wallet_outlined,
+                          size: 64, color: colors.textMuted),
+                      const SizedBox(height: 16),
+                      Text(
+                        'admin.financial.no_data'.tr,
+                        style: TextStyle(color: colors.textMuted),
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        text: 'admin.dashboard.refresh'.tr,
+                        onPressed: () => controller.loadSummary(
+                          controller.dateRange.value ??
+                              DateTimeRange(
+                                start: DateTime.now()
+                                    .subtract(const Duration(days: 30)),
+                                end: DateTime.now(),
+                              ),
+                        ),
+                        variant: ButtonVariant.outline,
+                      ),
+                    ],
+                  ),
+                );
               }
 
               return LayoutBuilder(

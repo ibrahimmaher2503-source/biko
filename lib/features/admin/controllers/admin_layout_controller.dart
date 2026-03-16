@@ -169,13 +169,16 @@ class AdminLayoutController extends GetxController {
     }
   }
 
-  /// Get sidebar items visible to the current user.
+  /// Reactive list of sidebar items visible to the current user.
   ///
-  /// Filters out [superAdminOnly] items if the current user is not a
-  /// super admin.
+  /// Filters out [superAdminOnly] items when the current user is not a
+  /// super admin. Reading `_isSuperAdmin` through the auth controller
+  /// ensures GetX tracks this dependency for reactive rebuilds.
   List<SidebarItem> getVisibleItems() {
     final auth = Get.find<AdminAuthController>();
-    if (auth.isSuperAdmin) {
+    // Access the observable value directly so Obx tracks the dependency.
+    final superAdmin = auth.isSuperAdmin;
+    if (superAdmin) {
       return _sidebarItems;
     }
     return _sidebarItems.where((item) => !item.superAdminOnly).toList();

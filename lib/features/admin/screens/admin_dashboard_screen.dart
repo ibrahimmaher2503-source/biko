@@ -20,27 +20,6 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: Text('admin.dashboard.title'.tr),
-        actions: [
-          Obx(
-            () => controller.isLoading.value
-                ? const Padding(
-                    padding: EdgeInsets.all(16.0),
-                    child: SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    ),
-                  )
-                : IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: controller.refreshDashboard,
-                    tooltip: 'admin.dashboard.refresh'.tr,
-                  ),
-          ),
-        ],
-      ),
       body: Obx(() {
         if (controller.isLoading.value &&
             controller.stats.value.tripsToday == 0) {
@@ -55,6 +34,24 @@ class AdminDashboardScreen extends GetView<AdminDashboardController> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Refresh button row
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Obx(
+                    () => controller.isLoading.value
+                        ? const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: controller.refreshDashboard,
+                            tooltip: 'admin.dashboard.refresh'.tr,
+                          ),
+                  ),
+                ),
+
                 // Stats Cards Grid
                 _buildStatsGrid(context, colors),
 

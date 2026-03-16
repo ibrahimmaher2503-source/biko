@@ -59,7 +59,8 @@ class AdminSidebar extends GetView<AdminLayoutController> {
             ),
             const Divider(height: 1),
 
-            // Nav items
+            // Nav items – also observe auth controller to reactively
+            // hide super-admin-only items when role changes.
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),

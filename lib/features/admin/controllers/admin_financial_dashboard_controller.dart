@@ -51,7 +51,14 @@ class AdminFinancialDashboardController extends GetxController {
       ]);
     } catch (e, stack) {
       debugPrint('loadAllData error: $e\n$stack');
-      AppSnackbar.error(e.toString());
+      // Show user-friendly message instead of raw Firestore errors
+      final msg = e.toString();
+      if (msg.contains('failed-precondition') ||
+          msg.contains('requires an index')) {
+        AppSnackbar.error('admin.finance.index_required'.tr);
+      } else {
+        AppSnackbar.error('admin.finance.load_error'.tr);
+      }
     } finally {
       isLoading.value = false;
     }
