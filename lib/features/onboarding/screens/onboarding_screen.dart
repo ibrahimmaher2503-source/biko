@@ -37,7 +37,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
 
   Widget _buildTopBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -57,7 +57,7 @@ class OnboardingScreen extends GetView<OnboardingController> {
 
   Widget _buildBottom(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+      padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 32),
       child: Column(
         children: [
           // Page indicators

@@ -26,7 +26,11 @@ class OtpVerificationScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(4),
                 child: IconButton(
                   onPressed: Get.back,
-                  icon: const Icon(Icons.arrow_back),
+                  icon: Icon(
+                    Directionality.of(context) == TextDirection.rtl
+                        ? Icons.arrow_forward
+                        : Icons.arrow_back,
+                  ),
                 ),
               ),
             ),

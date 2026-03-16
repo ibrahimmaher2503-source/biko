@@ -73,7 +73,7 @@ class _BottomSheetContent extends StatelessWidget {
           // Content
           Flexible(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(
+              padding: const EdgeInsetsDirectional.fromSTEB(
                 AppConstants.spacingLg,
                 0,
                 AppConstants.spacingLg,

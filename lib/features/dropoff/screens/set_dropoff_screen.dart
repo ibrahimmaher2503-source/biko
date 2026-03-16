@@ -49,7 +49,9 @@ class SetDropoffScreen extends GetView<DropoffController> {
             top: MediaQuery.of(context).padding.top + 12,
             start: 16,
             child: _FloatingCircleButton(
-              icon: Icons.arrow_back,
+              icon: Directionality.of(context) == TextDirection.rtl
+                  ? Icons.arrow_forward
+                  : Icons.arrow_back,
               colors: colors,
               onTap: Get.back,
             ),

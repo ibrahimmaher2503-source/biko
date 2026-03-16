@@ -46,10 +46,17 @@ class ProfileSetupScreen extends GetView<ProfileSetupController> {
 
   Widget _buildTopBar(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 0),
       child: Row(
         children: [
-          IconButton(onPressed: Get.back, icon: const Icon(Icons.arrow_back)),
+          IconButton(
+            onPressed: Get.back,
+            icon: Icon(
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.arrow_forward
+                  : Icons.arrow_back,
+            ),
+          ),
           Expanded(
             child: Text(
               'profile.title'.tr,
@@ -341,7 +348,7 @@ class ProfileSetupScreen extends GetView<ProfileSetupController> {
 
   Widget _buildCompleteButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+      padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 32),
       child: Obx(
         () => AppButton(
           text: 'profile.complete'.tr,

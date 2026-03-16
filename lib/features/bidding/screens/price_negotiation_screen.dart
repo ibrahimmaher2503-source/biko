@@ -285,7 +285,9 @@ class _BackButton extends StatelessWidget {
           ],
         ),
         child: Icon(
-          Icons.arrow_back,
+          Directionality.of(context) == TextDirection.rtl
+              ? Icons.arrow_forward
+              : Icons.arrow_back,
           size: 20,
           color: Theme.of(context).colorScheme.onSurface,
         ),

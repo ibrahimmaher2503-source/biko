@@ -150,7 +150,7 @@ class TripSummaryCard extends StatelessWidget {
                   ),
                 ),
                 tilePadding: const EdgeInsets.symmetric(horizontal: 16),
-                childrenPadding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                childrenPadding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 16),
                 iconColor: ext.textMuted,
                 collapsedIconColor: ext.textMuted,
                 children: [
