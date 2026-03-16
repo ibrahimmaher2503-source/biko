@@ -102,7 +102,7 @@ class NavigateToPickupScreen extends GetView<NavigatePickupController> {
       child: SafeArea(
         top: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
+          padding: const EdgeInsetsDirectional.fromSTEB(20, 20, 20, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -277,7 +277,7 @@ class _TurnByTurnBanner extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1E293B),
+        color: theme.colorScheme.inverseSurface,
         borderRadius: BorderRadius.circular(AppTheme.radiusLarge),
         boxShadow: [
           BoxShadow(

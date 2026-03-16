@@ -73,7 +73,7 @@ class PendingApprovalScreen extends StatelessWidget {
           children: [
             // Header
             Padding(
-              padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+              padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 0),
               child: Row(
                 children: [
                   IconButton(
@@ -261,7 +261,7 @@ class PendingApprovalScreen extends StatelessWidget {
             ),
             // Bottom buttons
             Padding(
-              padding: const EdgeInsets.fromLTRB(24, 0, 24, 32),
+              padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 32),
               child: Column(
                 children: [
                   // Contact Support

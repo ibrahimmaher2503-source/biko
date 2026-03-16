@@ -102,7 +102,7 @@ class WalletScreen extends GetView<WalletController> {
 
     Get.bottomSheet<void>(
       Container(
-        padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
+        padding: const EdgeInsetsDirectional.fromSTEB(24, 12, 24, 24),
         decoration: BoxDecoration(
           color: Get.theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.vertical(

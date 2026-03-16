@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/models/trip_model.dart';
 import 'package:biko/core/routes/app_routes.dart';
+import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/services/auth_service.dart';
 import 'package:biko/core/services/firestore_service.dart';
 import 'package:biko/core/services/location_service.dart';
@@ -104,7 +105,7 @@ class ActiveTripController extends GetxController {
         Polyline(
           polylineId: const PolylineId('route'),
           points: result.polylinePoints as List<LatLng>,
-          color: const Color(0xFFE0062E),
+          color: AppTheme.primary,
           width: 4,
         ),
       });

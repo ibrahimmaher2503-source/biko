@@ -122,7 +122,7 @@ class DriverHomeScreen extends GetView<DriverHomeController> {
             // Custom header with greeting and wallet badge
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                padding: const EdgeInsetsDirectional.fromSTEB(20, 16, 20, 0),
                 child: Row(
                   children: [
                     // Greeting

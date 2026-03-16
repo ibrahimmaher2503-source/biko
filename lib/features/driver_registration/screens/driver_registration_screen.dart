@@ -27,7 +27,7 @@ class DriverRegistrationScreen extends GetView<DriverRegistrationController> {
             // Scrollable content
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(24, 0, 24, 96),
+                padding: const EdgeInsetsDirectional.fromSTEB(24, 0, 24, 96),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -76,7 +76,7 @@ class DriverRegistrationScreen extends GetView<DriverRegistrationController> {
 
   Widget _buildHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+      padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 0),
       child: Row(
         children: [
           IconButton(onPressed: Get.back, icon: const Icon(Icons.arrow_back)),
@@ -195,7 +195,7 @@ class DriverRegistrationScreen extends GetView<DriverRegistrationController> {
     final ext = Theme.of(context).extension<AppColorsExtension>()!;
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+      padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 32),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
         border: Border(top: BorderSide(color: ext.borderSubtle)),

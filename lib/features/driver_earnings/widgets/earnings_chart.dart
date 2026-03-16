@@ -2,6 +2,7 @@ import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 /// Bar chart showing daily earnings for the selected period.
 ///
@@ -22,7 +23,7 @@ class EarningsChart extends StatelessWidget {
 
     return AppCard(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 20, 16, 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -92,7 +93,7 @@ class EarningsChart extends StatelessWidget {
                     touchTooltipData: BarTouchTooltipData(
                       getTooltipItem: (group, groupIdx, rod, rodIdx) {
                         return BarTooltipItem(
-                          '${rod.toY.toStringAsFixed(0)} EGP',
+                          '${rod.toY.toStringAsFixed(0)} ${'common.egp'.tr}',
                           theme.textTheme.labelSmall!.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w600,

@@ -115,7 +115,7 @@ class ChatScreen extends GetView<ChatController> {
             child: SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 10, 10, 10),
                 child: Row(
                   children: [
                     // Rounded text input
