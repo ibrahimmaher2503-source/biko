@@ -60,7 +60,9 @@ class ActiveTripScreen extends GetView<ActiveTripController> {
                     child: Row(
                       children: [
                         _CircleIconButton(
-                          icon: Icons.arrow_back,
+                          icon: Directionality.of(context) == TextDirection.rtl
+                              ? Icons.arrow_forward
+                              : Icons.arrow_back,
                           onTap: () => _showExitConfirmation(context),
                         ),
                       ],

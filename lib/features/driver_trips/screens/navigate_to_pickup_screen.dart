@@ -55,7 +55,9 @@ class NavigateToPickupScreen extends GetView<NavigatePickupController> {
                     children: [
                       // Back button
                       _CircleIconButton(
-                        icon: Icons.arrow_back,
+                        icon: Directionality.of(context) == TextDirection.rtl
+                            ? Icons.arrow_forward
+                            : Icons.arrow_back,
                         onTap: () => Get.back<void>(),
                       ),
                       const SizedBox(width: 12),

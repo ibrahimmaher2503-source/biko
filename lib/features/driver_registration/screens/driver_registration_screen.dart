@@ -79,7 +79,14 @@ class DriverRegistrationScreen extends GetView<DriverRegistrationController> {
       padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 4, 0),
       child: Row(
         children: [
-          IconButton(onPressed: Get.back, icon: const Icon(Icons.arrow_back)),
+          IconButton(
+            onPressed: Get.back,
+            icon: Icon(
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.arrow_forward
+                  : Icons.arrow_back,
+            ),
+          ),
           Expanded(
             child: Text(
               'registration.title'.tr,
