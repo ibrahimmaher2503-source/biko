@@ -1,6 +1,7 @@
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_dialog.dart';
 import 'package:biko/core/widgets/app_loading.dart';
+import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/bidding/controllers/bids_controller.dart';
 import 'package:biko/features/bidding/widgets/bids_list.dart';
 import 'package:biko/features/bidding/widgets/search_timeout_widget.dart';
