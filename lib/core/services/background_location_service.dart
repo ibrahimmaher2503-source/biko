@@ -72,7 +72,7 @@ class BackgroundLocationService extends GetxService {
     _disconnectRef = _realtimeDb.child('driver_locations/$uid');
     await _disconnectRef!.onDisconnect().update({
       'is_online': false,
-      'last_seen': ServerValue.timestamp,
+      'updated_at': ServerValue.timestamp,
     });
 
     isOnline.value = true;
@@ -132,9 +132,8 @@ class BackgroundLocationService extends GetxService {
   }
 
   @override
-  void onClose() {
-    _publishTimer?.cancel();
-    _locationSubscription?.cancel();
+  Future<void> onClose() async {
+    await stop();
     super.onClose();
   }
 }
