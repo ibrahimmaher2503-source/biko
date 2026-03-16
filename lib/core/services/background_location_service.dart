@@ -39,10 +39,13 @@ class BackgroundLocationService extends GetxService {
       debugPrint('⚠️ BackgroundLocationService: Already started');
       return;
     }
+    // Set immediately to prevent concurrent starts
+    isOnline.value = true;
 
     final uid = AuthService.currentUid;
     if (uid == null) {
       debugPrint('⚠️ BackgroundLocationService: No authenticated user');
+      isOnline.value = false;
       return;
     }
 
@@ -50,6 +53,7 @@ class BackgroundLocationService extends GetxService {
     final hasPermission = await locationService.checkAndRequestPermission();
     if (!hasPermission) {
       debugPrint('⚠️ BackgroundLocationService: No location permission');
+      isOnline.value = false;
       return;
     }
 
@@ -80,7 +84,6 @@ class BackgroundLocationService extends GetxService {
       'updated_at': ServerValue.timestamp,
     });
 
-    isOnline.value = true;
     debugPrint('✅ BackgroundLocationService started for $uid');
   }
 
