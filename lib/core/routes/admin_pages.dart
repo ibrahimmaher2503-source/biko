@@ -50,6 +50,8 @@ import 'package:biko/features/admin/screens/admin_transaction_monitor_screen.dar
 import 'package:biko/features/admin/screens/admin_trip_detail_screen.dart';
 import 'package:biko/features/admin/screens/admin_trips_screen.dart';
 import 'package:biko/features/admin/screens/admin_wallet_monitoring_screen.dart';
+import 'package:biko/features/dispatch/bindings/dispatch_binding.dart';
+import 'package:biko/features/dispatch/screens/dispatch_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -281,6 +283,14 @@ class AdminPages {
       name: AppRoutes.adminSettlement,
       page: () => const AdminLayoutShell(child: AdminSettlementScreen()),
       binding: AdminSettlementBinding(),
+      middlewares: [AdminAuthGuard()],
+    ),
+
+    // ==================== Dispatch (phone-optimised, no sidebar) ====================
+    GetPage(
+      name: AppRoutes.dispatchHome,
+      page: () => const DispatchHomeScreen(),
+      binding: DispatchBinding(),
       middlewares: [AdminAuthGuard()],
     ),
   ];

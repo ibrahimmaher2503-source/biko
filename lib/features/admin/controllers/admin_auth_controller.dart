@@ -11,6 +11,10 @@ import 'package:get/get.dart';
 ///
 /// All Firebase Auth access goes through [AuthService] (RULE-06 compliance).
 class AdminAuthController extends GetxController {
+  /// Route to navigate to after a successful login.
+  /// Dispatcher app overrides this to [AppRoutes.dispatchHome].
+  static String postLoginRoute = AppRoutes.adminDashboard;
+
   final isAuthenticated = false.obs;
   final isCheckingAuth = true.obs;
   final isLoading = false.obs;
@@ -95,7 +99,7 @@ class AdminAuthController extends GetxController {
       );
 
       isAuthenticated.value = true;
-      Get.offAllNamed(AppRoutes.adminDashboard);
+      Get.offAllNamed(postLoginRoute);
     } catch (e) {
       debugPrint('AdminAuthController.signIn failed: $e');
       if (e is AuthException) {
