@@ -231,4 +231,8 @@ class AppRoutes {
 
   /// Settlement
   static const String adminSettlement = '/admin/finance/settlement';
+
+  // ==================== Dispatcher App Routes ====================
+  /// Dispatcher phone app — live dispatch control home
+  static const String dispatchHome = '/dispatch/home';
 }

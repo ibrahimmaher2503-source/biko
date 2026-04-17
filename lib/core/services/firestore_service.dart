@@ -1128,4 +1128,101 @@ class FirestoreService {
       rethrow;
     }
   }
+
+  // ==================== Dispatch ====================
+
+  /// Stream trips that are waiting for a driver (searching or bidding).
+  ///
+  /// Requires composite index: status (array-contains) + created_at ASC.
+  /// Run `firebase deploy --only firestore:indexes` after first use.
+  static Stream<List<TripModel>> listenToSearchingTrips() {
+    return _firestore
+        .collection('trips')
+        .where('status', whereIn: ['searching', 'bidding'])
+        .orderBy('created_at')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return TripModel.fromMap(data);
+      }).toList();
+    });
+  }
+
+  /// Stream trips that are in-progress (accepted through in_progress).
+  ///
+  /// Requires composite index: status (array-contains) + created_at ASC.
+  static Stream<List<TripModel>> listenToActiveTrips() {
+    return _firestore
+        .collection('trips')
+        .where('status', whereIn: ['accepted', 'on_the_way', 'arrived', 'in_progress'])
+        .orderBy('created_at')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        data['id'] = doc.id;
+        return TripModel.fromMap(data);
+      }).toList();
+    });
+  }
+
+  /// Stream all currently-online drivers from Realtime Database.
+  static Stream<List<DriverLocationModel>> listenToAllOnlineDrivers() {
+    return _realtimeDb.child('driver_locations').onValue.map((event) {
+      final data = event.snapshot.value;
+      if (data == null) return <DriverLocationModel>[];
+
+      final map = Map<String, dynamic>.from(data as Map);
+      final drivers = <DriverLocationModel>[];
+
+      for (final entry in map.entries) {
+        final driverData = Map<String, dynamic>.from(entry.value as Map);
+        if (driverData['is_online'] != true) continue;
+        drivers.add(DriverLocationModel.fromMap(entry.key, driverData));
+      }
+
+      return drivers;
+    });
+  }
+
+  /// Manually assign a driver to a searching trip (dispatcher action).
+  ///
+  /// Uses a Firestore transaction to guard against race conditions.
+  /// Cleans up live bids from Realtime DB after assignment.
+  static Future<void> assignDriverToTrip({
+    required String tripId,
+    required String driverUid,
+    required double price,
+  }) async {
+    try {
+      final tripRef = _firestore.collection('trips').doc(tripId);
+
+      await _firestore.runTransaction((transaction) async {
+        final snap = await transaction.get(tripRef);
+        if (!snap.exists || snap.data() == null) {
+          throw Exception('Trip not found');
+        }
+
+        final status = snap.data()!['status'] as String?;
+        if (status != 'searching' && status != 'bidding') {
+          throw Exception('Trip is no longer available for dispatch');
+        }
+
+        transaction.update(tripRef, {
+          'status': 'accepted',
+          'driver_uid': driverUid,
+          'accepted_price': price,
+          'accepted_at': FieldValue.serverTimestamp(),
+          'dispatched_by_admin': true,
+        });
+      });
+
+      await _realtimeDb.child('live_bids/$tripId').remove();
+    } catch (e) {
+      debugPrint('❌ FirestoreService.assignDriverToTrip failed: $e');
+      rethrow;
+    }
+  }
 }
