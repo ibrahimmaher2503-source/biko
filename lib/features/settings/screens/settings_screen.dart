@@ -2,13 +2,13 @@ import 'package:biko/core/constants/app_constants.dart';
 import 'package:biko/core/theme/app_theme.dart';
 import 'package:biko/core/widgets/app_menu_item.dart';
 import 'package:biko/core/widgets/language_selector.dart';
-import 'package:biko/features/profile/controllers/profile_controller.dart';
+import 'package:biko/features/settings/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Settings screen with language, theme, and notification preferences
-class SettingsScreen extends GetView<ProfileController> {
+class SettingsScreen extends GetView<SettingsController> {
   const SettingsScreen({super.key});
 
   @override
@@ -19,9 +19,8 @@ class SettingsScreen extends GetView<ProfileController> {
     return Scaffold(
       appBar: AppBar(title: Text('profile.settings'.tr), centerTitle: false),
       body: Obx(() {
-        final userData = controller.user.value;
-        final currentLang = userData?.lang ?? 'ar';
-        final currentTheme = userData?.theme ?? 'light';
+        final currentLang = controller.selectedLanguage.value;
+        final isDark = controller.isDarkMode.value;
 
         return SingleChildScrollView(
           padding: const EdgeInsets.only(top: 8),
@@ -45,21 +44,15 @@ class SettingsScreen extends GetView<ProfileController> {
               AppMenuItem(
                 icon: Icons.dark_mode_outlined,
                 title: 'settings.theme'.tr,
-                subtitle: currentTheme == 'dark'
+                subtitle: isDark
                     ? 'settings.dark_mode'.tr
                     : 'settings.light_mode'.tr,
                 trailing: Switch(
-                  value: currentTheme == 'dark',
-                  onChanged: (isDark) {
-                    controller.changeTheme(isDark ? 'dark' : 'light');
-                  },
+                  value: isDark,
+                  onChanged: (_) => controller.toggleTheme(),
                   activeThumbColor: AppTheme.primary,
                 ),
-                onTap: () {
-                  controller.changeTheme(
-                    currentTheme == 'dark' ? 'light' : 'dark',
-                  );
-                },
+                onTap: controller.toggleTheme,
               ),
 
               // Section: Notifications
@@ -141,6 +134,7 @@ class SettingsScreen extends GetView<ProfileController> {
       ),
     );
   }
+
 }
 
 class _SectionHeader extends StatelessWidget {

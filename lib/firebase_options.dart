@@ -25,7 +25,6 @@ class DefaultFirebaseOptions {
     appId: '1:283152900428:android:62a906efdab6b9e9942fe9',
     messagingSenderId: '283152900428',
     projectId: 'biko-f1bfa',
-    databaseURL: 'https://biko-f1bfa-default-rtdb.firebaseio.com',
     storageBucket: 'biko-f1bfa.firebasestorage.app',
   );
 
@@ -34,7 +33,6 @@ class DefaultFirebaseOptions {
     appId: '1:283152900428:ios:15a809651dc16c60942fe9',
     messagingSenderId: '283152900428',
     projectId: 'biko-f1bfa',
-    databaseURL: 'https://biko-f1bfa-default-rtdb.firebaseio.com',
     storageBucket: 'biko-f1bfa.firebasestorage.app',
     androidClientId: '283152900428-5flfpmm7ib95jo7g3q4aumuksjnkvij9.apps.googleusercontent.com',
     iosClientId: '283152900428-rkdt7fe7atl1r41s8mvifto6686pjahh.apps.googleusercontent.com',
@@ -47,8 +45,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '283152900428',
     projectId: 'biko-f1bfa',
     authDomain: 'biko-f1bfa.firebaseapp.com',
-    databaseURL: 'https://biko-f1bfa-default-rtdb.firebaseio.com',
     storageBucket: 'biko-f1bfa.firebasestorage.app',
     measurementId: 'G-WXC7PE1K6N',
   );
+
 }
