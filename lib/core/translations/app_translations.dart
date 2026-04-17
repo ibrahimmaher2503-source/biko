@@ -376,6 +376,7 @@ class AppTranslations extends Translations {
       'settings.app_version': 'إصدار التطبيق',
       'settings.terms': 'الشروط والأحكام',
       'settings.privacy': 'سياسة الخصوصية',
+      'settings.save_failed': 'فشل حفظ الإعداد',
 
       // Trip History
       'history.title': 'سجل الرحلات',
@@ -2333,6 +2334,7 @@ class AppTranslations extends Translations {
       'settings.app_version': 'App Version',
       'settings.terms': 'Terms & Conditions',
       'settings.privacy': 'Privacy Policy',
+      'settings.save_failed': 'Failed to save setting',
 
       // Trip History
       'history.title': 'Trip History',
