@@ -35,6 +35,8 @@ class AppTranslations extends Translations {
       'common.done': 'تم',
       'common.yes': 'نعم',
       'common.no': 'لا',
+      'common.yes_cancel': 'نعم، إلغاء',
+      'common.no_stay': 'لا، ابقَ',
       'common.search': 'بحث',
       'common.filter': 'تصفية',
       'common.sort': 'ترتيب',
@@ -282,6 +284,10 @@ class AppTranslations extends Translations {
       'bids.cancel_trip_title': 'إلغاء الرحلة',
       'bids.cancel_trip_message': 'هل تريد إلغاء الرحلة؟ ستتوقف السائقون عن المزايدة.',
       'bids.yes_cancel': 'نعم، إلغاء',
+      'bids.cancel_confirm_title': 'إلغاء الرحلة؟',
+      'bids.cancel_confirm_body': 'هل تريد إلغاء الرحلة؟ ستتوقف السائقون عن المزايدة.',
+      'bids.trip_cancelled': 'تم إلغاء الرحلة',
+      'bids.rebook': 'احجز مجددًا',
 
       // Tracking
       'tracking.driver_en_route': 'السائق في الطريق إليك',
@@ -1985,6 +1991,8 @@ class AppTranslations extends Translations {
       'common.done': 'Done',
       'common.yes': 'Yes',
       'common.no': 'No',
+      'common.yes_cancel': 'Yes, Cancel',
+      'common.no_stay': 'No, Stay',
       'common.search': 'Search',
       'common.filter': 'Filter',
       'common.sort': 'Sort',
@@ -2240,6 +2248,10 @@ class AppTranslations extends Translations {
       'bids.cancel_trip_title': 'Cancel Trip',
       'bids.cancel_trip_message': 'Cancel this trip? Drivers will stop bidding.',
       'bids.yes_cancel': 'Yes, Cancel',
+      'bids.cancel_confirm_title': 'Cancel Trip?',
+      'bids.cancel_confirm_body': 'Cancel this trip? Drivers will stop bidding.',
+      'bids.trip_cancelled': 'Trip cancelled',
+      'bids.rebook': 'Rebook',
 
       // Tracking
       'tracking.driver_en_route': 'Driver is on the way',
