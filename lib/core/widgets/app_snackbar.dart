@@ -48,12 +48,16 @@ class AppSnackbar {
   // Prevent instantiation
   AppSnackbar._();
 
-  /// Show a snackbar with custom type, message, and options
+  /// Show a snackbar with custom type, message, and options.
+  ///
+  /// Pass [actionLabel] and [onAction] together to show a labelled action button.
   static void show({
     required String message,
     required SnackbarType type,
     Duration duration = const Duration(seconds: 3),
     VoidCallback? onTap,
+    String? actionLabel,
+    VoidCallback? onAction,
   }) {
     final config = _getConfig(type);
 
@@ -78,6 +82,18 @@ class AppSnackbar {
       borderRadius: 12,
       onTap: onTap != null ? (_) => onTap() : null,
       animationDuration: const Duration(milliseconds: 300),
+      mainButton: actionLabel != null && onAction != null
+          ? TextButton(
+              onPressed: onAction,
+              child: Text(
+                actionLabel,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            )
+          : null,
     );
   }
 
@@ -86,12 +102,16 @@ class AppSnackbar {
     String message, {
     Duration duration = const Duration(seconds: 3),
     VoidCallback? onTap,
+    String? actionLabel,
+    VoidCallback? onAction,
   }) {
     show(
       message: message,
       type: SnackbarType.success,
       duration: duration,
       onTap: onTap,
+      actionLabel: actionLabel,
+      onAction: onAction,
     );
   }
 
@@ -100,12 +120,16 @@ class AppSnackbar {
     String message, {
     Duration duration = const Duration(seconds: 3),
     VoidCallback? onTap,
+    String? actionLabel,
+    VoidCallback? onAction,
   }) {
     show(
       message: message,
       type: SnackbarType.error,
       duration: duration,
       onTap: onTap,
+      actionLabel: actionLabel,
+      onAction: onAction,
     );
   }
 
@@ -114,12 +138,16 @@ class AppSnackbar {
     String message, {
     Duration duration = const Duration(seconds: 3),
     VoidCallback? onTap,
+    String? actionLabel,
+    VoidCallback? onAction,
   }) {
     show(
       message: message,
       type: SnackbarType.info,
       duration: duration,
       onTap: onTap,
+      actionLabel: actionLabel,
+      onAction: onAction,
     );
   }
 
@@ -128,12 +156,16 @@ class AppSnackbar {
     String message, {
     Duration duration = const Duration(seconds: 3),
     VoidCallback? onTap,
+    String? actionLabel,
+    VoidCallback? onAction,
   }) {
     show(
       message: message,
       type: SnackbarType.warning,
       duration: duration,
       onTap: onTap,
+      actionLabel: actionLabel,
+      onAction: onAction,
     );
   }
 

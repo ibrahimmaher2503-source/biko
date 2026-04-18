@@ -4,6 +4,7 @@ import 'package:biko/core/models/bid_model.dart';
 import 'package:biko/core/models/enums.dart';
 import 'package:biko/core/routes/app_routes.dart';
 import 'package:biko/core/services/firestore_service.dart';
+import 'package:biko/core/widgets/app_dialog.dart';
 import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -173,19 +174,33 @@ class BidsController extends GetxController {
     }
   }
 
-  /// Cancel the trip and allow the screen to be popped.
+  /// Show confirmation dialog, then cancel the trip and navigate home.
   ///
-  /// Called by the [PopScope] confirmation dialog in [BidsScreen].
-  Future<bool> cancelTrip() async {
-    if (tripId.value.isEmpty) return true;
+  /// Called by [PopScope] in [BidsScreen] and by the Cancel Search AppBar button.
+  /// Shows [AppDialog.confirm] first — if the customer declines, nothing happens.
+  /// On confirm: cancels the trip, navigates to home, and shows a rebook snackbar.
+  Future<void> requestCancelTrip() async {
+    if (tripId.value.isEmpty) return;
+    final confirmed = await AppDialog.confirm(
+      title: 'bids.cancel_confirm_title'.tr,
+      content: 'bids.cancel_confirm_body'.tr,
+      confirmText: 'common.yes_cancel'.tr,
+      cancelText: 'common.no_stay'.tr,
+      isDestructive: true,
+    );
+    if (!confirmed) return;
     try {
       _tripResolved = true;
       await FirestoreService.cancelTripSearch(tripId.value);
-      return true;
-    } catch (e) {
+      Get.offAllNamed(AppRoutes.customerHome);
+      AppSnackbar.info(
+        'bids.trip_cancelled'.tr,
+        actionLabel: 'bids.rebook'.tr,
+        onAction: () => Get.offAllNamed(AppRoutes.setPickup),
+      );
+    } catch (_) {
       _tripResolved = false;
-      debugPrint('❌ BidsController.cancelTrip: $e');
-      return false;
+      AppSnackbar.error('common.error'.tr);
     }
   }
 }

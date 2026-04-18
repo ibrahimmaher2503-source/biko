@@ -1,7 +1,5 @@
 import 'package:biko/core/theme/app_theme.dart';
-import 'package:biko/core/widgets/app_dialog.dart';
 import 'package:biko/core/widgets/app_loading.dart';
-import 'package:biko/core/widgets/app_snackbar.dart';
 import 'package:biko/features/bidding/controllers/bids_controller.dart';
 import 'package:biko/features/bidding/widgets/bids_list.dart';
 import 'package:biko/features/bidding/widgets/search_timeout_widget.dart';
@@ -24,21 +22,7 @@ class BidsScreen extends GetView<BidsController> {
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
         if (didPop) return;
-        final confirmed = await AppDialog.confirm(
-          title: 'bids.cancel_trip_title'.tr,
-          content: 'bids.cancel_trip_message'.tr,
-          confirmText: 'bids.yes_cancel'.tr,
-          cancelText: 'common.no'.tr,
-          isDestructive: true,
-        );
-        if (confirmed) {
-          final success = await controller.cancelTrip();
-          if (success) {
-            Get.back();
-          } else {
-            AppSnackbar.error('common.error'.tr);
-          }
-        }
+        await controller.requestCancelTrip();
       },
       child: Scaffold(
         appBar: AppBar(
@@ -86,27 +70,8 @@ class BidsScreen extends GetView<BidsController> {
     );
   }
 
-  void _showCancelDialog(BuildContext context) {
-    Get.dialog(
-      AlertDialog(
-        title: Text('bids.cancel_search'.tr),
-        content: Text('bids.cancel_search_confirm'.tr),
-        actions: [
-          TextButton(onPressed: Get.back, child: Text('common.no'.tr)),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              controller.cancelSearch();
-            },
-            child: Text(
-              'common.yes'.tr,
-              style: TextStyle(color: Theme.of(context).colorScheme.error),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  void _showCancelDialog(BuildContext context) =>
+      controller.requestCancelTrip();
 }
 
 /// Header showing pickup → dropoff and offered price.
