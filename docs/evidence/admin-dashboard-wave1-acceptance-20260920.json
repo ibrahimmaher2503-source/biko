@@ -1,0 +1,38 @@
+{
+  "project": "biko-development",
+  "project_ref": "jlkzgsgfzolhwraakhbt",
+  "date": "2026-09-20",
+  "applied_migrations": [
+    "20260919230820_admin_dashboard_access",
+    "20260919230959_admin_dashboard_audit",
+    "20260919231549_admin_dashboard_staff_management",
+    "20260919232046_admin_dashboard_staff_self_elevation_guard"
+  ],
+  "sql_acceptance": {
+    "admin_dashboard_access": "PASS with rollback",
+    "admin_dashboard_audit": "PASS with rollback",
+    "admin_dashboard_staff_management": "PASS with rollback"
+  },
+  "edge_function": {
+    "name": "admin-staff",
+    "version": 1,
+    "status": "ACTIVE",
+    "verify_jwt": true,
+    "anonymous_probe": 401
+  },
+  "dashboard": {
+    "next_version": "16.3.3",
+    "lint": "PASS",
+    "build": "PASS",
+    "browser_protected_route": "/roles -> /login?next=%2Froles",
+    "password_reset_state": "PASS"
+  },
+  "post_test_state": {
+    "staff_count": 0,
+    "platform_role_count": 3,
+    "audit_count": 0,
+    "get_dashboard_context_exists": true,
+    "admin_create_staff_exists": true
+  },
+  "known_acceptance_dependency": "No trusted live Super Admin account exists; positive authenticated browser acceptance remains dependent on ADM-03 bootstrap identity."
+}
