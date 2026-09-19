@@ -1,0 +1,2740 @@
+{
+  "project_ref": "jlkzgsgfzolhwraakhbt",
+  "project_name": "biko-development",
+  "status": "ACTIVE_HEALTHY",
+  "method": "read-only catalog snapshot; no behavioral acceptance",
+  "migrations": [
+    {
+      "version": "20260829123858",
+      "name": "foundation"
+    },
+    {
+      "version": "20260829230833",
+      "name": "authorization_rls"
+    },
+    {
+      "version": "20260829232707",
+      "name": "core_bidding_engine"
+    },
+    {
+      "version": "20260829233756",
+      "name": "order_state_machine"
+    },
+    {
+      "version": "20260830001817",
+      "name": "driver_app_core"
+    },
+    {
+      "version": "20260830010117",
+      "name": "driver_business_freeze_reconciliation"
+    },
+    {
+      "version": "20260830014754",
+      "name": "user_flow_backend_delta"
+    },
+    {
+      "version": "20260830015129",
+      "name": "user_flow_privacy_hardening"
+    },
+    {
+      "version": "20260830021017",
+      "name": "gate_2_remediation"
+    },
+    {
+      "version": "20260830133522",
+      "name": "wave_a_security_transaction_integrity"
+    },
+    {
+      "version": "20260830135840",
+      "name": "wave_b_recovery_auth_contracts"
+    },
+    {
+      "version": "20260830143750",
+      "name": "wave_c_read_correctness"
+    },
+    {
+      "version": "20260830151837",
+      "name": "user_app_core_bridge"
+    },
+    {
+      "version": "20260830163437",
+      "name": "maps_location_pricing_dispatch"
+    },
+    {
+      "version": "20260830174205",
+      "name": "realtime_push_notifications"
+    },
+    {
+      "version": "20260830185634",
+      "name": "safety_driver_verification_delivery_confirmation"
+    },
+    {
+      "version": "20260830190204",
+      "name": "m10_legacy_assigned_driver_read_fix"
+    }
+  ],
+  "roles": [
+    {
+      "code": "OFFICE_ACCOUNTANT",
+      "scope_type": "OFFICE",
+      "permissions": [
+        "dashboard.view",
+        "finance.view",
+        "orders.view",
+        "reports.view"
+      ]
+    },
+    {
+      "code": "OFFICE_ADMIN",
+      "scope_type": "OFFICE",
+      "permissions": [
+        "bids.view",
+        "dashboard.view",
+        "drivers.create",
+        "drivers.edit",
+        "drivers.view",
+        "finance.view",
+        "motorcycles.create",
+        "motorcycles.edit",
+        "motorcycles.view",
+        "orders.cancel",
+        "orders.manage",
+        "orders.view",
+        "reports.view"
+      ]
+    },
+    {
+      "code": "OFFICE_DISPATCHER",
+      "scope_type": "OFFICE",
+      "permissions": [
+        "bids.view",
+        "dashboard.view",
+        "drivers.view",
+        "motorcycles.view",
+        "orders.manage",
+        "orders.view"
+      ]
+    },
+    {
+      "code": "SUPER_ADMIN",
+      "scope_type": "PLATFORM",
+      "permissions": [
+        "audit.view",
+        "bids.view",
+        "dashboard.view",
+        "drivers.activate",
+        "drivers.create",
+        "drivers.edit",
+        "drivers.suspend",
+        "drivers.verify",
+        "drivers.view",
+        "finance.view",
+        "motorcycles.create",
+        "motorcycles.edit",
+        "motorcycles.view",
+        "offices.create",
+        "offices.edit",
+        "offices.suspend",
+        "offices.view",
+        "orders.cancel",
+        "orders.manage",
+        "orders.view",
+        "reports.view",
+        "roles.manage",
+        "roles.view",
+        "settings.manage",
+        "settings.view",
+        "users.view"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "rls": true,
+      "name": "driver_documents",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "driver_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "document_type",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "file_path",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "document_status",
+          "not_null": true
+        },
+        {
+          "name": "rejection_reason",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "expiry_date",
+          "type": "date",
+          "not_null": false
+        },
+        {
+          "name": "verified_by",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "issued_at",
+          "type": "date",
+          "not_null": false
+        },
+        {
+          "name": "is_current",
+          "type": "boolean",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "driver_latest_locations",
+      "columns": [
+        {
+          "name": "driver_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "latitude",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "longitude",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "accuracy_meters",
+          "type": "numeric(8,2)",
+          "not_null": true
+        },
+        {
+          "name": "heading_degrees",
+          "type": "numeric(6,2)",
+          "not_null": false
+        },
+        {
+          "name": "speed_mps",
+          "type": "numeric(8,2)",
+          "not_null": false
+        },
+        {
+          "name": "position",
+          "type": "geography(Point,4326)",
+          "not_null": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": false,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "driver_work_signals",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "drivers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "driver_type",
+          "type": "driver_type",
+          "not_null": true
+        },
+        {
+          "name": "office_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "status",
+          "type": "driver_status",
+          "not_null": true
+        },
+        {
+          "name": "rating",
+          "type": "numeric(3,2)",
+          "not_null": true
+        },
+        {
+          "name": "rating_count",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "completed_trip_count",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "is_online",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "date_of_birth",
+          "type": "date",
+          "not_null": false
+        },
+        {
+          "name": "verification_rejection_reason",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "ride_safety_equipment_confirmed_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "motorcycle_documents",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "motorcycle_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "document_type",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "file_path",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "document_status",
+          "not_null": true
+        },
+        {
+          "name": "issued_at",
+          "type": "date",
+          "not_null": false
+        },
+        {
+          "name": "expiry_date",
+          "type": "date",
+          "not_null": false
+        },
+        {
+          "name": "rejection_reason",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "verified_by",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "is_current",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "motorcycles",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "driver_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "office_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "plate_number",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "brand",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "model",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "color",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "model_year",
+          "type": "integer",
+          "not_null": false
+        },
+        {
+          "name": "photo_url",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "status",
+          "type": "motorcycle_status",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "verification_status",
+          "type": "document_status",
+          "not_null": true
+        },
+        {
+          "name": "verification_rejection_reason",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "verified_by",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "verified_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "notification_outbox",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "event_key",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "event_type",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "audience",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "target_user_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "target_app_kind",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "target_type",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "offer_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "attempt_count",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "next_attempt_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "last_attempt_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "sent_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "last_error_code",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "offers",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "driver_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "office_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "offered_price",
+          "type": "numeric(12,2)",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "offer_status",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "office_members",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "office_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "role_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "account_status",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "offices",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "responsible_person",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "area",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "status",
+          "type": "account_status",
+          "not_null": true
+        },
+        {
+          "name": "commission_config",
+          "type": "jsonb",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "operating_zones",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "area",
+          "type": "geography(MultiPolygon,4326)",
+          "not_null": true
+        },
+        {
+          "name": "is_active",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": false,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "order_delivery_details",
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "recipient_name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "recipient_phone",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "parcel_weight_kg",
+          "type": "numeric(5,2)",
+          "not_null": true
+        },
+        {
+          "name": "declared_value",
+          "type": "numeric(12,2)",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "order_driver_candidates",
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "driver_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "order_events",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "event_type",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "actor_user_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "from_status",
+          "type": "order_status",
+          "not_null": false
+        },
+        {
+          "name": "to_status",
+          "type": "order_status",
+          "not_null": true
+        },
+        {
+          "name": "metadata",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": false,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "customer_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "service_type_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "pickup_lat",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "pickup_lng",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "destination_lat",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "destination_lng",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "pickup_address",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "destination_address",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "proposed_price",
+          "type": "numeric(12,2)",
+          "not_null": true
+        },
+        {
+          "name": "agreed_price",
+          "type": "numeric(12,2)",
+          "not_null": false
+        },
+        {
+          "name": "driver_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "selected_offer_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "office_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "status",
+          "type": "order_status",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "assigned_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "bidding_expires_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "driver_on_way_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "driver_arrived_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "started_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "cancelled_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "expired_at",
+          "type": "timestamp with time zone",
+          "not_null": false
+        },
+        {
+          "name": "cancelled_by",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "cancellation_reason",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "cancellation_type",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "creation_intent_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "creation_payload_hash",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "route_quote_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "route_distance_meters",
+          "type": "integer",
+          "not_null": false
+        },
+        {
+          "name": "route_duration_seconds",
+          "type": "integer",
+          "not_null": false
+        },
+        {
+          "name": "route_polyline",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "suggested_price",
+          "type": "numeric(12,2)",
+          "not_null": false
+        },
+        {
+          "name": "minimum_customer_price",
+          "type": "numeric(12,2)",
+          "not_null": false
+        },
+        {
+          "name": "motorcycle_id",
+          "type": "uuid",
+          "not_null": false
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "permissions",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "code",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "platform_settings",
+      "columns": [
+        {
+          "name": "key",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "value",
+          "type": "jsonb",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": false,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "profiles",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "full_name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "profile_type",
+          "type": "profile_type",
+          "not_null": true
+        },
+        {
+          "name": "status",
+          "type": "account_status",
+          "not_null": true
+        },
+        {
+          "name": "profile_photo_url",
+          "type": "text",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "role_permissions",
+      "columns": [
+        {
+          "name": "role_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "permission_id",
+          "type": "uuid",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "roles",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "code",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "scope_type",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "route_quotes",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "customer_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "service_type_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "pickup_lat",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "pickup_lng",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "destination_lat",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "destination_lng",
+          "type": "numeric(9,6)",
+          "not_null": true
+        },
+        {
+          "name": "distance_meters",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "duration_seconds",
+          "type": "integer",
+          "not_null": true
+        },
+        {
+          "name": "encoded_polyline",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "suggested_price",
+          "type": "numeric(12,2)",
+          "not_null": true
+        },
+        {
+          "name": "minimum_customer_price",
+          "type": "numeric(12,2)",
+          "not_null": true
+        },
+        {
+          "name": "pricing_version",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "expires_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "used_order_id",
+          "type": "uuid",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "safety_overrides",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "order_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "actor_user_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "requested_action",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "reason",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "from_status",
+          "type": "order_status",
+          "not_null": true
+        },
+        {
+          "name": "to_status",
+          "type": "order_status",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": false,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "service_types",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "code",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "name_ar",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "name_en",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "is_enabled",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "config",
+          "type": "jsonb",
+          "not_null": false
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "user_push_tokens",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "token",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "platform",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "app_kind",
+          "type": "text",
+          "not_null": true
+        },
+        {
+          "name": "enabled",
+          "type": "boolean",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        },
+        {
+          "name": "last_seen_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": false,
+      "authenticated_update": false
+    },
+    {
+      "rls": true,
+      "name": "user_roles",
+      "columns": [
+        {
+          "name": "id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "user_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "role_id",
+          "type": "uuid",
+          "not_null": true
+        },
+        {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "not_null": true
+        }
+      ],
+      "force_rls": false,
+      "authenticated_delete": false,
+      "authenticated_insert": false,
+      "authenticated_select": true,
+      "authenticated_update": false
+    }
+  ],
+  "policies": [
+    {
+      "cmd": "SELECT",
+      "qual": "((EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = driver_documents.driver_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))) OR (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = driver_documents.driver_id) AND private.can_access_office(d.office_id, 'drivers.view'::text)))) OR private.is_super_admin())",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "driver_documents",
+      "permissive": "PERMISSIVE",
+      "policyname": "driver_documents_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "private.can_receive_driver_work_signal(order_id)",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "driver_work_signals",
+      "permissive": "PERMISSIVE",
+      "policyname": "driver_work_signals_select_eligible",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR private.can_access_office(office_id, 'drivers.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "drivers",
+      "permissive": "PERMISSIVE",
+      "policyname": "drivers_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((EXISTS ( SELECT 1\n   FROM (motorcycles m\n     JOIN drivers d ON ((d.id = m.driver_id)))\n  WHERE ((m.id = motorcycle_documents.motorcycle_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))) OR private.is_super_admin())",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "motorcycle_documents",
+      "permissive": "PERMISSIVE",
+      "policyname": "motorcycle_documents_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = motorcycles.driver_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))) OR private.can_access_office(office_id, 'motorcycles.view'::text) OR private.is_super_admin())",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "motorcycles",
+      "permissive": "PERMISSIVE",
+      "policyname": "motorcycles_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(target_user_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "notification_outbox",
+      "permissive": "PERMISSIVE",
+      "policyname": "notification_outbox_select_own",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(private.is_super_admin() OR private.can_access_office(office_id, 'orders.view'::text) OR (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = offers.driver_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "offers",
+      "permissive": "PERMISSIVE",
+      "policyname": "offers_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR private.can_access_office(office_id, 'dashboard.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "office_members",
+      "permissive": "PERMISSIVE",
+      "policyname": "office_members_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "private.can_access_office(id, 'dashboard.view'::text)",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "offices",
+      "permissive": "PERMISSIVE",
+      "policyname": "offices_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM orders o\n  WHERE ((o.id = order_delivery_details.order_id) AND (o.customer_id = ( SELECT auth.uid() AS uid)))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "order_delivery_details",
+      "permissive": "PERMISSIVE",
+      "policyname": "order_delivery_details_select_customer",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(private.is_super_admin() OR (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = order_driver_candidates.driver_id) AND (d.user_id = ( SELECT auth.uid() AS uid))))) OR (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = order_driver_candidates.driver_id) AND private.can_access_office(d.office_id, 'orders.view'::text)))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "order_driver_candidates",
+      "permissive": "PERMISSIVE",
+      "policyname": "order_driver_candidates_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.id = orders.driver_id) AND (d.user_id = ( SELECT auth.uid() AS uid)))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "orders",
+      "permissive": "PERMISSIVE",
+      "policyname": "orders_select_assigned_driver",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((customer_id = ( SELECT auth.uid() AS uid)) OR private.is_super_admin() OR private.can_access_office(office_id, 'orders.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "orders",
+      "permissive": "PERMISSIVE",
+      "policyname": "orders_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(private.is_super_admin() OR private.has_permission('roles.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "permissions",
+      "permissive": "PERMISSIVE",
+      "policyname": "permissions_select_authorized",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((id = ( SELECT auth.uid() AS uid)) OR private.is_super_admin() OR (EXISTS ( SELECT 1\n   FROM office_members om\n  WHERE ((om.user_id = profiles.id) AND private.can_access_office(om.office_id, 'dashboard.view'::text)))) OR (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.user_id = profiles.id) AND (d.office_id IS NOT NULL) AND private.can_access_office(d.office_id, 'drivers.view'::text)))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "profiles",
+      "permissive": "PERMISSIVE",
+      "policyname": "profiles_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(private.is_super_admin() OR private.has_permission('roles.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "role_permissions",
+      "permissive": "PERMISSIVE",
+      "policyname": "role_permissions_select_authorized",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(private.is_super_admin() OR private.has_permission('roles.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "roles",
+      "permissive": "PERMISSIVE",
+      "policyname": "roles_select_authorized",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "(customer_id = ( SELECT auth.uid() AS uid))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "route_quotes",
+      "permissive": "PERMISSIVE",
+      "policyname": "route_quotes_select_owned",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "true",
+      "roles": [
+        "anon",
+        "authenticated"
+      ],
+      "tablename": "service_types",
+      "permissive": "PERMISSIVE",
+      "policyname": "service_types_public_read",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((user_id = ( SELECT auth.uid() AS uid)) OR private.is_super_admin() OR private.has_permission('roles.view'::text))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "user_roles",
+      "permissive": "PERMISSIVE",
+      "policyname": "user_roles_select_permitted",
+      "schemaname": "public",
+      "with_check": null
+    },
+    {
+      "cmd": "DELETE",
+      "qual": "((bucket_id = 'driver-documents'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.user_id = ( SELECT auth.uid() AS uid)) AND ((storage.foldername(objects.name))[1] = (d.id)::text)))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "driver_documents_storage_delete_own",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "INSERT",
+      "qual": null,
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "driver_documents_storage_insert_own",
+      "schemaname": "storage",
+      "with_check": "((bucket_id = 'driver-documents'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.user_id = ( SELECT auth.uid() AS uid)) AND ((storage.foldername(objects.name))[1] = (d.id)::text)))))"
+    },
+    {
+      "cmd": "SELECT",
+      "qual": "((bucket_id = 'driver-documents'::text) AND (((owner_id = (( SELECT auth.uid() AS uid))::text) AND (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.user_id = ( SELECT auth.uid() AS uid)) AND ((storage.foldername(objects.name))[1] = (d.id)::text))))) OR private.is_super_admin()))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "driver_documents_storage_select_own",
+      "schemaname": "storage",
+      "with_check": null
+    },
+    {
+      "cmd": "UPDATE",
+      "qual": "((bucket_id = 'driver-documents'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.user_id = ( SELECT auth.uid() AS uid)) AND ((storage.foldername(objects.name))[1] = (d.id)::text)))))",
+      "roles": [
+        "authenticated"
+      ],
+      "tablename": "objects",
+      "permissive": "PERMISSIVE",
+      "policyname": "driver_documents_storage_update_own",
+      "schemaname": "storage",
+      "with_check": "((bucket_id = 'driver-documents'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND (EXISTS ( SELECT 1\n   FROM drivers d\n  WHERE ((d.user_id = ( SELECT auth.uid() AS uid)) AND ((storage.foldername(objects.name))[1] = (d.id)::text)))))"
+    }
+  ],
+  "functions": [
+    {
+      "name": "advance_order_state",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "private",
+      "arguments": "p_order_id uuid, p_expected order_status, p_next order_status",
+      "anon_execute": false,
+      "definition_md5": "cfb4053d5443ec84889b4369b5f2bc32",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "assert_driver_geofence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "schema": "private",
+      "arguments": "p_driver_id uuid, p_order orders, p_target text",
+      "anon_execute": false,
+      "definition_md5": "257308bf93e2f619815faa1e9a3cd4fc",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "assign_verified_motorcycle",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "822664dff590dfade10a4580b001a135",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "can_access_office",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "target_office_id uuid, permission_code text",
+      "anon_execute": false,
+      "definition_md5": "4f51b2c17744c956bc2eda8893c04768",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "can_receive_driver_work_signal",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "ac2d1f62e5cf3c40b72c35c77d043ee5",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "dispatch_radius_meters",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "integer",
+      "schema": "private",
+      "arguments": "p_created_at timestamp with time zone",
+      "anon_execute": false,
+      "definition_md5": "4f40dd1f48cfc5e544c840e434e8df0e",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "driver_is_geographically_eligible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "p_driver_id uuid, p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "d627e6ace6f16c96b2445404301833cc",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "driver_safety_ineligibility",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "text",
+      "schema": "private",
+      "arguments": "p_driver_id uuid",
+      "anon_execute": false,
+      "definition_md5": "676e664a39455c7dafb1784078509685",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "enforce_assignment_geography",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "1082c45cc86cf7cf634c6f8005c738b2",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "enforce_offer_geography",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "2dc9ea7cbd1970e7bda362ee90390180",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "enqueue_notification",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "schema": "private",
+      "arguments": "p_event_key text, p_event_type text, p_audience text, p_target_user_id uuid, p_target_app_kind text, p_target_type text, p_order_id uuid, p_offer_id uuid, p_title text, p_body text",
+      "anon_execute": false,
+      "definition_md5": "80651e2773d312e1854c14d34a61fdea",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "enqueue_offer_notification",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "7d4956995390892f39daf7b90053f29c",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "enqueue_order_event_notifications",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "e2e823b2a3de5a7d65480794d3a303a8",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "ensure_fresh_location_before_online",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "44605390102b3b5518818dadd1efe7db",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "has_permission",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "permission_code text",
+      "anon_execute": false,
+      "definition_md5": "971512a40f035161982743c1ae54c1f2",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "is_office_member",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "target_office_id uuid",
+      "anon_execute": false,
+      "definition_md5": "9fc167903ad09625e68b1e69f2971458",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "is_super_admin",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "dddd16d3edd0f6135ed21455a9e127b4",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "lock_driver_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "private",
+      "arguments": "p_order_id uuid, p_service_code text, p_expected order_status",
+      "anon_execute": false,
+      "definition_md5": "ddc8a40dfc4c20441c2646fe7f452f04",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "operating_zone_allows",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "private",
+      "arguments": "p_point geography",
+      "anon_execute": false,
+      "definition_md5": "0ac0d207102bf26ee88bce944446e019",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "prepare_delivery_confirmation",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "32b3299b985cee7f853de9dce4156abf",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "reconcile_driver_idle_availability",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "schema": "private",
+      "arguments": "p_driver_id uuid",
+      "anon_execute": false,
+      "definition_md5": "313f2402f86e519082c57f332cd5cea3",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "record_order_event",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "956faab356605dab658f442088ff1bbd",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "setting_positive_int",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "integer",
+      "schema": "private",
+      "arguments": "p_key text, p_fallback integer",
+      "anon_execute": false,
+      "definition_md5": "8e61e94e58b8126edfc5c0fb9ec7693a",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "signal_new_driver_work",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "private",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "07299734d00b68665de17e601b90b3f5",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "accept_offer",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid, p_offer_id uuid",
+      "anon_execute": false,
+      "definition_md5": "547b2dc9c7b1a7e52043c726c8b4a8eb",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "admin_safety_override",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid, p_requested_action text, p_reason text",
+      "anon_execute": false,
+      "definition_md5": "e3fcde0e695c9e71571075564cc2e3ac",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "cancel_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid, p_reason text",
+      "anon_execute": false,
+      "definition_md5": "45a2f853e3d6f6fb838a4b90cf1c925c",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "claim_notification_outbox",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(id uuid, event_type text, target_app_kind text, target_type text, order_id uuid, offer_id uuid, title text, body text, attempt_count integer, tokens text[])",
+      "schema": "public",
+      "arguments": "p_limit integer",
+      "anon_execute": false,
+      "definition_md5": "77ca1ad5ba78c341b6b354264eb648c0",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "complete_delivery_with_code",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(outcome text, order_status order_status, attempts_remaining integer, locked_until timestamp with time zone)",
+      "schema": "public",
+      "arguments": "p_order_id uuid, p_confirmation_code text",
+      "anon_execute": false,
+      "definition_md5": "f56d2fd34cfdf2c986d00e0be46720b7",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "complete_notification_outbox",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "public",
+      "arguments": "p_id uuid, p_success boolean, p_error_code text, p_retry_after_seconds integer",
+      "anon_execute": false,
+      "definition_md5": "53f511968999c7fa30c71ccc4357d043",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "complete_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "cb2e79785392e609e1c4be7559f3491f",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "confirm_delivery_pickup",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "a3636dcd4f59abcc06e72f8889ce772f",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "confirm_ride_safety_equipment",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "public",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "2bb424f4bc3f74cb69c7a5c6b016fca9",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "create_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_service_type_id uuid, p_pickup_lat numeric, p_pickup_lng numeric, p_pickup_address text, p_destination_lat numeric, p_destination_lng numeric, p_destination_address text, p_proposed_price numeric, p_recipient_name text, p_recipient_phone text, p_parcel_weight_kg numeric, p_declared_value numeric, p_creation_intent_id uuid, p_route_quote_id uuid",
+      "anon_execute": false,
+      "definition_md5": "bcf54aa529c8b6d23505ba606bf3502a",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "create_trusted_route_quote",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "route_quotes",
+      "schema": "public",
+      "arguments": "p_customer_id uuid, p_service_type_id uuid, p_pickup_lat numeric, p_pickup_lng numeric, p_destination_lat numeric, p_destination_lng numeric, p_distance_meters integer, p_duration_seconds integer, p_encoded_polyline text",
+      "anon_execute": false,
+      "definition_md5": "c9958d66c1f5dab3cf8079520289a286",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "disable_push_token",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "public",
+      "arguments": "p_token text, p_app_kind text",
+      "anon_execute": false,
+      "definition_md5": "83974c89a5821afc2e31368491260234",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "driver_arrived",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "7bba2e69b10a8638bf7c3d8f0fee2d8e",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "driver_cancel_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid, p_reason text",
+      "anon_execute": false,
+      "definition_md5": "325dc55b1a1c9fdcd6fc085778409901",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "driver_on_way",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "5cd5af82a4e93df873de2e6def28f414",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "enqueue_driver_document_expiry_notifications",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "integer",
+      "schema": "public",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "832ccf0e77a7d0a31a5c374678815410",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "expire_customer_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "2ae883f01897bc584347debd08526eda",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "expire_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "92967fece2d78c045465df1d2ed12b69",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "get_customer_assigned_driver",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(driver_public_id uuid, driver_first_name text, driver_photo_url text, driver_type driver_type, office_display_name text, completed_trip_count integer, driver_verified boolean, motorcycle_brand text, motorcycle_model text, motorcycle_plate_number text)",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "5cde46826b45d825e39240c7c9525c50",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "get_customer_order_offers",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(offer_id uuid, offered_price numeric, driver_public_id uuid, driver_first_name text, driver_photo_url text, driver_type driver_type, office_display_name text, completed_trip_count integer)",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "9a319e07f15cd949af78078c592f2447",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "get_delivery_confirmation_code",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "text",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "770c65f7f6a0d9b89cca064332c1ebd0",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "get_driver_active_offers",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(id uuid, order_id uuid, offered_price numeric, status offer_status, pickup_address text, destination_address text, created_at timestamp with time zone)",
+      "schema": "public",
+      "arguments": "p_cursor_created_at timestamp with time zone, p_cursor_id uuid, p_limit integer",
+      "anon_execute": false,
+      "definition_md5": "2c23eb03771efca73c0aa2acb1df6b50",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "get_driver_offer",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(id uuid, order_id uuid, offered_price numeric, status offer_status, order_status order_status, bidding_expires_at timestamp with time zone, assigned_to_me boolean, pickup_address text, destination_address text, service_code text, service_name text, server_now timestamp with time zone)",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "0e4d041412499f3bad58a2ad3fee2cb7",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "get_driver_requests",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(id uuid, pickup_address text, destination_address text, pickup_lat numeric, pickup_lng numeric, destination_lat numeric, destination_lng numeric, proposed_price numeric, agreed_price numeric, status order_status, created_at timestamp with time zone, completed_at timestamp with time zone, bidding_expires_at timestamp with time zone, service_code text, service_name text, route_distance_meters integer, route_duration_seconds integer, route_polyline text, driver_distance_meters integer, dispatch_radius_meters integer)",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "ff797f7bfb3b516890c49feb8a3b867e",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "get_driver_verification_overview",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(driver_status driver_status, date_of_birth date, safety_reason text, ride_safety_equipment_confirmed boolean, motorcycle jsonb, driver_documents jsonb, motorcycle_documents jsonb)",
+      "schema": "public",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "4222b225967002374b14b6b06d41ae07",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "handle_new_auth_user",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "public",
+      "arguments": "",
+      "anon_execute": false,
+      "definition_md5": "406c158a3974c5c0e74e0ad50a7c15b7",
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "register_push_token",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "schema": "public",
+      "arguments": "p_token text, p_platform text, p_app_kind text",
+      "anon_execute": false,
+      "definition_md5": "c6165c745a486e527c7520e57bdd39bf",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "review_driver_document",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "driver_documents",
+      "schema": "public",
+      "arguments": "p_document_id uuid, p_status document_status, p_rejection_reason text",
+      "anon_execute": false,
+      "definition_md5": "f9bb77fa381841a44c08ac7eabe17551",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "review_driver_verification",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "drivers",
+      "schema": "public",
+      "arguments": "p_driver_id uuid, p_status driver_status, p_date_of_birth date, p_reason text",
+      "anon_execute": false,
+      "definition_md5": "5673675d684d682e05819e6734ff7cb5",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "review_motorcycle",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "motorcycles",
+      "schema": "public",
+      "arguments": "p_motorcycle_id uuid, p_status document_status, p_rejection_reason text",
+      "anon_execute": false,
+      "definition_md5": "1a6237154b614d2b90f205df84965198",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "review_motorcycle_document",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "motorcycle_documents",
+      "schema": "public",
+      "arguments": "p_document_id uuid, p_status document_status, p_rejection_reason text",
+      "anon_execute": false,
+      "definition_md5": "6997ac59a4c24913ab6e7068b6de8c62",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "revoke_push_token",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "schema": "public",
+      "arguments": "p_token text, p_app_kind text",
+      "anon_execute": false,
+      "definition_md5": "8455872aff20c384b4dc1d0851b5d118",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "set_driver_online",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "drivers",
+      "schema": "public",
+      "arguments": "p_is_online boolean",
+      "anon_execute": false,
+      "definition_md5": "0cdfa9d1b1ac29cf3121d78f8a533f67",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "set_updated_at",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "schema": "public",
+      "arguments": "",
+      "anon_execute": true,
+      "definition_md5": "63f977f8e2e3db6a119fcbe248bf3314",
+      "security_definer": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "start_order",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "orders",
+      "schema": "public",
+      "arguments": "p_order_id uuid",
+      "anon_execute": false,
+      "definition_md5": "1ae7429db6046d5b80c0b3d7897f4eee",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "submit_driver_document",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "schema": "public",
+      "arguments": "p_document_type text, p_file_path text, p_expiry_date date, p_issued_at date",
+      "anon_execute": false,
+      "definition_md5": "28a091727bbb678501ad994d4ad2a5d5",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "submit_motorcycle_document",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "schema": "public",
+      "arguments": "p_motorcycle_id uuid, p_document_type text, p_file_path text, p_expiry_date date, p_issued_at date",
+      "anon_execute": false,
+      "definition_md5": "5155aa620b5eb75e1dbb9069229990ff",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "submit_offer",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "offers",
+      "schema": "public",
+      "arguments": "p_order_id uuid, p_offered_price numeric",
+      "anon_execute": false,
+      "definition_md5": "3ea60bf0f59b7598076db4b3b5e638c0",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "update_driver_location",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "driver_latest_locations",
+      "schema": "public",
+      "arguments": "p_latitude numeric, p_longitude numeric, p_accuracy_meters numeric, p_heading_degrees numeric, p_speed_mps numeric",
+      "anon_execute": false,
+      "definition_md5": "fa4d60aa5d3461dbb11e5fe86b5059b4",
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "withdraw_offer",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "offers",
+      "schema": "public",
+      "arguments": "p_offer_id uuid",
+      "anon_execute": false,
+      "definition_md5": "7de1f60c1d448abc33819c3f9876ed3c",
+      "security_definer": true,
+      "authenticated_execute": true
+    }
+  ],
+  "captured_at": "2026-09-19T18:40:44.843779+00:00",
+  "critical_definitions": {
+    "private.has_permission": "CREATE OR REPLACE FUNCTION private.has_permission(permission_code text)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select exists (\n    select 1 from public.profiles profile\n    where profile.id = (select auth.uid()) and profile.status = 'ACTIVE'\n      and (\n        exists (\n          select 1 from public.user_roles ur\n          join public.role_permissions rp on rp.role_id = ur.role_id\n          join public.permissions p on p.id = rp.permission_id\n          where ur.user_id = profile.id and p.code = permission_code\n        )\n        or exists (\n          select 1 from public.office_members om\n          join public.offices o on o.id = om.office_id and o.status = 'ACTIVE'\n          join public.role_permissions rp on rp.role_id = om.role_id\n          join public.permissions p on p.id = rp.permission_id\n          where om.user_id = profile.id and om.status = 'ACTIVE'\n            and p.code = permission_code\n        )\n      )\n  );\n$function$\n",
+    "private.is_super_admin": "CREATE OR REPLACE FUNCTION private.is_super_admin()\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select exists (\n    select 1 from public.user_roles ur\n    join public.profiles p on p.id = ur.user_id and p.status = 'ACTIVE'\n    join public.roles r on r.id = ur.role_id\n    where ur.user_id = (select auth.uid()) and r.code = 'SUPER_ADMIN'\n  );\n$function$\n",
+    "private.is_office_member": "CREATE OR REPLACE FUNCTION private.is_office_member(target_office_id uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select exists (\n    select 1 from public.office_members om\n    join public.profiles p on p.id = om.user_id and p.status = 'ACTIVE'\n    join public.offices o on o.id = om.office_id and o.status = 'ACTIVE'\n    where om.user_id = (select auth.uid()) and om.office_id = target_office_id\n      and om.status = 'ACTIVE'\n  );\n$function$\n",
+    "private.can_access_office": "CREATE OR REPLACE FUNCTION private.can_access_office(target_office_id uuid, permission_code text)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select private.is_super_admin() or exists (\n    select 1 from public.office_members om\n    join public.profiles profile on profile.id = om.user_id and profile.status = 'ACTIVE'\n    join public.offices o on o.id = om.office_id and o.status = 'ACTIVE'\n    join public.role_permissions rp on rp.role_id = om.role_id\n    join public.permissions p on p.id = rp.permission_id\n    where om.user_id = (select auth.uid()) and om.office_id = target_office_id\n      and om.status = 'ACTIVE' and p.code = permission_code\n  );\n$function$\n"
+  }
+}

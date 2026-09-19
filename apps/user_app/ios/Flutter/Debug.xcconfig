@@ -1,0 +1,3 @@
+#include? "Maps.xcconfig"
+#include "Generated.xcconfig"
+APS_ENVIRONMENT=development

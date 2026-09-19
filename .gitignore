@@ -1,0 +1,40 @@
+# Editors and local operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+**/google-services.json
+**/GoogleService-Info.plist
+**/*service-account*.json
+**/serviceAccountKey.json
+**/*.pem
+**/*.key
+**/*.p12
+**/*.pfx
+
+# Flutter / Dart
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/build/
+**/coverage/
+
+# Node / Next.js
+**/node_modules/
+**/.next/
+**/out/
+**/*.tsbuildinfo
+
+# Supabase local state
+supabase/.branches/
+supabase/.temp/
+# Local Google Maps SDK keys.
+**/ios/Flutter/Maps.xcconfig
