@@ -166,6 +166,15 @@ button:disabled { cursor: wait; opacity: .65; }
 .office-links a { border: 1px solid #fecaca; border-radius: 10px; background: var(--biko-red-soft); padding: 10px; color: var(--biko-red-dark); font-size: 12px; font-weight: 800; text-align: center; }
 .office-links a:hover { background: #ffe4e6; }
 .roles-staff-page { display: grid; gap: 18px; }
+.office-staff-page { display: grid; gap: 18px; }
+.office-staff-toolbar { display: grid; grid-template-columns: minmax(180px, .8fr) minmax(220px, 1.4fr) minmax(160px, .7fr) auto; align-items: end; gap: 14px; }
+.staff-summary { display: grid; grid-template-columns: auto auto; align-items: center; gap: 3px 8px; min-width: 100px; border-radius: 12px; background: #f9fafb; padding: 10px 12px; }
+.staff-summary strong { color: var(--biko-red-dark); font-size: 18px; line-height: 1; }
+.staff-summary span { color: var(--muted); font-size: 11px; }
+.office-staff-table { min-width: 900px; }
+.staff-role-cell { display: grid; gap: 3px; min-width: 170px; }
+.staff-role-cell select { min-height: 38px; width: 100%; border: 1px solid var(--border); border-radius: 9px; background: #fff; padding: 6px 8px; font-size: 12px; }
+.staff-role-cell .button { justify-self: start; }
 .admin-card { display: grid; gap: 18px; border: 1px solid var(--border); border-radius: 18px; background: var(--surface); padding: clamp(18px, 3vw, 28px); }
 .reason-card { gap: 8px; border-color: #fecaca; background: #fffafa; }
 .admin-card-header { display: flex; justify-content: space-between; gap: 16px; }
@@ -220,6 +229,7 @@ button:disabled { cursor: wait; opacity: .65; }
   .dashboard-main { padding: 22px 16px 36px; }
   .office-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .office-toolbar, .office-detail-grid { grid-template-columns: 1fr; }
+  .office-staff-toolbar { grid-template-columns: 1fr; }
 }
 @media (max-width: 520px) {
   .auth-page { padding: 12px; }

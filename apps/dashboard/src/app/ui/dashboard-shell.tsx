@@ -12,6 +12,7 @@ export const dashboardSections = [
   { slug: "motorcycles", label: "المركبات", permission: "motorcycles.view" },
   { slug: "users", label: "المستخدمون", permission: "users.view" },
   { slug: "offices", label: "المكاتب", permission: "offices.view" },
+  { slug: "office-staff", label: "موظفو المكتب", permission: "office_members.manage" },
   { slug: "reports", label: "التقارير", permission: "reports.view" },
   { slug: "finance", label: "المالية", permission: "finance.view" },
   { slug: "roles", label: "الأدوار والصلاحيات", permission: "roles.view" },

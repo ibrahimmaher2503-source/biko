@@ -110,6 +110,28 @@ export type AdminStaffData = {
   officeMemberships: AdminOfficeMembership[];
 };
 
+export type AdminOfficeStaffMember = {
+  id: string;
+  office_id: string;
+  user_id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  profile_status: string;
+  membership_status: string;
+  role_id: string;
+  role_code: string;
+  role_name: string;
+  role_scope_type: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AdminOfficeStaffData = {
+  members: AdminOfficeStaffMember[];
+  roles: AdminRole[];
+};
+
 export function hasPermission(context: DashboardContext, permission: string) {
   return (
     context.platform_roles.some((role) => role.code === "SUPER_ADMIN") ||

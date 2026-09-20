@@ -7,6 +7,7 @@ import type {
   AdminRoleAssignment,
   AdminOfficeMembership,
   AdminStaffData,
+  AdminOfficeStaffData,
   AdminOfficesData,
   DashboardContext,
   DashboardLoad,
@@ -205,4 +206,68 @@ export async function getAdminOfficesData(): Promise<
       total_count: Number(officesData[0]?.total_count ?? officesData.length),
     },
   };
+}
+
+export async function getAdminOfficeStaffData(
+  officeId: string,
+): Promise<
+  | { state: "ready"; data: AdminOfficeStaffData }
+  | { state: "error"; message: string }
+> {
+  const supabase = await createClient();
+  const [staffResult, rolesResult] = await Promise.all([
+    supabase.rpc("admin_list_office_staff", {
+      p_office_id: officeId,
+      p_search: null,
+      p_status: null,
+      p_limit: 100,
+      p_offset: 0,
+    }),
+    supabase.rpc("admin_list_assignable_office_roles", { p_office_id: officeId }),
+  ]);
+  if (staffResult.error || rolesResult.error) return { state: "error", message: "تعذر تحميل موظفي المكتب." };
+
+  const rows = (staffResult.data ?? []) as Array<Record<string, unknown>>;
+  const members = rows.map((row) => ({
+    id: stringValue(row.membership_id),
+    office_id: stringValue(row.office_id, officeId),
+    user_id: stringValue(row.user_id),
+    full_name: stringValue(row.full_name, "بدون اسم"),
+    email: stringValue(row.email),
+    phone: stringValue(row.phone),
+    profile_status: stringValue(row.profile_status, "ACTIVE"),
+    membership_status: stringValue(row.membership_status, "ACTIVE"),
+    role_id: stringValue(row.role_id),
+    role_code: stringValue(row.role_code),
+    role_name: stringValue(row.role_name, "دور مكتب"),
+    role_scope_type: stringValue(row.role_scope_type, "OFFICE"),
+    created_at: stringValue(row.created_at),
+    updated_at: stringValue(row.updated_at),
+  }));
+  const rolesById = new Map<string, AdminOfficeStaffData["roles"][number]>();
+  const roleRows = (rolesResult.data ?? []) as Array<Record<string, unknown>>;
+  for (const roleValue of roleRows) {
+    const role = record(roleValue);
+    const roleId = stringValue(role.id);
+    if (roleId) {
+      rolesById.set(roleId, {
+        id: roleId,
+        code: stringValue(role.code),
+        name: stringValue(role.name, "دور مكتب"),
+        scope_type: stringValue(role.scope_type, "OFFICE"),
+      });
+    }
+  }
+  for (const member of members) {
+    if (!rolesById.has(member.role_id)) {
+      rolesById.set(member.role_id, {
+        id: member.role_id,
+        code: member.role_code,
+        name: member.role_name,
+        scope_type: member.role_scope_type,
+      });
+    }
+  }
+
+  return { state: "ready", data: { members, roles: [...rolesById.values()] } };
 }

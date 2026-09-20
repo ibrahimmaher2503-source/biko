@@ -1,0 +1,39 @@
+{
+  "project": "biko-development",
+  "project_ref": "jlkzgsgfzolhwraakhbt",
+  "captured_at": "2026-09-20",
+  "task": "ADM-10",
+  "status": "PASS",
+  "migrations": [
+    "admin_dashboard_office_staff",
+    "admin_dashboard_office_staff_result_types",
+    "admin_dashboard_office_staff_mutation_aliases"
+  ],
+  "sql_rollback": {
+    "status": "PASS",
+    "covered": [
+      "exact-office list and detail",
+      "cross-office read and mutation denial",
+      "platform role denial",
+      "self mutation denial",
+      "membership role change",
+      "membership suspend and restore",
+      "before and after audit",
+      "platform role catalog and assignment non-disclosure"
+    ]
+  },
+  "dashboard": {
+    "lint": "PASS",
+    "build": "PASS",
+    "route": "/office-staff",
+    "browser": {
+      "office_a_memberships": 4,
+      "office_b_memberships": 4,
+      "search": "PASS",
+      "office_switch": "PASS",
+      "cross_office_visual_leak": false,
+      "invite_email_sent": false
+    }
+  },
+  "secrets_stored_in_repository": false
+}
