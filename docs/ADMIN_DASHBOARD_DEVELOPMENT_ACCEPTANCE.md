@@ -1,11 +1,10 @@
-# Development Dashboard Acceptance Preparation
+# Development Dashboard Acceptance Fixture
 
-Status: `SCENARIOS_PREPARED` / `NOT_PROVISIONED`
+Status: `PROVISIONED` / `ADM03_ACCEPTED`
 
-This document prepares the ADM-03 Development acceptance fixture. It does not
-create users, roles, offices, schema, migrations, secrets, or test data. It
-must not be read as a PASS or as evidence that the Development project is
-available.
+The Development fixture was provisioned and accepted on 2026-09-20. Exact
+non-secret identities and IDs are recorded in
+`evidence/admin-dashboard-adm03-adm09-acceptance-20260920.json`.
 
 ## Environment gate (last observed)
 
@@ -15,58 +14,52 @@ The latest recorded environment sequence is:
 project_ref: jlkzgsgfzolhwraakhbt
 initial_project_status: INACTIVE
 current_coordinator_state: ACTIVE_HEALTHY
-migration_inventory: 17 applied / 26 local source files
-fixture_status: NOT_PROVISIONED
-gate: CATALOG_READY / FIXTURE_PROVISIONING_PENDING
+migration_inventory: admin Wave 1 plus admin_dashboard_offices applied
+fixture_status: PROVISIONED
+gate: ADM03_ACCEPTED / ADM09_ACCEPTED
 ```
 
-The coordinator restored the exact Development project on 2026-09-19 and
-confirmed ACTIVE_HEALTHY, then captured its migration ledger and read-only
-catalog. Evidence: [live catalog](evidence/admin-dashboard-wave0-catalog-20260919.json).
-This is environment/catalog readiness, not authenticated account or UI acceptance.
-No migrations or fixture rows were applied. The latest nine local migrations
-are absent from the live ledger; D07 financial contracts are absent too.
+The coordinator restored the exact Development project on 2026-09-19, then
+applied the bounded admin migrations and provisioned run `ADM03-20260920`.
+Email/password login, role context, office isolation, suspended identities,
+Office A Browser access, and CUSTOMER denial were observed. D07 remains outside
+this acceptance slice.
 
-Remaining setup blockers:
+Recorded external dependencies:
 
-- Operations/Support/Verification roles and trusted scope are absent; ADM-04/08
-  must supply these without substituting Super Admin.
-- Persistent login-capable fixture accounts have not been provisioned. The
-  available connector has no Auth Admin user-provisioning operation, and
-  `apps/dashboard` and `supabase` contain only `.env.example` templates, not
-  a configured local administrative Auth client. Use a supported trusted Auth
-  provisioning path; do not manufacture login-ready users by manually filling
-  Auth internal tables.
-- Hosted email settings/redirect allowlist and restricted Maps configuration
-  were not inspected by this catalog query. Local TOML is not hosted evidence.
+- Hosted Auth redirect allowlist was not exposed by the available management
+  connector: `BLOCKED_BY_AUTH_CONFIG_VISIBILITY`. Password login and logout are
+  accepted; production redirect configuration still needs deployment evidence.
+- No restricted browser Maps key/configuration was supplied:
+  `BLOCKED_BY_MAPS_CONFIG`. No map or live-location acceptance is claimed.
 
-ADM-03 remains PARTIAL: environment restored and scenarios prepared; accounts,
-fixtures, and external configuration acceptance are not complete.
+ADM-03 is complete because the required fixture and role/scope evidence exist,
+and unavailable external configuration is explicitly recorded rather than
+silently treated as accepted.
 
 ## Reserved identity aliases
 
-Aliases are stable names for a future Development run, not existing accounts.
-Use a fresh run key in every provisioned email/display name, for example
-`DASH-QA-<run-key>`. Never put a password, access token, service-role key, or
-magic link in this file or in evidence.
+Aliases below map to the persistent Development fixture run `ADM03-20260920`.
+Never put a password, access token, service-role key, or magic link in this file
+or in evidence.
 
 | Alias | Intended identity | Intended scope/status | Current state |
 |---|---|---|---|
-| `dash.qa.super_admin` | platform Super Admin | `PLATFORM`, active | `NOT_PROVISIONED` |
-| `dash.qa.platform_ops` | platform Operations | `PLATFORM`, active | `BLOCKED_UNTIL_ADM04_ADM08` |
-| `dash.qa.verification` | platform Verification | `PLATFORM`, active | `BLOCKED_UNTIL_ADM04_ADM08` |
-| `dash.qa.support` | platform Support | `PLATFORM`, active | `BLOCKED_UNTIL_ADM04_ADM08` |
-| `dash.qa.office_a_admin` | Office Admin | `OFFICE:A`, active | `NOT_PROVISIONED` |
-| `dash.qa.office_a_dispatcher` | Office Dispatcher | `OFFICE:A`, active | `NOT_PROVISIONED` |
-| `dash.qa.office_a_accountant` | Office Accountant | `OFFICE:A`, active | `NOT_PROVISIONED` |
-| `dash.qa.office_b_admin` | Office Admin | `OFFICE:B`, active | `NOT_PROVISIONED` |
-| `dash.qa.office_b_accountant` | Office Accountant | `OFFICE:B`, active | `NOT_PROVISIONED` |
-| `dash.qa.mixed_membership` | `OFFICE_ACCOUNTANT` in A plus `OFFICE_DISPATCHER` in B | A finance/reports/orders; B drivers/live/orders; no cross-role expansion | `NOT_PROVISIONED` |
-| `dash.qa.suspended_staff` | suspended dashboard staff | no operational access | `NOT_PROVISIONED` |
-| `dash.qa.suspended_office` | staff in a suspended office/membership | office scope denied; active platform Super Admin recovery remains separately testable | `NOT_PROVISIONED` |
-| `dash.qa.customer` | CUSTOMER | no dashboard scope | `NOT_PROVISIONED` |
-| `dash.qa.driver_a` | OFFICE_DRIVER in Office A | driver self-scope; office data only through permitted staff | `NOT_PROVISIONED` |
-| `dash.qa.driver_b` | OFFICE_DRIVER in Office B | driver self-scope; office data only through permitted staff | `NOT_PROVISIONED` |
+| `dash.qa.super_admin` | platform Super Admin | `PLATFORM`, active | `PROVISIONED` |
+| `dash.qa.platform_ops` | platform Operations | `PLATFORM`, active | `PROVISIONED` |
+| `dash.qa.verification` | platform Verification | `PLATFORM`, active | `PROVISIONED` |
+| `dash.qa.support` | platform Support | `PLATFORM`, active | `PROVISIONED` |
+| `dash.qa.office_a_admin` | Office Admin | `OFFICE:A`, active | `PROVISIONED` |
+| `dash.qa.office_a_dispatcher` | Office Dispatcher | `OFFICE:A`, active | `PROVISIONED` |
+| `dash.qa.office_a_accountant` | Office Accountant | `OFFICE:A`, active | `PROVISIONED` |
+| `dash.qa.office_b_admin` | Office Admin | `OFFICE:B`, active | `PROVISIONED` |
+| `dash.qa.office_b_accountant` | Office Accountant | `OFFICE:B`, active | `PROVISIONED` |
+| `dash.qa.mixed_membership` | `OFFICE_ACCOUNTANT` in A plus `OFFICE_DISPATCHER` in B | A finance/reports/orders; B drivers/live/orders; no cross-role expansion | `PROVISIONED` |
+| `dash.qa.suspended_staff` | suspended dashboard staff | no operational access | `PROVISIONED_DENIED_AS_EXPECTED` |
+| `dash.qa.suspended_office` | staff in a suspended office/membership | office scope denied; active platform Super Admin recovery remains separately testable | `PROVISIONED_DENIED_AS_EXPECTED` |
+| `dash.qa.customer` | CUSTOMER | no dashboard scope | `PROVISIONED_DENIED_AS_EXPECTED` |
+| `dash.qa.driver_a` | OFFICE_DRIVER in Office A | driver self-scope; office data only through permitted staff | `PROVISIONED` |
+| `dash.qa.driver_b` | OFFICE_DRIVER in Office B | driver self-scope; office data only through permitted staff | `PROVISIONED` |
 
 `PLATFORM_OPERATIONS`, `SUPPORT`, and `VERIFICATION` must not be faked by
 assigning `SUPER_ADMIN`. Their role/permission and trusted-action contracts

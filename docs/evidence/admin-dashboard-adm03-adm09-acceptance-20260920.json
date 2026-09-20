@@ -1,0 +1,63 @@
+{
+  "project": "biko-development",
+  "project_ref": "jlkzgsgfzolhwraakhbt",
+  "run_key": "ADM03-20260920",
+  "captured_at": "2026-09-20",
+  "adm03": {
+    "status": "PASS_WITH_EXTERNAL_DEPENDENCIES_RECORDED",
+    "auth_user_count": 15,
+    "staff_profile_count": 12,
+    "platform_role_assignment_count": 5,
+    "office_membership_count": 8,
+    "office_ids": {
+      "A": "87bc308c-4678-4fae-99bd-cb1bb6fa0641",
+      "B": "c959fb6c-3ab1-434e-9bb1-b06aa3781e9b"
+    },
+    "driver_count": 2,
+    "motorcycle_count": 2,
+    "api_scope_acceptance": {
+      "platform_operations": "2 offices",
+      "support": "0 offices",
+      "verification": "0 offices",
+      "office_a_roles": "1 office each",
+      "office_b_roles": "1 office each",
+      "mixed_membership": "2 offices with independent roles",
+      "suspended_staff": "no dashboard scope",
+      "suspended_membership": "no office scope",
+      "customer_and_drivers": "no dashboard scope"
+    },
+    "browser": {
+      "office_a_admin_login_and_scope": "PASS",
+      "customer_dashboard_denial": "PASS",
+      "super_admin_fixture_visibility": "PASS"
+    },
+    "external_dependencies": {
+      "hosted_auth_redirects": "BLOCKED_BY_AUTH_CONFIG_VISIBILITY",
+      "maps": "BLOCKED_BY_MAPS_CONFIG"
+    },
+    "secrets_stored_in_repository": false
+  },
+  "adm09": {
+    "status": "PASS",
+    "migration": "admin_dashboard_offices",
+    "sql_rollback": "PASS",
+    "rollback_cleanup": "PASS",
+    "dashboard_lint": "PASS",
+    "dashboard_build": "PASS",
+    "browser": {
+      "list_search_filter_details": "PASS",
+      "create": "PASS",
+      "edit": "PASS",
+      "suspend": "PASS",
+      "restore": "PASS"
+    },
+    "audit_actions": [
+      "OFFICE_CREATED",
+      "OFFICE_UPDATED",
+      "OFFICE_SUSPENDED",
+      "OFFICE_RESTORED"
+    ],
+    "browser_fixture_cleanup": "EXACT_ID_DELETED",
+    "retained_browser_audit": true
+  }
+}

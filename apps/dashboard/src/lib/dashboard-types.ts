@@ -59,6 +59,35 @@ export type AdminOffice = {
   status: string;
 };
 
+export type DashboardOffice = {
+  id: string;
+  name: string;
+  responsible_person: string | null;
+  phone: string | null;
+  address: string | null;
+  area: string | null;
+  status: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type OfficeStats = {
+  driver_count: number;
+  active_driver_count: number;
+  motorcycle_count: number;
+  order_count: number;
+  active_order_count: number;
+  completed_order_count: number;
+  cancelled_order_count: number;
+};
+
+export type DashboardOfficeRow = DashboardOffice & { stats: OfficeStats };
+
+export type AdminOfficesData = {
+  offices: DashboardOfficeRow[];
+  total_count: number;
+};
+
 export type AdminRoleAssignment = {
   user_id: string;
   role_id: string;

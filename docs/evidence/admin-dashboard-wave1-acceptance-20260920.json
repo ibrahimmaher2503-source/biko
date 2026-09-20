@@ -32,9 +32,9 @@
     "authenticated_roles_page": "PASS"
   },
   "post_test_state": {
-    "staff_count": 1,
+    "staff_count": 12,
     "platform_role_count": 3,
-    "audit_count": 1,
+    "audit_count": 6,
     "get_dashboard_context_exists": true,
     "admin_create_staff_exists": true
   },
@@ -45,5 +45,5 @@
     "audit_event": "DEVELOPMENT_SUPER_ADMIN_BOOTSTRAPPED",
     "password_stored_in_repository": false
   },
-  "known_acceptance_dependency": "ADM-03 still needs two-office and non-Super-Admin acceptance identities; the Wave 1 Super Admin browser gate is closed."
+  "known_acceptance_dependency": "Closed by ADM03-20260920 fixture; Maps and hosted redirect configuration remain explicitly recorded external dependencies."
 }
