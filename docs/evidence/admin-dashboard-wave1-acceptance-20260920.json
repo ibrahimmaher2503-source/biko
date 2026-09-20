@@ -25,14 +25,25 @@
     "lint": "PASS",
     "build": "PASS",
     "browser_protected_route": "/roles -> /login?next=%2Froles",
-    "password_reset_state": "PASS"
+    "password_reset_state": "PASS",
+    "super_admin_login": "PASS",
+    "session_refresh": "PASS",
+    "logout_data_clearance": "PASS",
+    "authenticated_roles_page": "PASS"
   },
   "post_test_state": {
-    "staff_count": 0,
+    "staff_count": 1,
     "platform_role_count": 3,
-    "audit_count": 0,
+    "audit_count": 1,
     "get_dashboard_context_exists": true,
     "admin_create_staff_exists": true
   },
-  "known_acceptance_dependency": "No trusted live Super Admin account exists; positive authenticated browser acceptance remains dependent on ADM-03 bootstrap identity."
+  "bootstrap": {
+    "demo_email": "admin.demo@biko.invalid",
+    "role": "SUPER_ADMIN",
+    "status": "ACTIVE",
+    "audit_event": "DEVELOPMENT_SUPER_ADMIN_BOOTSTRAPPED",
+    "password_stored_in_repository": false
+  },
+  "known_acceptance_dependency": "ADM-03 still needs two-office and non-Super-Admin acceptance identities; the Wave 1 Super Admin browser gate is closed."
 }

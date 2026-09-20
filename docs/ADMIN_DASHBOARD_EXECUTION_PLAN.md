@@ -198,10 +198,10 @@
 |---|---|---|---|---|---|
 | ADM-01 | DONE — inventory | Luna + المنسق | ADMIN_DASHBOARD_CONTRACTS.md | كتالوج Development وتاريخ migrations محفوظان | ليست شهادة قبول سلوك RPCs |
 | ADM-02 | DONE — specification | Luna + المنسق | ADMIN_DASHBOARD_ACCESS_MATRIX.md | مصفوفة قراءة/كتابة/إجراء؛ مطابقة الأدوار الحالية بالكتالوج | الأدوار المقترحة تنفذ في ADM-04/08 |
-| ADM-03 | PARTIAL | Luna + المنسق | ADMIN_DASHBOARD_DEVELOPMENT_ACCEPTANCE.md | Development يعمل وسيناريوهات القبول جاهزة | الحسابات والبيانات وإعداد Auth/Maps لم تُجهز فعليًا |
+| ADM-03 | PARTIAL | Luna + المنسق | ADMIN_DASHBOARD_DEVELOPMENT_ACCEPTANCE.md | Development يعمل وحساب Demo Super Admin مقبول في Browser | حسابات الأدوار الأخرى وبيانات المكتبين وإعداد Maps لم تُجهز بعد |
 | ADM-04/05 | DONE | Luna + المنسق | migrations `190000`/`190100` واختبارات rollback | مطبقة على Development؛ اختبارات الصلاحيات والتدقيق PASS | تحذيرات linter العامة موثقة ولا توسع صلاحية |
-| ADM-06/07 | DONE — source/runtime | Luna + المنسق | `apps/dashboard` | lint/build PASS؛ Browser أثبت حماية `/roles` وتحويله إلى login واستعادة كلمة المرور | قبول جلسة STAFF إيجابية ينتظر حساب bootstrap موثوق من ADM-03 |
-| ADM-08 | DONE — source/runtime | Luna + المنسق | migrations `190200`/self-elevation guard و`admin-staff` و`/roles` | migrations وrollback PASS؛ Edge Function ACTIVE ورفض anonymous 401؛ build PASS | لم تُرسل دعوة ولم يُنشأ حساب حقيقي دون هوية مالك معتمدة |
+| ADM-06/07 | DONE — browser accepted | Luna + المنسق | `apps/dashboard` | lint/build PASS؛ حماية `/roles` والدخول والتحديث والخروج واستعادة كلمة المرور PASS | لا عائق ضمن الموجة 1 |
+| ADM-08 | DONE — browser accepted | Luna + المنسق | migrations `190200`/self-elevation guard و`admin-staff` و`/roles` | migrations وrollback PASS؛ Edge Function ACTIVE؛ حساب Demo Super Admin وصفحة `/roles` PASS | لم تُرسل دعوات خارجية؛ بيانات المرور غير محفوظة في المستودع |
 | ADM-09..36 | TODO | غير مسند | وفق الوصف أعلاه | لم يبدأ التنفيذ أو قبول الواجهات | اعتماديات كل مهمة أعلاه |
 
 تكتمل لوحة الإدارة بالكامل ضمن MVP عندما تعمل جميع المسارات المطلوبة بهوية حقيقية، وتنجح الصلاحيات وRLS وعزل المكتبين، وتُسجل الإجراءات الحساسة، وتطابق التقارير والمالية مصدرها، وتعمل حالات الفشل والتعافي، وتتوافر حزمة تشغيل قابلة للتحقق. build ناجح أو واجهة مكتملة شكليًا لا يكفيان.
@@ -224,6 +224,6 @@
 - نجحت اختبارات rollback الموجهة للصلاحيات والنطاق والتدقيق وإدارة الموظفين؛ لا بيانات fixture باقية.
 - نُشرت Edge Function `admin-staff` كإصدار 1 وحالة `ACTIVE` مع `verify_jwt=true`؛ الطلب المجهول رُفض `401`.
 - نجح Dashboard `lint` و`build` على Next.js 16.3.3. أثبت Browser أن `/roles` المحمي يتحول إلى `/login?next=%2Froles` وأن حالة استعادة كلمة المرور تعمل.
-- ما زال القبول الإيجابي بحساب STAFF حقيقي تابعًا لـADM-03: لا يوجد حساب Super Admin حي، ولم يُنشأ first-user bootstrap أو تُرسل دعوة دون هوية مالك معتمدة.
+- أُنشئ حساب Development Demo Super Admin موثوق بعد موافقة المالك، وسُجل bootstrap في `audit_logs`. نجح الدخول، تحديث الصفحة مع بقاء الجلسة، فتح `/roles`، والخروج دون بقاء بيانات المستخدم السابق.
 
-التالي المباشر: إغلاق اعتماد ADM-03 بحساب Super Admin موثوق وبيانات مكتبين، ثم بدء ADM-09/10 في الموجة 2.
+التالي المباشر: استكمال ADM-03 بحسابات الأدوار الأخرى وبيانات مكتبين، ثم بدء ADM-09/10 في الموجة 2.
